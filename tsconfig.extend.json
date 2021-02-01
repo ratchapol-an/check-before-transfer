@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@shares/*" : ["./components/share-components/*"],
+        }
+        
+    }
+}
