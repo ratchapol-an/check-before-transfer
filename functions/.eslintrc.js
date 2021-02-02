@@ -30,9 +30,14 @@ module.exports = {
   ],
   plugins: ['@typescript-eslint', 'import'],
   rules: {
+    camelcase: ['off', { ignoreDestructuring: true }],
+    '@typescript-eslint/naming-convention': 'off',
+    'no-console': 'off',
+    'consistent-return': ['off'],
     'quote-props': ['error', 'as-needed'],
     'max-len': ['error', { code: 120, ignoreUrls: true }],
     quotes: ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
+    indent: ['error', 2],
   },
   settings: {
     'import/parsers': {
