@@ -5,7 +5,6 @@
   "endOfLine": "lf",
   "printWidth": 120,
   "tabWidth": 2,
-  "parser": "typescript",
   "bracketSpacing": true,
   "jsxBracketSameLine": false,
   "arrowParens":"always",
@@ -14,6 +13,13 @@
       "files": "*.scss",
       "options": {
         "parser": "scss",
+        "tabWidth": 4
+      }
+    },
+    {
+      "files": "*.less",
+      "options": {
+        "parser": "less",
         "tabWidth": 4
       }
     },
