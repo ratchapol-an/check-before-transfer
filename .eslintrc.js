@@ -30,14 +30,7 @@ module.exports = {
     'plugin:import/typescript',
   ],
   rules: {
-    'react/jsx-props-no-spreading': [
-      'error',
-      {
-        // html: 'ignore',
-        // custom: 'ignore',
-        exceptions: ['Component'],
-      },
-    ],
+    'react/jsx-props-no-spreading': ['off'],
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/no-unused-vars': ['off'],

@@ -1,3 +1,18 @@
+@import '~antd/lib/style/themes/default.less';
 .container {
+    width: 100%;
     max-width: 1200px;
+    margin: 0 auto;
+    padding-left: @padding-sm;
+    padding-right: @padding-sm;
+
+    @media only screen and (min-width: @screen-md-min) {
+        padding-left: @padding-md;
+        padding-right: @padding-md;
+    }
+
+    @media only screen and (min-width: @screen-lg-min) {
+        padding-left: @padding-lg;
+        padding-right: @padding-lg;
+    }
 }
