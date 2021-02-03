@@ -21,8 +21,6 @@ export default function Home() {
             <Hero className="home-hero" />
           </Container>
         </Content>
-
-        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
       </Layout>
     </>
   );
