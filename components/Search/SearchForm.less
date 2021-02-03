@@ -1,0 +1,33 @@
+@import '~antd/lib/style/themes/default.less';
+
+.search-form {
+    .ant-radio-group {
+        .ant-radio-wrapper {
+            @media only screen and (max-width: @screen-sm-max) {
+                display: block;
+                height: 30px;
+                line-height: 30px;
+            }
+        }
+    }
+
+    @media only screen and (min-width: @screen-md-min) {
+        .ant-input-lg,
+        .ant-input-clear-icon,
+        .ant-input-search-button,
+        .report-btn {
+            font-size: @heading-4-size;
+        }
+
+        .ant-input-affix-wrapper-lg {
+            width: 572px;
+            padding: @padding-sm @padding-lg;
+        }
+
+        .ant-input-search-button,
+        .report-btn {
+            height: 57px;
+            min-width: 140px;
+        }
+    }
+}
