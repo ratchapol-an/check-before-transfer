@@ -1,4 +1,4 @@
 import SearchForm from './SearchForm';
+import SearchResults from './SearchResults';
 
-// eslint-disable-next-line import/prefer-default-export
-export { SearchForm };
+export { SearchForm, SearchResults };

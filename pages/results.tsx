@@ -1,8 +1,7 @@
 import Container from '@components/Container';
 import Header from '@components/Header';
-import { SearchForm } from '@components/Search';
+import { SearchForm, SearchResults } from '@components/Search';
 import Layout, { Content } from 'antd/lib/layout/layout';
-import PageHeader from 'antd/lib/page-header';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -21,12 +20,7 @@ export default function Results() {
         <Content>
           <Container>
             <SearchForm />
-            <PageHeader
-              className="site-page-header"
-              onBack={() => null}
-              title="ผลการค้นหา"
-              subTitle="This is a subtitle"
-            />
+            <SearchResults />
           </Container>
         </Content>
       </Layout>
