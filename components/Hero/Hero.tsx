@@ -13,7 +13,7 @@ const Hero: React.FunctionComponent<React.HTMLAttributes<HTMLDivElement>> = ({ c
           <br />
           ก่อนโอนเงิน
         </Title>
-        <SearchForm />
+        <SearchForm size="large" />
       </Space>
     </section>
   );

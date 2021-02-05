@@ -11,28 +11,28 @@
         }
     }
 
-    .report-btn {
-        color: @blue-base;
-        border-color: @blue-base;
-    }
-
     @media only screen and (min-width: @screen-md-min) {
-        .ant-input-lg,
-        .ant-input-clear-icon,
-        .ant-input-search-button,
-        .report-btn {
-            font-size: @heading-4-size;
-        }
-
         .ant-input-affix-wrapper-lg {
             width: 572px;
-            padding: @padding-sm @padding-lg;
         }
+        .ant-input-search-button {
+            min-width: 100px;
+        }
+        &.search-form-lg {
+            .ant-input-lg,
+            .ant-input-clear-icon,
+            .ant-input-search-button {
+                font-size: @heading-4-size;
+            }
 
-        .ant-input-search-button,
-        .report-btn {
-            height: 57px;
-            min-width: 140px;
+            .ant-input-affix-wrapper-lg {
+                padding: @padding-sm @padding-lg;
+            }
+
+            .ant-input-search-button {
+                height: 57px;
+                min-width: 140px;
+            }
         }
     }
 }

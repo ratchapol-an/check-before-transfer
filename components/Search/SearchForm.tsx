@@ -1,9 +1,10 @@
 import { Input, Radio, RadioChangeEvent, Space } from 'antd';
+import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import './SearchForm.less';
 
-type SearchBy = 'bank-account' | 'phone' | 'id-number' | 'name';
+export type SearchBy = 'bank-account' | 'phone' | 'id-number' | 'name';
 const placeHolders: Record<SearchBy, string> = {
   'bank-account': 'ระบุเลขบัญชีธนาคาร เช่น 099-9-99999-0 หรือ 0999999990',
   phone: 'ระบุเบอร์มือถือ เช่น 099-999-9999 หรือ 0999999999',
@@ -11,18 +12,32 @@ const placeHolders: Record<SearchBy, string> = {
   name: 'ระบุชื่อนามสกุล โดยไม่มีคำนำหน้า เช่น สมชาย ใจดี',
 };
 
-const SearchForm: React.FunctionComponent = () => {
+type SearchFormProps = {
+  size?: 'normal' | 'large';
+  initialValue?: string;
+  initialSearchBy?: SearchBy;
+};
+
+const SearchForm: React.FunctionComponent<SearchFormProps> = ({
+  size = 'normal',
+  initialValue = '',
+  initialSearchBy = 'bank-account',
+}) => {
   const { Search } = Input;
-  const [searchBy, updateSearchBy] = useState<SearchBy>('bank-account');
+  const [searchValue, setSearchValue] = useState(initialValue);
+  const [searchBy, setSearchBy] = useState<SearchBy>(initialSearchBy);
   const router = useRouter();
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
   const handleSearch = (value: string) => {
     router.push(`/results?q=${value}&by=${searchBy}`);
   };
   const handleSearchByChange = (e: RadioChangeEvent) => {
-    updateSearchBy(e.target.value);
+    setSearchBy(e.target.value);
   };
   return (
-    <Space className="search-form" direction="vertical" size="middle">
+    <Space className={clsx('search-form', { 'search-form-lg': size === 'large' })} direction="vertical" size="middle">
       <Radio.Group onChange={handleSearchByChange} value={searchBy}>
         <Radio value="bank-account">เลขบัญชีธนาคาร</Radio>
         <Radio value="phone">เบอร์โทรศัพท์มือถือ</Radio>
@@ -35,6 +50,8 @@ const SearchForm: React.FunctionComponent = () => {
           allowClear
           enterButton="ค้นหา"
           size="large"
+          value={searchValue}
+          onChange={handleInputChange}
           onSearch={handleSearch}
           type={searchBy === 'name' ? 'text' : 'tel'}
           maxLength={searchBy === 'name' ? 100 : 20}

@@ -1,6 +1,6 @@
 import Container from '@components/Container';
 import Header from '@components/Header';
-import { SearchForm, SearchResults } from '@components/Search';
+import { SearchBy, SearchForm, SearchResults } from '@components/Search';
 import Layout, { Content } from 'antd/lib/layout/layout';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -8,7 +8,10 @@ import React from 'react';
 
 export default function Results() {
   const router = useRouter();
-  console.log(router.query);
+  const { q, by } = router.query;
+  const initialSearchValue = typeof q === 'string' ? q : undefined;
+  const initialSearchBy = typeof by === 'string' ? (by as SearchBy) : undefined;
+
   return (
     <>
       <Head>
@@ -19,7 +22,9 @@ export default function Results() {
         <Header />
         <Content>
           <Container>
-            <SearchForm />
+            <SearchForm initialSearchBy={initialSearchBy} initialValue={initialSearchValue} />
+          </Container>
+          <Container>
             <SearchResults />
           </Container>
         </Content>
