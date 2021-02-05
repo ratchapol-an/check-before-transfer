@@ -14,7 +14,7 @@ export default function Home() {
         <title>เช็คก่อนโอน</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout className="layout">
+      <Layout className="home-page-layout">
         <Header />
         <Content>
           <Container>

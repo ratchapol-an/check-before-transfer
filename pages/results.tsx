@@ -1,10 +1,12 @@
 import Container from '@components/Container';
 import Header from '@components/Header';
 import { SearchBy, SearchForm, SearchResults } from '@components/Search';
+import { Divider } from 'antd';
 import Layout, { Content } from 'antd/lib/layout/layout';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
+import './results.less';
 
 export default function Results() {
   const router = useRouter();
@@ -18,12 +20,13 @@ export default function Results() {
         <title>เช็คก่อนโอน</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout className="layout">
+      <Layout className="results-page-layout">
         <Header />
-        <Content>
+        <Content className="results-page-content">
           <Container>
             <SearchForm initialSearchBy={initialSearchBy} initialValue={initialSearchValue} />
           </Container>
+          <Divider />
           <Container>
             <SearchResults />
           </Container>
