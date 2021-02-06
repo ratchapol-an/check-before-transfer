@@ -5,14 +5,20 @@ import { Divider } from 'antd';
 import Layout, { Content } from 'antd/lib/layout/layout';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React from 'react';
+import { ParsedUrlQuery } from 'querystring';
+import React, { useEffect, useState } from 'react';
 import './results.less';
 
 export default function Results() {
   const router = useRouter();
-  const { q, by } = router.query;
-  const initialSearchValue = typeof q === 'string' ? q : undefined;
-  const initialSearchBy = typeof by === 'string' ? (by as SearchBy) : undefined;
+  const [initialSearchValue, setInitialSearchValue] = useState<string | undefined>();
+  const [initialSearchBy, setInitialSearchBy] = useState<SearchBy | undefined>();
+  useEffect(() => {
+    const { q, by } = router.query;
+
+    setInitialSearchValue(typeof q === 'string' ? q : undefined);
+    setInitialSearchBy(typeof by === 'string' ? (by as SearchBy) : undefined);
+  }, [router]);
 
   return (
     <>
