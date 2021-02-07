@@ -1,8 +1,9 @@
 import Container from '@components/Container';
 import Header from '@components/Header';
-import { SearchBy, SearchForm, SearchResults } from '@components/Search';
+import { SearchForm, SearchResults } from '@components/Search';
 import { Divider } from 'antd';
 import Layout, { Content } from 'antd/lib/layout/layout';
+import SearchBy from 'models/searchBy';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
 

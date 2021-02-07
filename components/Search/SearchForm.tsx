@@ -1,10 +1,10 @@
 import { Input, Radio, RadioChangeEvent, Space } from 'antd';
 import clsx from 'clsx';
+import SearchBy from 'models/searchBy';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useState } from 'react';
 import './SearchForm.less';
 
-export type SearchBy = 'bank-account' | 'phone' | 'id-number' | 'name';
 const placeHolders: Record<SearchBy, string> = {
   'bank-account': 'ระบุเลขบัญชีธนาคาร เช่น 099-9-99999-0 หรือ 0999999990',
   phone: 'ระบุเบอร์มือถือ เช่น 099-999-9999 หรือ 0999999999',
