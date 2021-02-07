@@ -3,25 +3,17 @@ import Header from '@components/Header';
 import { SearchBy, SearchForm, SearchResults } from '@components/Search';
 import { Divider } from 'antd';
 import Layout, { Content } from 'antd/lib/layout/layout';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { ParsedUrlQuery } from 'querystring';
-import React, { useEffect, useState } from 'react';
+
 import './results.less';
 
-export default function Results() {
-  const router = useRouter();
-  const [initialSearchValue, setInitialSearchValue] = useState<string | undefined>();
-  const [initialSearchBy, setInitialSearchBy] = useState<SearchBy | undefined>();
-  useEffect(() => {
-    const { q, by } = router.query;
-
-    setInitialSearchValue(typeof q === 'string' ? q : undefined);
-    setInitialSearchBy(typeof by === 'string' ? (by as SearchBy) : undefined);
-  }, [router]);
-
+export default function Results({
+  initialSearchBy,
+  initialSearchValue,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <>
+    <div>
       <Head>
         <title>เช็คก่อนโอน</title>
         <link rel="icon" href="/favicon.ico" />
@@ -38,6 +30,19 @@ export default function Results() {
           </Container>
         </Content>
       </Layout>
-    </>
+    </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<{
+  initialSearchValue: string;
+  initialSearchBy?: SearchBy;
+}> = async (context) => {
+  const { q, by } = context.query;
+  return {
+    props: {
+      initialSearchValue: typeof q === 'string' ? q : '',
+      initialSearchBy: typeof by === 'string' ? (by as SearchBy) : 'bank-account',
+    },
+  };
+};
