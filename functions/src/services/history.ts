@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { logger } from 'firebase-functions';
-import { ReportHistory, ActionType } from '../types';
+import { ReportHistory, ActionType, Report } from '../types';
 
 const REPORT_HISTORY_COLLECTION = 'report_histories';
 
@@ -9,8 +9,8 @@ export const saveHistory = async (
   who: string,
   action: ActionType,
   reportID: string,
-  oldData: any,
-  newData: any,
+  oldData: FirebaseFirestore.DocumentData | Report,
+  newData: FirebaseFirestore.DocumentData | Report,
   db: FirebaseFirestore.Firestore,
 ): Promise<void> => {
   const reportHistoryRef = await db.collection(REPORT_HISTORY_COLLECTION).doc(reportID);
