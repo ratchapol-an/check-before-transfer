@@ -37,7 +37,7 @@ module.exports = {
     'quote-props': ['error', 'as-needed'],
     'max-len': ['error', { code: 120, ignoreUrls: true }],
     quotes: ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
-    indent: ['error', 2],
+    indent: ['error', 2, { SwitchCase: 1 }],
   },
   settings: {
     'import/parsers': {

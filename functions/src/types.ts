@@ -1,18 +1,4 @@
 /* eslint-disable no-unused-vars */
-// export interface ReportReq {
-//   transferType: string;
-//   transferDetail: string;
-//   bank: string;
-//   accountNumber: string;
-//   phoneNumber: string;
-//   passportID: string;
-//   amount: number;
-//   effectedDate: string;
-//   doucument: string[];
-//   reportSource: string;
-//   reportDetail: string;
-//   reporterID?: string;
-// }
 
 export enum ReportStatus {
   WaitingForReview = 1,
@@ -56,4 +42,17 @@ interface ChangedOBJ {
 export enum ActionType {
   CREATE = 'create',
   UPDATE = 'update',
+}
+// export interface ReportRequest {
+//   value: string;
+//   searchBy: string;
+// }
+
+// export type SearchBy = 'bank-account' | 'phone' | 'id-number' | 'name';
+
+export enum SearchBy {
+  Payment = 'paymentMethod',
+  PhoneNumber = 'phoneNumber',
+  nationalID = 'nationalIdNumber',
+  Name = 'name',
 }

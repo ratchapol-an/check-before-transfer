@@ -4,6 +4,7 @@ import admin from 'firebase-admin';
 import cors from 'cors';
 import { Report, ActionType } from './types';
 import { saveHistory } from './services/history';
+import { getSearchQuery } from './services/search';
 
 // Day.js
 // const DATE_FORMAT = 'DD-MM-YYY HH:mm';
@@ -21,17 +22,17 @@ export const addReport = firebaseFunction.https.onRequest(async (req, res) => {
     const reporterID = body.reporter_id;
 
     const newReport: Report = {
-      bankCode: body.bankCode,
-      bankAccountNumber: body.bankAccountNumber,
+      bankCode: body.bank_code,
+      bankAccountNumber: body.bank_account_number,
       name: body.name,
-      phoneNumber: body.phoneNumber,
-      nationalIdNumber: body.nationalIdNumber,
+      phoneNumber: body.phone_number,
+      nationalIdNumber: body.national_id_number,
       amount: body.amount,
-      eventDate: body.eventDate,
-      eventDetail: body.eventDetail,
-      reporterId: body.reporterId,
-      paymentMethod: body.paymentMethod,
-      productLink: body.productLink,
+      eventDate: body.event_date,
+      eventDetail: body.event_detail,
+      reporterId: body.reporter_id,
+      paymentMethod: body.payment_method,
+      productLink: body.product_link,
       status: body.status,
       document: [],
     };
@@ -52,17 +53,17 @@ export const updateReport = firebaseFunction.https.onRequest(async (req, res) =>
     const reporterID = reporter_id;
 
     const newReport: Report = {
-      bankCode: report.bankCode,
-      bankAccountNumber: report.bankAccountNumber,
+      bankCode: report.bank_code,
+      bankAccountNumber: report.bank_account_number,
       name: report.name,
-      phoneNumber: report.phoneNumber,
-      nationalIdNumber: report.nationalIdNumber,
-      amount: parseFloat(report.amount),
-      eventDate: report.eventDate,
-      eventDetail: report.eventDetail,
-      reporterId: report.reporterId,
-      paymentMethod: report.paymentMethod,
-      productLink: report.productLink,
+      phoneNumber: report.phone_number,
+      nationalIdNumber: report.national_id_number,
+      amount: report.amount,
+      eventDate: report.event_date,
+      eventDetail: report.event_detail,
+      reporterId: report.reporter_id,
+      paymentMethod: report.payment_method,
+      productLink: report.product_link,
       status: report.status,
       document: [],
     };
@@ -80,4 +81,28 @@ export const updateReport = firebaseFunction.https.onRequest(async (req, res) =>
     return res.status(200).send(`Updated report ${report_id} by ${reporterID}`);
   });
 });
+
+export const getReports = firebaseFunction.https.onRequest(async (req, res) => {
+  defaultCors(req, res, async () => {
+    if (req.method !== 'GET') return res.status(403).send('Forbidden!');
+    const { q, by } = req.query;
+    const searchQuery = getSearchQuery(by as string);
+
+    if (searchQuery === '') return res.status(404).send('Missing search by');
+
+    const snapshot = await db.collection(REPORT_COLLECTION).where(searchQuery, '==', q).get();
+    if (snapshot.empty) {
+      console.log('No matching report.');
+      return;
+    }
+    const reports: FirebaseFirestore.DocumentData[] = [];
+    snapshot.forEach((report) => {
+      reports.push(report.data());
+      console.log(report.id, '=>', report.data());
+    });
+
+    return res.status(200).send(reports);
+  });
+});
+
 // export default {};
