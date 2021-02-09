@@ -99,8 +99,7 @@ export const getReports = firebaseFunction.https.onRequest(async (req, res) => {
         .orderBy('created_at', 'desc')
         .get();
       if (snapshot.empty) {
-        console.log('No matching report.');
-        return;
+        return res.status(404).send('No matching report.');
       }
       const reports: FirebaseFirestore.DocumentData[] = [];
       let totalDamagedPrice = 0;
