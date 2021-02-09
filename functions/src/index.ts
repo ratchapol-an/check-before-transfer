@@ -2,11 +2,13 @@
 import * as functions from 'firebase-functions';
 import admin from 'firebase-admin';
 import cors from 'cors';
+import dayjs from 'dayjs';
 import { Report, ActionType } from './types';
 import { saveHistory } from './services/history';
 import { getSearchQuery } from './services/search';
-
+import 'dayjs/locale/th';
 // Day.js
+dayjs.locale('th');
 // const DATE_FORMAT = 'DD-MM-YYY HH:mm';
 const REPORT_COLLECTION = 'reports';
 
@@ -20,7 +22,6 @@ export const addReport = firebaseFunction.https.onRequest(async (req, res) => {
     if (req.method !== 'POST') return res.status(403).send('Forbidden!');
     const { body } = req;
     const reporterID = body.reporter_id;
-
     const newReport: Report = {
       bankCode: body.bank_code,
       bankAccountNumber: body.bank_account_number,
@@ -33,8 +34,9 @@ export const addReport = firebaseFunction.https.onRequest(async (req, res) => {
       reporterId: body.reporter_id,
       paymentMethod: body.payment_method,
       productLink: body.product_link,
-      status: body.status,
+      status: 1,
       document: [],
+      created_at: admin.firestore.Timestamp.fromDate(dayjs().toDate()),
     };
 
     const writeResult = await db.collection(REPORT_COLLECTION).add(newReport);
@@ -90,18 +92,33 @@ export const getReports = firebaseFunction.https.onRequest(async (req, res) => {
 
     if (searchQuery === '') return res.status(404).send('Missing search by');
 
-    const snapshot = await db.collection(REPORT_COLLECTION).where(searchQuery, '==', q).get();
-    if (snapshot.empty) {
-      console.log('No matching report.');
-      return;
-    }
-    const reports: FirebaseFirestore.DocumentData[] = [];
-    snapshot.forEach((report) => {
-      reports.push(report.data());
-      console.log(report.id, '=>', report.data());
-    });
+    try {
+      const snapshot = await db
+        .collection(REPORT_COLLECTION)
+        .where(searchQuery, '==', q)
+        .orderBy('created_at', 'desc')
+        .get();
+      if (snapshot.empty) {
+        console.log('No matching report.');
+        return;
+      }
+      const reports: FirebaseFirestore.DocumentData[] = [];
+      let totalDamagedPrice = 0;
+      snapshot.forEach((s) => {
+        const report = s.data();
+        totalDamagedPrice += report.amount;
+        reports.push(report);
+      });
 
-    return res.status(200).send(reports);
+      return res.status(200).send({
+        name: q,
+        count: reports.length,
+        total: totalDamagedPrice,
+        last_report: reports[0],
+      });
+    } catch (e) {
+      return res.status(500).send(e);
+    }
   });
 });
 

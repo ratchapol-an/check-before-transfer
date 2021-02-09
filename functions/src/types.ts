@@ -27,6 +27,7 @@ export interface Report {
   productLink: string;
   status: ReportStatus;
   document: [];
+  created_at?: FirebaseFirestore.FieldValue;
 }
 
 export interface ReportHistory {
@@ -43,10 +44,6 @@ export enum ActionType {
   CREATE = 'create',
   UPDATE = 'update',
 }
-// export interface ReportRequest {
-//   value: string;
-//   searchBy: string;
-// }
 
 // export type SearchBy = 'bank-account' | 'phone' | 'id-number' | 'name';
 

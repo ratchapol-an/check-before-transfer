@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import admin from 'firebase-admin';
 import { logger } from 'firebase-functions';
 import { ReportHistory, ActionType, Report } from '../types';
 
+const { serverTimestamp } = admin.firestore.FieldValue;
 const REPORT_HISTORY_COLLECTION = 'report_histories';
 
 export const saveHistory = async (
@@ -28,11 +30,13 @@ export const saveHistory = async (
   if (reportHistoryDoc.exists) {
     const currentHistories = reportHistoryDoc.data()?.history || [];
     await reportHistoryRef
-      .update({ history: [...currentHistories, newReportHistory] })
-      .catch((e) => logger.info(`Fail to save history => ${e}`, { structuredData: true }));
+      .update({ history: [...currentHistories, newReportHistory], updated_at: serverTimestamp() })
+      .catch((e) => {
+        logger.info(`Fail to save history => ${e}`, { structuredData: true });
+      });
   } else {
     await reportHistoryRef
-      .set({ history: [newReportHistory] })
+      .set({ history: [newReportHistory], updated_at: serverTimestamp() })
       .catch((e) => logger.info(`Fail to save history => ${e}`, { structuredData: true }));
   }
 };
