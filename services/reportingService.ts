@@ -2,8 +2,15 @@ import Report, { mockReport } from 'models/Report';
 import SearchBy from 'models/searchBy';
 import axios from 'axios';
 
+// HOW TO RUN LOCAL (Node 12 Only)
+// - cd function
+// - nvm use 12
+// - yarn build & yarn serve
+
 axios.defaults.baseURL = 'http://localhost:5001/check-before-transfer/asia-southeast2';
-export interface SearchResult {
+// PROD URL
+// https://asia-southeast2-check-before-transfer.cloudfunctions.net
+interface SearchResult {
   name: string;
   total_report: number;
   total_damaged_price: number;
@@ -18,8 +25,6 @@ export const search = async (value: string, by: SearchBy): Promise<SearchResult>
   });
 
   return data;
-  // Return type Promise<void | ReportResp>
-  // return Promise.resolve(value === '0945603070' ? [mockReport] : []);
 };
 
 export const addReport = (report: Report) => {
