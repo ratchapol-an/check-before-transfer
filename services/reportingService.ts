@@ -23,7 +23,7 @@ export const search = async (value: string, by: SearchBy): Promise<SearchResult>
       by,
     },
   });
-
+  console.log(data);
   return data;
 };
 
