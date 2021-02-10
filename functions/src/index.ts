@@ -39,12 +39,17 @@ export const addReport = firebaseFunction.https.onRequest(async (req, res) => {
       document: [],
       created_at: admin.firestore.Timestamp.fromDate(dayjs().toDate()),
     };
-
-    const writeResult = await db.collection(REPORT_COLLECTION).add(newReport);
-    const reportID = writeResult.id;
-    await saveHistory(reporterID, ActionType.CREATE, reportID, {}, newReport, db);
-    functions.logger.info(`Add report ${reportID} by ${reporterID}`, { structuredData: true });
-    return res.send(`Add report ${reportID} by ${reporterID}`);
+    try {
+      const writeResult = await db.collection(REPORT_COLLECTION).add(newReport);
+      const reportID = writeResult.id;
+      await saveHistory(reporterID, ActionType.CREATE, reportID, {}, newReport, db);
+      functions.logger.info(`Add report ${reportID} by ${reporterID}`, { structuredData: true });
+      return res.status(200).json({
+        report_id: reportID,
+      });
+    } catch (e) {
+      return res.status(500).send(e);
+    }
   });
 });
 
@@ -70,18 +75,23 @@ export const updateReport = firebaseFunction.https.onRequest(async (req, res) =>
       status: report.status,
       document: [],
     };
+    try {
+      const reportRef = await db.collection(REPORT_COLLECTION).doc(reportID);
+      const reportDoc = await reportRef.get();
+      let oldReport = {};
+      if (reportDoc.exists) {
+        oldReport = reportDoc.data() || {};
+      }
+      await saveHistory(reporterID, ActionType.UPDATE, reportID, oldReport, newReport, db);
 
-    const reportRef = await db.collection(REPORT_COLLECTION).doc(reportID);
-    const reportDoc = await reportRef.get();
-    let oldReport = {};
-    if (reportDoc.exists) {
-      oldReport = reportDoc.data() || {};
+      await reportRef.update(newReport);
+      functions.logger.info(`Updated report ${report_id} by ${reporterID}`, { structuredData: true });
+      return res.status(200).json({
+        report_id: reportID,
+      });
+    } catch (e) {
+      return res.status(500).send(e);
     }
-    await saveHistory(reporterID, ActionType.UPDATE, reportID, oldReport, newReport, db);
-
-    await reportRef.update(newReport);
-    functions.logger.info(`Updated report ${report_id} by ${reporterID}`, { structuredData: true });
-    return res.status(200).send(`Updated report ${report_id} by ${reporterID}`);
   });
 });
 
@@ -89,21 +99,27 @@ export const verify = firebaseFunction.https.onRequest(async (req, res) => {
   defaultCors(req, res, async () => {
     if (req.method !== 'PUT') return res.status(403).send('Forbidden!');
     const { report_id, reporter_id, status } = req.body;
-    const reportRef = await db.collection(REPORT_COLLECTION).doc(report_id);
-    const reportDoc = await reportRef.get();
-    let oldStatus;
-    if (reportDoc.exists) {
-      oldStatus = reportDoc.data() || undefined;
+    try {
+      const reportRef = await db.collection(REPORT_COLLECTION).doc(report_id);
+      const reportDoc = await reportRef.get();
+      let oldStatus;
+      if (reportDoc.exists) {
+        oldStatus = reportDoc.data() || undefined;
+      }
+      reportRef.update({
+        status,
+      });
+      await saveHistory(reporter_id, ActionType.UPDATE, report_id, oldStatus?.status, status, db);
+      return res.status(200).json({
+        report_id,
+      });
+    } catch (e) {
+      return res.status(500).send(e);
     }
-    reportRef.update({
-      status,
-    });
-    await saveHistory(reporter_id, ActionType.UPDATE, report_id, oldStatus?.status, status, db);
-    return res.status(200).send(`Update status report ID ${report_id} to ${status}`);
   });
 });
 
-export const getReports = firebaseFunction.https.onRequest(async (req, res) => {
+export const getReport = firebaseFunction.https.onRequest(async (req, res) => {
   defaultCors(req, res, async () => {
     if (req.method !== 'GET') return res.status(403).send('Forbidden!');
     const { q, by } = req.query;
