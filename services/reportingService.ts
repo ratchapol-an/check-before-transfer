@@ -10,7 +10,7 @@ import axios from 'axios';
 axios.defaults.baseURL = 'http://localhost:5001/check-before-transfer/asia-southeast2';
 // PROD URL
 // https://asia-southeast2-check-before-transfer.cloudfunctions.net
-interface SearchResult {
+export interface SearchResult {
   name: string;
   total_report: number;
   total_damaged_price: number;
