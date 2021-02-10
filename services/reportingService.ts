@@ -3,28 +3,23 @@ import SearchBy from 'models/searchBy';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:5001/check-before-transfer/asia-southeast2';
-interface GetReportResp {
+export interface SearchResult {
   name: string;
   total_report: number;
   total_damaged_price: number;
   lasted_report: Report;
 }
-export const search = (value: string, by: SearchBy): Promise<Report[]> => {
-  axios
-    .get<GetReportResp>('/getReport', {
-      params: {
-        q: value,
-        by,
-      },
-    })
-    .then(({ data }) => {
-      console.log(data);
-    })
-    .catch((e) => {
-      console.log(e.message);
-    });
+export const search = async (value: string, by: SearchBy): Promise<SearchResult> => {
+  const { data } = await axios.get<SearchResult>('/getReport', {
+    params: {
+      q: value,
+      by,
+    },
+  });
+
+  return data;
   // Return type Promise<void | ReportResp>
-  return Promise.resolve(value === '0945603070' ? [mockReport] : []);
+  // return Promise.resolve(value === '0945603070' ? [mockReport] : []);
 };
 
 export const addReport = (report: Report) => {

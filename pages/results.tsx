@@ -3,18 +3,17 @@ import Header from '@components/Header';
 import { NoResults, SearchForm, SearchResults } from '@components/Search';
 import { Divider } from 'antd';
 import Layout, { Content } from 'antd/lib/layout/layout';
-import Report from 'models/Report';
 import SearchBy from 'models/searchBy';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
-import { search } from 'services/reportingService';
+import { search, SearchResult } from 'services/reportingService';
 
 import './results.less';
 
 export default function Results({
   searchBy,
   searchValue,
-  reports,
+  searchResult,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <div>
@@ -29,7 +28,17 @@ export default function Results({
             <SearchForm initialSearchBy={searchBy} initialValue={searchValue} />
           </Container>
           <Divider />
-          <Container>{reports.length ? <SearchResults /> : <NoResults />}</Container>
+          <Container>
+            {searchResult ? (
+              <SearchResults
+                lastReport={searchResult.lasted_report}
+                totalAmount={searchResult.total_damaged_price}
+                totalNumberOfReports={searchResult.total_report}
+              />
+            ) : (
+              <NoResults />
+            )}
+          </Container>
         </Content>
       </Layout>
     </div>
@@ -39,21 +48,25 @@ export default function Results({
 export const getServerSideProps: GetServerSideProps<{
   searchValue: string;
   searchBy?: SearchBy;
-  reports: Report[];
+  searchResult: SearchResult | null;
 }> = async (context) => {
   const { q, by } = context.query;
   const searchValue = typeof q === 'string' ? q : '';
   const searchBy = typeof by === 'string' ? (by as SearchBy) : 'bank-account';
-  let reports: Report[] = [];
+  let searchResult: SearchResult | null = null;
   if (searchValue) {
-    reports = await search(searchValue, searchBy);
+    try {
+      searchResult = await search(searchValue, searchBy);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return {
     props: {
       searchValue,
       searchBy,
-      reports,
+      searchResult,
     },
   };
 };
