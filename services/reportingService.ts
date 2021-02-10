@@ -2,7 +2,14 @@ import Report, { mockReport } from 'models/Report';
 import SearchBy from 'models/searchBy';
 import axios from 'axios';
 
+// HOW TO RUN LOCAL (Node 12 Only)
+// - cd function
+// - nvm use 12
+// - yarn build & yarn serve
+
 axios.defaults.baseURL = 'http://localhost:5001/check-before-transfer/asia-southeast2';
+// PROD URL
+// https://asia-southeast2-check-before-transfer.cloudfunctions.net
 interface GetReportResp {
   name: string;
   total_report: number;
