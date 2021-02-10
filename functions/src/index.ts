@@ -45,10 +45,10 @@ export const addReport = firebaseFunction.https.onRequest(async (req, res) => {
       await saveHistory(reporterID, ActionType.CREATE, reportID, {}, newReport, db);
       functions.logger.info(`Add report ${reportID} by ${reporterID}`, { structuredData: true });
       return res.status(200).json({
-        report_id: reportID,
+        reportID,
       });
     } catch (e) {
-      return res.status(500).send(e);
+      return res.status(500).send(e.message);
     }
   });
 });
@@ -87,10 +87,10 @@ export const updateReport = firebaseFunction.https.onRequest(async (req, res) =>
       await reportRef.update(newReport);
       functions.logger.info(`Updated report ${report_id} by ${reporterID}`, { structuredData: true });
       return res.status(200).json({
-        report_id: reportID,
+        reportID,
       });
     } catch (e) {
-      return res.status(500).send(e);
+      return res.status(500).send(e.message);
     }
   });
 });
@@ -111,10 +111,10 @@ export const verify = firebaseFunction.https.onRequest(async (req, res) => {
       });
       await saveHistory(reporter_id, ActionType.UPDATE, report_id, oldStatus?.status, status, db);
       return res.status(200).json({
-        report_id,
+        reportID: report_id,
       });
     } catch (e) {
-      return res.status(500).send(e);
+      return res.status(500).send(e.message);
     }
   });
 });
@@ -135,7 +135,7 @@ export const getReport = firebaseFunction.https.onRequest(async (req, res) => {
         .orderBy('created_at', 'desc')
         .get();
       if (snapshot.empty) {
-        return res.status(404).send('No matching report.');
+        return res.status(200).send(null);
       }
       const reports: FirebaseFirestore.DocumentData[] = [];
       let totalDamagedPrice = 0;
@@ -147,12 +147,12 @@ export const getReport = firebaseFunction.https.onRequest(async (req, res) => {
       // console.log(dayjs.unix(reports[0].created_at.seconds).add(7, 'hours').format(DATE_FORMAT));
       return res.status(200).send({
         name: q,
-        total_report: reports.length,
-        total_damaged_price: totalDamagedPrice,
-        lasted_report: reports[0],
+        totalReport: reports.length,
+        totalDamagedPrice,
+        lastedReport: reports[0],
       });
     } catch (e) {
-      return res.status(500).send(e);
+      return res.status(500).send(e.message);
     }
   });
 });

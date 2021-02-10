@@ -12,9 +12,9 @@ axios.defaults.baseURL = 'http://localhost:5001/check-before-transfer/asia-south
 // https://asia-southeast2-check-before-transfer.cloudfunctions.net
 export interface SearchResult {
   name: string;
-  total_report: number;
-  total_damaged_price: number;
-  lasted_report: Report;
+  totalReport: number;
+  totalDamagedPrice: number;
+  lastedReport: Report;
 }
 export const search = async (value: string, by: SearchBy): Promise<SearchResult> => {
   const { data } = await axios.get<SearchResult>('/getReport', {

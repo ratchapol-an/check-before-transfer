@@ -31,9 +31,9 @@ export default function Results({
           <Container>
             {searchResult ? (
               <SearchResults
-                lastReport={searchResult.lasted_report}
-                totalAmount={searchResult.total_damaged_price}
-                totalNumberOfReports={searchResult.total_report}
+                lastReport={searchResult.lastedReport}
+                totalAmount={searchResult.totalDamagedPrice}
+                totalNumberOfReports={searchResult.totalReport}
               />
             ) : (
               <NoResults />
