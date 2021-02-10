@@ -7,9 +7,10 @@ import { Report, ActionType } from './types';
 import { saveHistory } from './services/history';
 import { getSearchQuery } from './services/search';
 import 'dayjs/locale/th';
+
 // Day.js
 dayjs.locale('th');
-// const DATE_FORMAT = 'DD-MM-YYY HH:mm';
+// const DATE_FORMAT = 'DD-MM-YYYY HH:mm';
 const REPORT_COLLECTION = 'reports';
 
 admin.initializeApp();
@@ -84,6 +85,24 @@ export const updateReport = firebaseFunction.https.onRequest(async (req, res) =>
   });
 });
 
+export const verify = firebaseFunction.https.onRequest(async (req, res) => {
+  defaultCors(req, res, async () => {
+    if (req.method !== 'PUT') return res.status(403).send('Forbidden!');
+    const { report_id, reporter_id, status } = req.body;
+    const reportRef = await db.collection(REPORT_COLLECTION).doc(report_id);
+    const reportDoc = await reportRef.get();
+    let oldStatus;
+    if (reportDoc.exists) {
+      oldStatus = reportDoc.data() || undefined;
+    }
+    reportRef.update({
+      status,
+    });
+    await saveHistory(reporter_id, ActionType.UPDATE, report_id, oldStatus?.status, status, db);
+    return res.status(200).send(`Update status report ID ${report_id} to ${status}`);
+  });
+});
+
 export const getReports = firebaseFunction.https.onRequest(async (req, res) => {
   defaultCors(req, res, async () => {
     if (req.method !== 'GET') return res.status(403).send('Forbidden!');
@@ -96,6 +115,7 @@ export const getReports = firebaseFunction.https.onRequest(async (req, res) => {
       const snapshot = await db
         .collection(REPORT_COLLECTION)
         .where(searchQuery, '==', q)
+        .where('status', '==', 2)
         .orderBy('created_at', 'desc')
         .get();
       if (snapshot.empty) {
@@ -108,12 +128,12 @@ export const getReports = firebaseFunction.https.onRequest(async (req, res) => {
         totalDamagedPrice += report.amount;
         reports.push(report);
       });
-
+      // console.log(dayjs.unix(reports[0].created_at.seconds).add(7, 'hours').format(DATE_FORMAT));
       return res.status(200).send({
         name: q,
-        count: reports.length,
-        total: totalDamagedPrice,
-        last_report: reports[0],
+        total_report: reports.length,
+        total_damaged_price: totalDamagedPrice,
+        lasted_report: reports[0],
       });
     } catch (e) {
       return res.status(500).send(e);
