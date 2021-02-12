@@ -2,7 +2,7 @@ import { Input, Radio, RadioChangeEvent, Space } from 'antd';
 import clsx from 'clsx';
 import SearchBy from 'models/searchBy';
 import { useRouter } from 'next/router';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import './SearchForm.less';
 
 const placeHolders: Record<SearchBy, string> = {
@@ -24,14 +24,25 @@ const SearchForm: React.FunctionComponent<SearchFormProps> = ({
   initialSearchBy = 'bank-account',
 }) => {
   const { Search } = Input;
+  const isMounted = useRef(true);
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
   const [searchValue, setSearchValue] = useState(initialValue);
   const [searchBy, setSearchBy] = useState<SearchBy>(initialSearchBy);
+  const [isSearching, setIsSearching] = useState(false);
   const router = useRouter();
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
-  const handleSearch = (value: string) => {
-    router.push(`/results?q=${value}&by=${searchBy}`);
+  const handleSearch = async (value: string) => {
+    setIsSearching(true);
+    await router.push(`/results?q=${value}&by=${searchBy}`);
+    if (isMounted) {
+      setIsSearching(false);
+    }
   };
   const handleSearchByChange = (e: RadioChangeEvent) => {
     setSearchBy(e.target.value);
@@ -49,6 +60,7 @@ const SearchForm: React.FunctionComponent<SearchFormProps> = ({
           placeholder={placeHolders[searchBy]}
           allowClear
           enterButton="ค้นหา"
+          loading={isSearching}
           size="large"
           value={searchValue}
           onChange={handleInputChange}
