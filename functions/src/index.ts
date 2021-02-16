@@ -145,6 +145,7 @@ export const getReport = firebaseFunction.https.onRequest(async (req, res) => {
         reports.push(report);
       });
       // console.log(dayjs.unix(reports[0].created_at.seconds).add(7, 'hours').format(DATE_FORMAT));
+      console.log(reports[0]);
       return res.status(200).send({
         name: q,
         totalReport: reports.length,

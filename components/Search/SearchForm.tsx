@@ -38,11 +38,11 @@ const SearchForm: React.FunctionComponent<SearchFormProps> = ({
     setSearchValue(e.target.value);
   };
   const handleSearch = async (value: string) => {
-    setIsSearching(true);
+    // setIsSearching(true);
     await router.push(`/results?q=${value}&by=${searchBy}`);
-    if (isMounted) {
-      setIsSearching(false);
-    }
+    // if (isMounted) {
+    //   setIsSearching(false);
+    // }
   };
   const handleSearchByChange = (e: RadioChangeEvent) => {
     setSearchBy(e.target.value);
@@ -65,7 +65,7 @@ const SearchForm: React.FunctionComponent<SearchFormProps> = ({
           value={searchValue}
           onChange={handleInputChange}
           onSearch={handleSearch}
-          type={searchBy === 'name' ? 'text' : 'tel'}
+          type="search"
           maxLength={searchBy === 'name' ? 100 : 20}
         />
         {/* <Button className="report-btn" size="large">
