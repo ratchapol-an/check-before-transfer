@@ -13,7 +13,7 @@ const initAuth = () => {
         projectId: 'check-before-transfer',
         clientEmail: 'firebase-adminsdk-1jj8q@check-before-transfer.iam.gserviceaccount.com',
         // The private key must not be accesssible on the client side.
-        privateKey: process.env.FIREBASE_PRIVATE_KEY || '',
+        privateKey: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') : '',
       },
       databaseURL: 'https://check-before-transfer.firebaseio.com',
     },
@@ -33,8 +33,9 @@ const initAuth = () => {
       overwrite: true,
       path: '/',
       sameSite: 'strict',
-      secure: true, // set this to false in local (non-HTTPS) development
+      secure: process.env.APP_STAGE === 'production' || false, // set this to false in local (non-HTTPS) development
       signed: true,
+      domain: 'localhost',
     },
   });
 };
