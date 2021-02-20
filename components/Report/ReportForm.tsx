@@ -1,12 +1,38 @@
-import { Form, Select, InputNumber, Switch, Radio, Slider, Button, Upload, Rate, Checkbox, Row, Col } from 'antd';
+import {
+  Form,
+  Select,
+  Input,
+  InputNumber,
+  Switch,
+  Radio,
+  Slider,
+  Button,
+  Upload,
+  Rate,
+  Checkbox,
+  Row,
+  Col,
+  DatePicker,
+} from 'antd';
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
 import PaymentMethod, { paymentMethodCaptions } from 'models/PaymentMethod';
+import { useState } from 'react';
+import { data } from 'banks-logo';
+import moment from 'moment';
 
 const { Option } = Select;
 
 const formItemLayout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 14 },
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 24 },
+    md: { span: 8 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 24 },
+    md: { span: 12 },
+  },
 };
 
 const normFile = (e: any) => {
@@ -17,7 +43,21 @@ const normFile = (e: any) => {
   return e && e.fileList;
 };
 
+const bankOptions = (Object.keys(data) as Array<keyof typeof data>).map((key) => {
+  const bank = data[key];
+  return (
+    <Option value={bank.code} key={bank.code}>
+      {bank.official_name_thai}
+    </Option>
+  );
+});
+
 const ReportForm: React.FunctionComponent = () => {
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
+  const handlePaymentMethodSelect = (value: PaymentMethod) => {
+    setPaymentMethod(value);
+  };
+
   const onFinish = (values: any) => {
     console.log('Received values of form: ', values);
   };
@@ -39,7 +79,7 @@ const ReportForm: React.FunctionComponent = () => {
         hasFeedback
         rules={[{ required: true, message: 'กรุณาเลือกช่องทางการชำระเงิน' }]}
       >
-        <Select placeholder="เลือกช่องทางการชำระเงิน">
+        <Select placeholder="เลือกช่องทางการชำระเงิน" value={paymentMethod} onSelect={handlePaymentMethodSelect}>
           <Option value={PaymentMethod.BankAccountTransfer}>
             {paymentMethodCaptions[PaymentMethod.BankAccountTransfer]}
           </Option>
@@ -48,127 +88,122 @@ const ReportForm: React.FunctionComponent = () => {
           <Option value={PaymentMethod.Others}>{paymentMethodCaptions[PaymentMethod.Others]}</Option>
         </Select>
       </Form.Item>
-
+      {paymentMethod === PaymentMethod.BankAccountTransfer && (
+        <>
+          <Form.Item
+            name="bankCode"
+            label="ธนาคาร"
+            rules={[{ required: true, message: 'กรุณาเลือกธนาคาร' }]}
+            hasFeedback
+          >
+            <Select placeholder="เลือกธนาคาร">{bankOptions}</Select>
+          </Form.Item>
+          <Form.Item
+            name="bankAccountNo"
+            label="เลขบัญชีธนาคาร"
+            hasFeedback
+            rules={[
+              { required: true, message: 'กรุณากรอกเลขบัญชีธนาคาร' },
+              { pattern: /^[\d-]*\d[\d-]*$/, message: 'เลขบัญชีธนาคารไม่ถูกต้อง' },
+            ]}
+          >
+            <Input type="tel" maxLength={20} />
+          </Form.Item>
+        </>
+      )}
       <Form.Item
-        name="select-multiple"
-        label="Select[multiple]"
-        rules={[{ required: true, message: 'Please select your favourite colors!', type: 'array' }]}
+        name="phoneNumber"
+        label="เบอร์โทรศัพท์มือถือ"
+        hasFeedback
+        dependencies={['idNumber']}
+        rules={[
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (paymentMethod === PaymentMethod.PromptPay && !value && !getFieldValue('idNumber')) {
+                return Promise.reject('กรุณากรอกเบอร์โทรศัพท์มือถือ หรือ เลขประจำตัวประชาชน');
+              }
+              return Promise.resolve();
+            },
+          }),
+          { pattern: /^[\d-]*\d[\d-]*$/, message: 'เบอร์โทรศัพท์มือถือไม่ถูกต้อง' },
+        ]}
       >
-        <Select mode="multiple" placeholder="Please select favourite colors">
-          <Option value="red">Red</Option>
-          <Option value="green">Green</Option>
-          <Option value="blue">Blue</Option>
-        </Select>
+        <Input type="tel" maxLength={13} />
       </Form.Item>
-
-      <Form.Item label="InputNumber">
-        <Form.Item name="input-number" noStyle>
-          <InputNumber min={1} max={10} />
-        </Form.Item>
-        <span className="ant-form-text"> machines</span>
+      <Form.Item
+        name="idNumber"
+        label="เลขประจำตัวประชาชน"
+        hasFeedback
+        dependencies={['phoneNumber']}
+        rules={[
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (paymentMethod === PaymentMethod.PromptPay && !value && !getFieldValue('phoneNumber')) {
+                return Promise.reject('กรุณากรอกเลขประจำตัวประชาชน หรือ เบอร์โทรศัพท์มือถือ');
+              }
+              return Promise.resolve();
+            },
+          }),
+          { pattern: /^[\d-]*\d[\d-]*$/, message: 'เลขประจำตัวประชาชนไม่ถูกต้อง' },
+        ]}
+      >
+        <Input type="tel" maxLength={17} />
       </Form.Item>
-
-      <Form.Item name="switch" label="Switch" valuePropName="checked">
-        <Switch />
-      </Form.Item>
-
-      <Form.Item name="slider" label="Slider">
-        <Slider
-          marks={{
-            0: 'A',
-            20: 'B',
-            40: 'C',
-            60: 'D',
-            80: 'E',
-            100: 'F',
-          }}
+      <Form.Item
+        name="amount"
+        label="ยอดเงินที่โดนโกง (บาท)"
+        rules={[{ required: true, message: 'กรุณากรอกยอดเงินที่โดนโกง' }]}
+        hasFeedback
+        wrapperCol={{
+          xs: { span: 6 },
+        }}
+      >
+        <InputNumber
+          precision={2}
+          min={0}
+          style={{ width: '100%' }}
+          formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          parser={(value) => (value ? value.replace(/(,*)/g, '') : '')}
         />
       </Form.Item>
-
-      <Form.Item name="radio-group" label="Radio.Group">
-        <Radio.Group>
-          <Radio value="a">item 1</Radio>
-          <Radio value="b">item 2</Radio>
-          <Radio value="c">item 3</Radio>
-        </Radio.Group>
-      </Form.Item>
-
-      <Form.Item name="radio-button" label="Radio.Button" rules={[{ required: true, message: 'Please pick an item!' }]}>
-        <Radio.Group>
-          <Radio.Button value="a">item 1</Radio.Button>
-          <Radio.Button value="b">item 2</Radio.Button>
-          <Radio.Button value="c">item 3</Radio.Button>
-        </Radio.Group>
-      </Form.Item>
-
-      <Form.Item name="checkbox-group" label="Checkbox.Group">
-        <Checkbox.Group>
-          <Row>
-            <Col span={8}>
-              <Checkbox value="A" style={{ lineHeight: '32px' }}>
-                A
-              </Checkbox>
-            </Col>
-            <Col span={8}>
-              <Checkbox value="B" style={{ lineHeight: '32px' }} disabled>
-                B
-              </Checkbox>
-            </Col>
-            <Col span={8}>
-              <Checkbox value="C" style={{ lineHeight: '32px' }}>
-                C
-              </Checkbox>
-            </Col>
-            <Col span={8}>
-              <Checkbox value="D" style={{ lineHeight: '32px' }}>
-                D
-              </Checkbox>
-            </Col>
-            <Col span={8}>
-              <Checkbox value="E" style={{ lineHeight: '32px' }}>
-                E
-              </Checkbox>
-            </Col>
-            <Col span={8}>
-              <Checkbox value="F" style={{ lineHeight: '32px' }}>
-                F
-              </Checkbox>
-            </Col>
-          </Row>
-        </Checkbox.Group>
-      </Form.Item>
-
-      <Form.Item name="rate" label="Rate">
-        <Rate />
-      </Form.Item>
-
       <Form.Item
-        name="upload"
-        label="Upload"
-        valuePropName="fileList"
-        getValueFromEvent={normFile}
-        extra="longgggggggggggggggggggggggggggggggggg"
+        name="eventDate"
+        label="วันที่ทำธุรกรรม"
+        rules={[{ type: 'object' as const, required: true, message: 'กรุณากรอกวันที่ทำธุรกรรม' }]}
+        hasFeedback
+        wrapperCol={{
+          xs: { span: 8 },
+          md: { span: 6 },
+          lg: { span: 4 },
+        }}
       >
-        <Upload name="logo" action="/upload.do" listType="picture">
-          <Button icon={<UploadOutlined />}>Click to upload</Button>
-        </Upload>
+        <DatePicker
+          format="DD/MM/YYYY"
+          style={{ width: '100%' }}
+          showToday
+          disabledDate={(currentDate) => currentDate > moment()}
+          placeholder="วัน/เดือน/ปี"
+        />
       </Form.Item>
-
-      <Form.Item label="Dragger">
-        <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
-          <Upload.Dragger name="files" action="/upload.do">
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-            <p className="ant-upload-hint">Support for a single or bulk upload.</p>
-          </Upload.Dragger>
-        </Form.Item>
+      <Form.Item
+        name="productLink"
+        label="พบสินค้าหรือบริการผ่านทาง"
+        rules={[{ required: true, message: 'กรุณากรอกที่มาของสินค้าหรือบริการ' }]}
+        hasFeedback
+      >
+        <Input type="url" placeholder="ลิงค์ไปยังสินค้าหรือบริการ เช่น http://www.cheatshop.com/example/1234" />
       </Form.Item>
-
-      <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
+      <Form.Item
+        name="eventDetail"
+        label="รายละเอียดเหตุการณ์"
+        rules={[{ required: true, message: 'กรุณากรอกรายละเอียดของเหตุการณ์' }]}
+        hasFeedback
+      >
+        <Input.TextArea />
+      </Form.Item>
+      <Form.Item wrapperCol={{ md: { span: 12, offset: 8 } }}>
         <Button type="primary" htmlType="submit">
-          Submit
+          ส่งรายงาน
         </Button>
       </Form.Item>
     </Form>
