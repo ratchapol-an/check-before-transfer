@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { withAuthUser, useAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
 import { Layout } from 'antd';
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import { ReportForm } from '@components/Report';

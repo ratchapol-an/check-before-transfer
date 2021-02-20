@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { Layout } from 'antd';
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import Hero from '@components/Hero';

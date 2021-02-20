@@ -1,8 +1,11 @@
+import { FunctionComponent } from 'react';
 import { GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
 import { withAuthUser, useAuthUser, withAuthUserTokenSSR, SSRPropsContext } from 'next-firebase-auth';
+
 import { Divider } from 'antd';
 import Layout, { Content } from 'antd/lib/layout/layout';
+
 import Container from '@components/Container';
 import Header from '@components/Header';
 import { NoResults, SearchForm, SearchResults } from '@components/Search';
@@ -10,7 +13,6 @@ import SearchBy from 'models/searchBy';
 import { search, SearchResult } from 'services/reportingService';
 
 import './results.less';
-import { FunctionComponent } from 'react';
 import { ParsedUrlQuery } from 'querystring';
 
 // type Props = InferGetServerSidePropsType<typeof getServerSideProps>;

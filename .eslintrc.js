@@ -30,6 +30,7 @@ module.exports = {
     'plugin:import/typescript',
   ],
   rules: {
+    'prefer-promise-reject-errors': 'off',
     'react/jsx-props-no-spreading': ['off'],
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
