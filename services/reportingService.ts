@@ -7,7 +7,7 @@ import axios from 'axios';
 // - nvm use 12
 // - yarn build & yarn serve
 
-axios.defaults.baseURL = 'http://localhost:5001/check-before-transfer/asia-southeast2';
+axios.defaults.baseURL = 'http://localhost:5001/check-before-transfer/asia-southeast2/api';
 // PROD URL
 // https://asia-southeast2-check-before-transfer.cloudfunctions.net
 export interface SearchResult {

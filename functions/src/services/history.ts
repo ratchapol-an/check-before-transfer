@@ -5,6 +5,7 @@ import { logger } from 'firebase-functions';
 import { ReportHistory, ActionType, Report } from '../types';
 
 const { serverTimestamp } = admin.firestore.FieldValue;
+
 const REPORT_HISTORY_COLLECTION = 'report_histories';
 
 export const saveHistory = async (
