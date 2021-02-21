@@ -1,24 +1,11 @@
-import {
-  Form,
-  Select,
-  Input,
-  InputNumber,
-  Switch,
-  Radio,
-  Slider,
-  Button,
-  Upload,
-  Rate,
-  Checkbox,
-  Row,
-  Col,
-  DatePicker,
-} from 'antd';
-import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
+import { Form, Select, Input, InputNumber, Button, DatePicker } from 'antd';
 import PaymentMethod, { paymentMethodCaptions } from 'models/PaymentMethod';
 import { useState } from 'react';
 import { data } from 'banks-logo';
 import moment from 'moment';
+import PicturesWall from '@components/PicturesWall';
+import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
+import Report, { BasedReport } from '@models/Report';
 
 const { Option } = Select;
 
@@ -35,11 +22,9 @@ const formItemLayout = {
   },
 };
 
-const normFile = (e: any) => {
+const normFile = (e: UploadChangeParam) => {
   console.log('Upload event:', e);
-  if (Array.isArray(e)) {
-    return e;
-  }
+
   return e && e.fileList;
 };
 
@@ -52,27 +37,18 @@ const bankOptions = (Object.keys(data) as Array<keyof typeof data>).map((key) =>
   );
 });
 
-const ReportForm: React.FunctionComponent = () => {
+type ReportFormProps = {
+  onFinish: (values: ReportFormValues) => void;
+};
+
+const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish }) => {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
   const handlePaymentMethodSelect = (value: PaymentMethod) => {
     setPaymentMethod(value);
   };
 
-  const onFinish = (values: any) => {
-    console.log('Received values of form: ', values);
-  };
-
   return (
-    <Form
-      name="report"
-      {...formItemLayout}
-      onFinish={onFinish}
-      initialValues={{
-        'input-number': 3,
-        'checkbox-group': ['A', 'B'],
-        rate: 3.5,
-      }}
-    >
+    <Form name="report" {...formItemLayout} onFinish={onFinish}>
       <Form.Item
         name="paymentMethod"
         label="ช่องทางการชำระเงิน"
@@ -116,6 +92,7 @@ const ReportForm: React.FunctionComponent = () => {
         label="เบอร์โทรศัพท์มือถือ"
         hasFeedback
         dependencies={['idNumber']}
+        required={paymentMethod === PaymentMethod.PromptPay}
         rules={[
           ({ getFieldValue }) => ({
             validator(_, value) {
@@ -135,6 +112,7 @@ const ReportForm: React.FunctionComponent = () => {
         label="เลขประจำตัวประชาชน"
         hasFeedback
         dependencies={['phoneNumber']}
+        required={paymentMethod === PaymentMethod.PromptPay}
         rules={[
           ({ getFieldValue }) => ({
             validator(_, value) {
@@ -201,8 +179,29 @@ const ReportForm: React.FunctionComponent = () => {
       >
         <Input.TextArea />
       </Form.Item>
+      <Form.Item label="หลักฐานประกอบ" required>
+        <Form.Item
+          name="attachedFiles"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+          noStyle
+          rules={[
+            () => ({
+              validator(_, value: UploadFile[]) {
+                console.log(value);
+                if (!value || value.filter((o) => o.status === 'done' || o.status === 'success').length <= 0) {
+                  return Promise.reject('กรุณาอัพโหลดหลักฐานประกอบ');
+                }
+                return Promise.resolve();
+              },
+            }),
+          ]}
+        >
+          <PicturesWall uploadBtnVisible />
+        </Form.Item>
+      </Form.Item>
       <Form.Item wrapperCol={{ md: { span: 12, offset: 8 } }}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" size="large">
           ส่งรายงาน
         </Button>
       </Form.Item>
@@ -211,3 +210,5 @@ const ReportForm: React.FunctionComponent = () => {
 };
 
 export default ReportForm;
+
+export type ReportFormValues = BasedReport & { uploadFiles: UploadFile[] };

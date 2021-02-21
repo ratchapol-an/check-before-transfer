@@ -27,31 +27,38 @@ export const search = async (value: string, by: SearchBy): Promise<SearchResult>
   return data;
 };
 
-export const addReport = (report: Report) => {
-  axios
-    .post<{ report_id: string }>('/addReport', {
+export const addReport = async (report: Report, token: string) => {
+  await axios.post<{ report_id: string }>(
+    '/addReport',
+    {
       body: report,
-    })
-    .then(({ data }) => {
-      console.log(data.report_id);
-      // return data.report_id;
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
 };
 
 interface UpdateReportReq {
   report_id: string;
-  reporter_id: string;
   report: Report;
 }
 
-export const updateReport = (req: UpdateReportReq) => {
+export const updateReport = (req: UpdateReportReq, token: string) => {
   axios
-    .put<{ report_id: string }>('/updateReport', {
-      body: req,
-    })
+    .put<{ report_id: string }>(
+      '/updateReport',
+      {
+        body: req,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
     .then(({ data }) => {
       return data.report_id;
     })
@@ -62,15 +69,22 @@ export const updateReport = (req: UpdateReportReq) => {
 
 interface VerifyReportReq {
   report_id: string;
-  reporter_id: string;
   status: number;
 }
 
-export const verifyReport = (req: VerifyReportReq) => {
+export const verifyReport = (req: VerifyReportReq, token: string) => {
   axios
-    .put<{ report_id: string }>('/verify', {
-      body: req,
-    })
+    .put<{ report_id: string }>(
+      '/verify',
+      {
+        body: req,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
     .then(({ data }) => {
       console.log(data.report_id);
     })

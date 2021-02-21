@@ -6,25 +6,32 @@ import { firebaseAdmin, db } from './firebase';
 import { saveHistory } from './history';
 import { getSearchQuery } from './search';
 import { Report, ActionType } from '../types';
+import { getAuthorizationToken, validateIsAdmin, validateToken } from './admin';
 
 const REPORT_COLLECTION = 'reports';
 
 export const addReport = async (req: Request, res: Response): Promise<Response<any>> => {
   if (req.method !== 'POST') return res.status(403).send('Forbidden!');
+  const idToken = getAuthorizationToken(req);
+  if (idToken === '') return res.status(401).send('Unauthorized');
+
+  const token = await validateToken(idToken);
+  if (!token) return res.status(401).send('Unauthorized');
+
   const { body } = req;
-  const reporterID = body.reporter_id;
+  const reporterID = body.reporterId;
   const newReport: Report = {
-    bankCode: body.bank_code,
-    bankAccountNumber: body.bank_account_number,
+    bankCode: body.bankCode,
+    bankAccountNumber: body.bankAccountNumber,
     name: body.name,
-    phoneNumber: body.phone_number,
-    nationalIdNumber: body.national_id_number,
+    phoneNumber: body.phoneNumber,
+    nationalIdNumber: body.nationalIdNumber,
     amount: body.amount,
-    eventDate: body.event_date,
-    eventDetail: body.event_detail,
-    reporterId: body.reporter_id,
-    paymentMethod: body.payment_method,
-    productLink: body.product_link,
+    eventDate: body.eventDate,
+    eventDetail: body.eventDetail,
+    reporterId: token.uid,
+    paymentMethod: body.paymentMethod,
+    productLink: body.productLink,
     status: 1,
     document: [],
     created_at: firebaseAdmin.firestore.Timestamp.fromDate(dayjs().toDate()),
@@ -44,22 +51,27 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
 
 export const updateReport = async (req: Request, res: Response): Promise<Response<any>> => {
   if (req.method !== 'PUT') return res.status(403).send('Forbidden!');
-  const { report_id, report, reporter_id } = req.body;
+  const idToken = getAuthorizationToken(req);
+  if (idToken === '') return res.status(401).send('Unauthorized');
+
+  const token = await validateToken(idToken);
+  if (!token) return res.status(401).send('Unauthorized');
+
+  const { report_id, report } = req.body;
   const reportID = report_id;
-  const reporterID = reporter_id;
+  const reporterID = token.sub;
 
   const newReport: Report = {
-    bankCode: report.bank_code,
-    bankAccountNumber: report.bank_account_number,
+    bankCode: report.bankCode,
+    bankAccountNumber: report.bankAccountNumber,
     name: report.name,
-    phoneNumber: report.phone_number,
-    nationalIdNumber: report.national_id_number,
+    phoneNumber: report.phoneNumber,
+    nationalIdNumber: report.nationalIdNumber,
     amount: report.amount,
-    eventDate: report.event_date,
-    eventDetail: report.event_detail,
-    reporterId: report.reporter_id,
-    paymentMethod: report.payment_method,
-    productLink: report.product_link,
+    eventDate: report.eventDate,
+    eventDetail: report.eventDetail,
+    paymentMethod: report.paymentMethod,
+    productLink: report.productLink,
     status: report.status,
     document: [],
   };
@@ -70,6 +82,7 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
     if (reportDoc.exists) {
       oldReport = reportDoc.data() || {};
     }
+
     await saveHistory(reporterID, ActionType.UPDATE, reportID, oldReport, newReport, db);
 
     await reportRef.update(newReport);
@@ -84,7 +97,17 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
 
 export const verify = async (req: Request, res: Response): Promise<Response<any>> => {
   if (req.method !== 'PUT') return res.status(403).send('Forbidden!');
-  const { report_id, reporter_id, status } = req.body;
+
+  const idToken = getAuthorizationToken(req);
+
+  if (idToken === '') return res.status(401).send('Unauthorized');
+
+  const token = await validateIsAdmin(idToken);
+  if (!token) return res.status(401).send('Unauthorized');
+
+  const { report_id, status } = req.body;
+  const reporterID = token.sub;
+
   try {
     const reportRef = await db.collection(REPORT_COLLECTION).doc(report_id);
     const reportDoc = await reportRef.get();
@@ -95,7 +118,7 @@ export const verify = async (req: Request, res: Response): Promise<Response<any>
     reportRef.update({
       status,
     });
-    await saveHistory(reporter_id, ActionType.UPDATE, report_id, oldStatus?.status, status, db);
+    await saveHistory(reporterID, ActionType.UPDATE, report_id, oldStatus?.status, status, db);
     return res.status(200).json({
       reportID: report_id,
     });

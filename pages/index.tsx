@@ -13,6 +13,7 @@ interface HomeProps {
 export const Home: FunctionComponent<HomeProps> = ({ email }) => {
   const { Content, Footer } = Layout;
   const AuthUser = useAuthUser();
+  console.log('token', AuthUser.getIdToken());
 
   return (
     <>
@@ -20,7 +21,7 @@ export const Home: FunctionComponent<HomeProps> = ({ email }) => {
         <title>เช็คก่อนโอน</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout className="home-page-layout">
+      <Layout className="home-page-layout layout-with-bg">
         <Header auth={AuthUser} />
         <Content>
           <Container>

@@ -1,7 +1,7 @@
 import PaymentMethod from './PaymentMethod';
 import ReportStatus from './ReportStatus';
 
-type Report = {
+export type BasedReport = {
   bankCode?: string;
   bankAccountNumber?: string;
   name?: string;
@@ -17,6 +17,10 @@ type Report = {
   status: ReportStatus;
 };
 
+type Report = BasedReport & {
+  attachedFiles?: string[];
+};
+
 export const mockReport: Report = {
   amount: 5241.63,
   eventDate: new Date('October 13, 2014').toISOString(),
@@ -30,6 +34,7 @@ export const mockReport: Report = {
   status: ReportStatus.Approved,
   phoneNumber: '0945603070',
   name: 'สมชาย ใจดี',
+  attachedFiles: [],
 };
 
 export default Report;

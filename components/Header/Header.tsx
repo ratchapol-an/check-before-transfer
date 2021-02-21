@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { WithAuth } from '@models/Authentication';
 import './header.less';
+import { useRouter } from 'next/router';
 
 type HeaderProps = {
   auth: WithAuth;
@@ -12,6 +13,13 @@ type HeaderProps = {
 
 const Header: React.FunctionComponent<HeaderProps> = ({ auth }) => {
   const { Header: AntdHeader } = Layout;
+  const router = useRouter();
+  const handleReportBtnClick = () => {
+    router.push('/report');
+  };
+  const handleLoginBtnClick = () => {
+    router.push('/user/login');
+  };
   return (
     <AntdHeader className="header">
       <Container className="header-container">
@@ -24,7 +32,7 @@ const Header: React.FunctionComponent<HeaderProps> = ({ auth }) => {
           </a>
         </Link>
         <Space direction="horizontal">
-          <Button type="primary" ghost size="large">
+          <Button type="primary" ghost size="large" onClick={handleReportBtnClick}>
             รายงานการโกง
           </Button>
           {auth.email ? (
@@ -32,8 +40,8 @@ const Header: React.FunctionComponent<HeaderProps> = ({ auth }) => {
               ออจากระบบ
             </Button>
           ) : (
-            <Button type="link" size="large" onClick={(e) => e.preventDefault()}>
-              <Link href="/user/login">เข้าสู่ระบบ</Link>
+            <Button type="link" size="large" onClick={handleLoginBtnClick}>
+              เข้าสู่ระบบ
             </Button>
           )}
         </Space>
