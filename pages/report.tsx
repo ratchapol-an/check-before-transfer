@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Layout } from 'antd';
+import { Card, Divider, Layout, Typography } from 'antd';
 import React from 'react';
 import Header from '@components/Header';
 import Container from '@components/Container';
@@ -8,6 +8,7 @@ import { ReportForm } from '@components/Report';
 
 export default function Report() {
   const { Content, Footer } = Layout;
+  const { Title } = Typography;
   return (
     <>
       <Head>
@@ -17,8 +18,12 @@ export default function Report() {
       <Layout className="report-page-layout">
         <Header />
         <Content>
+          <Divider />
           <Container>
-            <ReportForm />
+            <Title level={3}>รายงานการโกง</Title>
+            <Card>
+              <ReportForm />
+            </Card>
           </Container>
         </Content>
       </Layout>
