@@ -4,6 +4,7 @@ import Header from '@components/Header';
 import Container from '@components/Container';
 import { ReportForm } from '@components/Report';
 import './index.less';
+
 import { useAuthUser, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
 
 const Report: React.FunctionComponent = () => {
