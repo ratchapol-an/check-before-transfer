@@ -6,11 +6,18 @@ import { firebaseAdmin, db } from './firebase';
 import { saveHistory } from './history';
 import { getSearchQuery } from './search';
 import { Report, ActionType } from '../types';
+import { getAuthorizationToken, validateIsAdmin, validateToken } from './admin';
 
 const REPORT_COLLECTION = 'reports';
 
 export const addReport = async (req: Request, res: Response): Promise<Response<any>> => {
   if (req.method !== 'POST') return res.status(403).send('Forbidden!');
+  const idToken = getAuthorizationToken(req);
+  if (idToken === '') return res.status(401).send('Unauthorized');
+
+  const isValid = await validateToken(idToken);
+  if (!isValid) return res.status(401).send('Unauthorized');
+
   const { body } = req;
   const reporterID = body.reporterId;
   const newReport: Report = {
@@ -44,6 +51,12 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
 
 export const updateReport = async (req: Request, res: Response): Promise<Response<any>> => {
   if (req.method !== 'PUT') return res.status(403).send('Forbidden!');
+  const idToken = getAuthorizationToken(req);
+  if (idToken === '') return res.status(401).send('Unauthorized');
+
+  const isValid = await validateToken(idToken);
+  if (!isValid) return res.status(401).send('Unauthorized');
+
   const { report_id, report, reporter_id } = req.body;
   const reportID = report_id;
   const reporterID = reporter_id;
@@ -84,6 +97,13 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
 
 export const verify = async (req: Request, res: Response): Promise<Response<any>> => {
   if (req.method !== 'PUT') return res.status(403).send('Forbidden!');
+
+  const idToken = getAuthorizationToken(req);
+  if (idToken === '') return res.status(401).send('Unauthorized');
+
+  const isAdmin = await validateIsAdmin(idToken);
+  if (!isAdmin) return res.status(401).send('Unauthorized');
+
   const { report_id, reporter_id, status } = req.body;
   try {
     const reportRef = await db.collection(REPORT_COLLECTION).doc(report_id);
