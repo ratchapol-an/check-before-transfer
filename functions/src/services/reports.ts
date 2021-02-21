@@ -12,19 +12,19 @@ const REPORT_COLLECTION = 'reports';
 export const addReport = async (req: Request, res: Response): Promise<Response<any>> => {
   if (req.method !== 'POST') return res.status(403).send('Forbidden!');
   const { body } = req;
-  const reporterID = body.reporter_id;
+  const reporterID = body.reporterId;
   const newReport: Report = {
-    bankCode: body.bank_code,
-    bankAccountNumber: body.bank_account_number,
+    bankCode: body.bankCode,
+    bankAccountNumber: body.bankAccountNumber,
     name: body.name,
-    phoneNumber: body.phone_number,
-    nationalIdNumber: body.national_id_number,
+    phoneNumber: body.phoneNumber,
+    nationalIdNumber: body.nationalIdNumber,
     amount: body.amount,
-    eventDate: body.event_date,
-    eventDetail: body.event_detail,
-    reporterId: body.reporter_id,
-    paymentMethod: body.payment_method,
-    productLink: body.product_link,
+    eventDate: body.eventDate,
+    eventDetail: body.eventDetail,
+    reporterId: body.reporterId,
+    paymentMethod: body.paymentMethod,
+    productLink: body.productLink,
     status: 1,
     document: [],
     created_at: firebaseAdmin.firestore.Timestamp.fromDate(dayjs().toDate()),
@@ -49,17 +49,17 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
   const reporterID = reporter_id;
 
   const newReport: Report = {
-    bankCode: report.bank_code,
-    bankAccountNumber: report.bank_account_number,
+    bankCode: report.bankCode,
+    bankAccountNumber: report.bankAccountNumber,
     name: report.name,
-    phoneNumber: report.phone_number,
-    nationalIdNumber: report.national_id_number,
+    phoneNumber: report.phoneNumber,
+    nationalIdNumber: report.nationalIdNumber,
     amount: report.amount,
-    eventDate: report.event_date,
-    eventDetail: report.event_detail,
-    reporterId: report.reporter_id,
-    paymentMethod: report.payment_method,
-    productLink: report.product_link,
+    eventDate: report.eventDate,
+    eventDetail: report.eventDetail,
+    reporterId: report.reporterId,
+    paymentMethod: report.paymentMethod,
+    productLink: report.productLink,
     status: report.status,
     document: [],
   };

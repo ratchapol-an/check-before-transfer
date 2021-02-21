@@ -4,6 +4,7 @@ import Header from '@components/Header';
 import Container from '@components/Container';
 import { ReportForm, ReportFormValues } from '@components/Report';
 import './index.less';
+
 import { useAuthUser, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
 import { addReport } from 'services/reportingService';
 import React from 'react';
