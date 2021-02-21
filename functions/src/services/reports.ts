@@ -129,7 +129,12 @@ export const getReport = async (req: Request, res: Response): Promise<Response<a
       reports.push(report);
     });
     // console.log(dayjs.unix(reports[0].created_at.seconds).add(7, 'hours').format(DATE_FORMAT));
-    console.log(reports[0]);
+    console.log({
+      name: q,
+      totalReport: reports.length,
+      totalDamagedPrice,
+      lastedReport: reports[0],
+    });
     return res.status(200).send({
       name: q,
       totalReport: reports.length,

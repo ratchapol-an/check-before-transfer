@@ -1,7 +1,6 @@
 import { Card } from 'antd';
 import Layout, { Content } from 'antd/lib/layout/layout';
 import Head from 'next/head';
-import React from 'react';
 import './tmp.less';
 
 export default function SignIn() {

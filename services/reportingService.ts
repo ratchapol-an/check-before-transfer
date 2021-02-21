@@ -24,7 +24,6 @@ export const search = async (value: string, by: SearchBy): Promise<SearchResult>
     },
     timeout: 1000,
   });
-  console.log(data);
   return data;
 };
 

@@ -3,10 +3,14 @@ import { Button, Layout, Menu, Space } from 'antd';
 import Container from '@components/Container';
 import Image from 'next/image';
 import Link from 'next/link';
-
+import { WithAuth } from '@models/Authentication';
 import './header.less';
 
-const Header: React.FunctionComponent = () => {
+type HeaderProps = {
+  auth: WithAuth;
+};
+
+const Header: React.FunctionComponent<HeaderProps> = ({ auth }) => {
   const { Header: AntdHeader } = Layout;
   return (
     <AntdHeader className="header">
@@ -23,9 +27,15 @@ const Header: React.FunctionComponent = () => {
           <Button type="primary" ghost size="large">
             รายงานการโกง
           </Button>
-          <Button type="link" size="large">
-            เข้าสู่ระบบ
-          </Button>
+          {auth.email ? (
+            <Button type="link" size="large" onClick={auth.signOut}>
+              ออจากระบบ
+            </Button>
+          ) : (
+            <Button type="link" size="large" onClick={(e) => e.preventDefault()}>
+              <Link href="/user/login">เข้าสู่ระบบ</Link>
+            </Button>
+          )}
         </Space>
       </Container>
     </AntdHeader>
