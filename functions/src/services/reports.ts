@@ -15,8 +15,8 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
   const idToken = getAuthorizationToken(req);
   if (idToken === '') return res.status(401).send('Unauthorized');
 
-  const isValid = await validateToken(idToken);
-  if (!isValid) return res.status(401).send('Unauthorized');
+  const token = await validateToken(idToken);
+  if (!token) return res.status(401).send('Unauthorized');
 
   const { body } = req;
   const reporterID = body.reporterId;
@@ -29,7 +29,7 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
     amount: body.amount,
     eventDate: body.eventDate,
     eventDetail: body.eventDetail,
-    reporterId: body.reporterId,
+    reporterId: token.uid,
     paymentMethod: body.paymentMethod,
     productLink: body.productLink,
     status: 1,
@@ -54,12 +54,12 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
   const idToken = getAuthorizationToken(req);
   if (idToken === '') return res.status(401).send('Unauthorized');
 
-  const isValid = await validateToken(idToken);
-  if (!isValid) return res.status(401).send('Unauthorized');
+  const token = await validateToken(idToken);
+  if (!token) return res.status(401).send('Unauthorized');
 
-  const { report_id, report, reporter_id } = req.body;
+  const { report_id, report } = req.body;
   const reportID = report_id;
-  const reporterID = reporter_id;
+  const reporterID = token.sub;
 
   const newReport: Report = {
     bankCode: report.bankCode,
@@ -70,7 +70,6 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
     amount: report.amount,
     eventDate: report.eventDate,
     eventDetail: report.eventDetail,
-    reporterId: report.reporterId,
     paymentMethod: report.paymentMethod,
     productLink: report.productLink,
     status: report.status,
@@ -83,6 +82,7 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
     if (reportDoc.exists) {
       oldReport = reportDoc.data() || {};
     }
+
     await saveHistory(reporterID, ActionType.UPDATE, reportID, oldReport, newReport, db);
 
     await reportRef.update(newReport);
@@ -99,12 +99,15 @@ export const verify = async (req: Request, res: Response): Promise<Response<any>
   if (req.method !== 'PUT') return res.status(403).send('Forbidden!');
 
   const idToken = getAuthorizationToken(req);
+
   if (idToken === '') return res.status(401).send('Unauthorized');
 
-  const isAdmin = await validateIsAdmin(idToken);
-  if (!isAdmin) return res.status(401).send('Unauthorized');
+  const token = await validateIsAdmin(idToken);
+  if (!token) return res.status(401).send('Unauthorized');
 
-  const { report_id, reporter_id, status } = req.body;
+  const { report_id, status } = req.body;
+  const reporterID = token.sub;
+
   try {
     const reportRef = await db.collection(REPORT_COLLECTION).doc(report_id);
     const reportDoc = await reportRef.get();
@@ -115,7 +118,7 @@ export const verify = async (req: Request, res: Response): Promise<Response<any>
     reportRef.update({
       status,
     });
-    await saveHistory(reporter_id, ActionType.UPDATE, report_id, oldStatus?.status, status, db);
+    await saveHistory(reporterID, ActionType.UPDATE, report_id, oldStatus?.status, status, db);
     return res.status(200).json({
       reportID: report_id,
     });

@@ -1,22 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
-import { firebaseAdmin } from './firebase';
+import { firebaseAdmin, AuthVerifyToken } from './firebase';
 
-export const validateToken = async (idToken: string): Promise<boolean> => {
-  try {
-    await firebaseAdmin.auth().verifyIdToken(idToken);
-    return true;
-  } catch (e) {
-    return false;
-  }
-};
-export const validateIsAdmin = async (idToken: string): Promise<boolean> => {
+export const validateToken = async (idToken: string): Promise<AuthVerifyToken | undefined> => {
   try {
     const decodedVerifyToken = await firebaseAdmin.auth().verifyIdToken(idToken);
-    if (decodedVerifyToken.admin !== true) return false;
-    return true;
+    return decodedVerifyToken;
   } catch (e) {
-    return false;
+    return undefined;
+  }
+};
+export const validateIsAdmin = async (idToken: string): Promise<AuthVerifyToken | undefined> => {
+  try {
+    const decodedVerifyToken = await firebaseAdmin.auth().verifyIdToken(idToken);
+    if (decodedVerifyToken.superUser === true) return decodedVerifyToken;
+    if (decodedVerifyToken.admin !== true) return undefined;
+    return decodedVerifyToken;
+  } catch (e) {
+    console.log(e.response.message);
+    return undefined;
   }
 };
 
@@ -41,6 +43,7 @@ export const createAdmin = async (req: Request, res: Response): Promise<Response
   if (req.method !== 'POST') return res.status(403).send('Forbidden!');
 
   const idToken = getAuthorizationToken(req);
+
   if (idToken === '') return res.status(401).send('Unauthorized');
 
   const isSuperUser = await validateIsSuperUser(idToken);

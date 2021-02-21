@@ -13,6 +13,7 @@ interface HomeProps {
 export const Home: FunctionComponent<HomeProps> = ({ email }) => {
   const { Content, Footer } = Layout;
   const AuthUser = useAuthUser();
+  console.log('token', AuthUser.getIdToken());
 
   return (
     <>

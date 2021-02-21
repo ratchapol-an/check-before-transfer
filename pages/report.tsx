@@ -5,19 +5,31 @@ import Container from '@components/Container';
 import { ReportForm, ReportFormValues } from '@components/Report';
 import './index.less';
 
-import { useAuthUser, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
+import { AuthAction, useAuthUser, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
 import { addReport } from 'services/reportingService';
 import React from 'react';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 
-const ReportPage: React.FunctionComponent = () => {
+interface ReportPageProps {
+  userToken?: string;
+}
+const ReportPage: React.FunctionComponent<ReportPageProps> = ({ userToken }) => {
   const { Content } = Layout;
   const { Title } = Typography;
-  const { confirm } = Modal;
+  const { confirm, error } = Modal;
   const AuthUser = useAuthUser();
   const router = useRouter();
+
   const handleFormFinish = async (values: ReportFormValues) => {
+    if (!userToken) {
+      error({
+        title: 'Something went wrong.',
+        content: 'Please try again.',
+      });
+      return;
+    }
+
     confirm({
       title: 'รู้ก่อนส่ง',
       icon: <ExclamationCircleOutlined />,
@@ -25,7 +37,7 @@ const ReportPage: React.FunctionComponent = () => {
         'ประมวลกฎหมายอาญา กำหนดความผิดฐานหมิ่นประมาทไว้ใน มาตรา 326 โดยมีมาตรา 328 เป็นบทเพิ่มโทษบัญญัติไว้ว่า "มาตรา 326 ผู้ใดใส่ความผู้อื่นต่อบุคคลที่สาม โดยประการที่น่าจะทำให้ผู้อื่นนั้นเสียชื่อเสียง ถูกดูหมิ่น หรือถูกเกลียดชัง ผู้นั้นกระทำความผิดฐานหมิ่นประมาท ต้องระวางโทษจำคุกไม่เกินหนึ่งปี หรือปรับไม่เกินสองหมื่นบาท หรือทั้งจำทั้งปรับ"',
       async onOk() {
         const { uploadFiles, ...report } = values;
-        await addReport(report);
+        await addReport(report, userToken);
         router.push('/thankyou');
       },
       onCancel() {},
@@ -55,13 +67,17 @@ const ReportPage: React.FunctionComponent = () => {
   );
 };
 
-export const getServerSideProps = withAuthUserTokenSSR()(async ({ AuthUser }) => {
+export const getServerSideProps = withAuthUserTokenSSR({
+  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+})(async ({ AuthUser }) => {
   const token = await AuthUser.getIdToken();
-  console.log('token', token);
-
   return {
-    props: {},
+    props: {
+      userToken: token,
+    },
   };
 });
 
-export default withAuthUser()(ReportPage);
+export default withAuthUser({
+  whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+})(ReportPage);

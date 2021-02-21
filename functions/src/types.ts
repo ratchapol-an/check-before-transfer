@@ -22,7 +22,7 @@ export interface Report {
   amount: number;
   eventDate: string;
   eventDetail: string;
-  reporterId: string;
+  reporterId?: string;
   paymentMethod: PaymentMethod;
   productLink: string;
   status: ReportStatus;
