@@ -30,7 +30,7 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchValue, searc
         <title>เช็คก่อนโอน</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout className="results-page-layout">
+      <Layout className="results-page-layout layout-with-bg">
         <Header auth={AuthUser} />
         <Content className="results-page-content">
           <Container>

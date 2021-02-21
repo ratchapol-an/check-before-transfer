@@ -27,18 +27,10 @@ export const search = async (value: string, by: SearchBy): Promise<SearchResult>
   return data;
 };
 
-export const addReport = (report: Report) => {
-  axios
-    .post<{ report_id: string }>('/addReport', {
-      body: report,
-    })
-    .then(({ data }) => {
-      console.log(data.report_id);
-      // return data.report_id;
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+export const addReport = async (report: Report) => {
+  await axios.post<{ report_id: string }>('/addReport', {
+    body: report,
+  });
 };
 
 interface UpdateReportReq {

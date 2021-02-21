@@ -20,7 +20,7 @@ export const Home: FunctionComponent<HomeProps> = ({ email }) => {
         <title>เช็คก่อนโอน</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout className="home-page-layout">
+      <Layout className="home-page-layout layout-with-bg">
         <Header auth={AuthUser} />
         <Content>
           <Container>
