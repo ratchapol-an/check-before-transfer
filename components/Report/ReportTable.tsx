@@ -4,16 +4,39 @@ import PaymentMethod, { paymentMethodCaptions } from '@models/PaymentMethod';
 import productTypeCaptions from '@models/productTypeCaptions';
 import Report, { mockReport } from '@models/Report';
 import ReportStatus, { reportStatusCaptions, reportStatusColors } from '@models/ReportStatus';
-import { Table, Tag, Space, Button, Modal } from 'antd';
+import { Table, Tag, Space, Button, Modal, TablePaginationConfig } from 'antd';
+import { PaginationConfig } from 'antd/lib/pagination';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { PaginatedReports } from 'services/reportingService';
 import { formatAmount } from 'utils';
 
 type ReportTableProps = {
   onDeleteReport: (reportId: string) => Promise<void>;
+  onLoadReports: (pagination: PaginationConfig) => Promise<PaginatedReports>;
 };
-const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport }) => {
+const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport, onLoadReports }) => {
   const [reports, setReports] = useState<Report[]>([mockReport]);
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
+    current: 1,
+    pageSize: 10,
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const loadReportsCallback = useCallback(
+    async ({ position, ...restConfig }: TablePaginationConfig) => {
+      setIsLoading(true);
+      const response = await onLoadReports(restConfig);
+      setReports(response.data);
+      setPagination({ total: response.total });
+      setIsLoading(false);
+    },
+    [onLoadReports],
+  );
+
+  useEffect(() => {
+    loadReportsCallback(pagination);
+  }, [pagination, loadReportsCallback]);
+
   const handleDelete = (id: string) => {
     Modal.confirm({
       title: 'คุณยืนยันที่จะลบรายงานนี้?',
@@ -26,8 +49,15 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
       },
     });
   };
+
   return (
-    <Table dataSource={reports} rowKey={(report) => report.id}>
+    <Table
+      dataSource={reports}
+      rowKey={(report) => report.id}
+      pagination={pagination as TablePaginationConfig}
+      loading={isLoading}
+      onChange={loadReportsCallback}
+    >
       <Table.Column<Report> title="วันที่ทำธุรกรรม" dataIndex="eventDate" key="eventDate" />
       <Table.Column<Report>
         title="ประเภทสินค้า/บริการ"
