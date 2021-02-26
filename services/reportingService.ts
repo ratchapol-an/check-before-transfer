@@ -28,7 +28,7 @@ export const search = async (value: string, by: SearchBy): Promise<SearchResult>
 };
 
 export const addReport = async (report: Report, token: string) => {
-  await axios.post<{ report_id: string }>(
+  const { data } = await axios.post<{ reportId: string }>(
     '/addReport',
     {
       body: report,
@@ -39,6 +39,8 @@ export const addReport = async (report: Report, token: string) => {
       },
     },
   );
+
+  return data.reportId;
 };
 
 interface UpdateReportReq {
@@ -92,3 +94,5 @@ export const verifyReport = (req: VerifyReportReq, token: string) => {
       console.log(e);
     });
 };
+
+export const deleteReport = async (reportId: string, token: string) => {};

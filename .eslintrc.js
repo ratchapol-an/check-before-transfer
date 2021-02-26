@@ -34,6 +34,7 @@ module.exports = {
     'react/jsx-props-no-spreading': ['off'],
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
+    'react/display-name': ['off'],
     '@typescript-eslint/no-unused-vars': ['off'],
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/explicit-function-return-type': ['off'],
@@ -58,6 +59,7 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
+    'jsx-a11y/anchor-is-valid': 'off',
   },
   settings: {
     'import/parsers': {

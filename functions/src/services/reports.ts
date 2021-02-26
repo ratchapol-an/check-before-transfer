@@ -38,11 +38,11 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
   };
   try {
     const writeResult = await db.collection(REPORT_COLLECTION).add(newReport);
-    const reportID = writeResult.id;
-    await saveHistory(reporterID, ActionType.CREATE, reportID, {}, newReport, db);
-    functions.logger.info(`Add report ${reportID} by ${reporterID}`, { structuredData: true });
+    const reportId = writeResult.id;
+    await saveHistory(reporterID, ActionType.CREATE, reportId, {}, newReport, db);
+    functions.logger.info(`Add report ${reportId} by ${reporterID}`, { structuredData: true });
     return res.status(200).json({
-      reportID,
+      reportId,
     });
   } catch (e) {
     return res.status(500).send(e.message);

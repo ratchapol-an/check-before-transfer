@@ -2,6 +2,7 @@ import PaymentMethod from './PaymentMethod';
 import ReportStatus from './ReportStatus';
 
 export type BasedReport = {
+  id: string;
   bankCode?: string;
   bankAccountNumber?: string;
   name?: string;
@@ -22,6 +23,7 @@ type Report = BasedReport & {
 };
 
 export const mockReport: Report = {
+  id: '0ikgg3hLqgbHLQucpxsy',
   amount: 5241.63,
   eventDate: new Date('October 13, 2014').toISOString(),
   eventDetail:

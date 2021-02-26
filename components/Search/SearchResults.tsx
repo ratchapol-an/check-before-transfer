@@ -3,6 +3,7 @@ import { WarningOutlined } from '@ant-design/icons';
 import Report from 'models/Report';
 import { paymentMethodCaptions } from 'models/PaymentMethod';
 import productTypeCaptions from 'models/productTypeCaptions';
+import { formatAmount } from 'utils';
 
 type SearchResultsProps = {
   lastReport: Report;
@@ -16,7 +17,6 @@ const SearchResults: React.FunctionComponent<SearchResultsProps> = ({
   totalAmount,
 }) => {
   const { Title } = Typography;
-  const formatter = new Intl.NumberFormat('th-TH');
   return (
     <section className="search-results">
       <Title level={3}>พบรายงานการโกง</Title>
@@ -38,7 +38,7 @@ const SearchResults: React.FunctionComponent<SearchResultsProps> = ({
           <Descriptions.Item label="ประเภทสินค้า/บริการ">
             {productTypeCaptions[lastReport.productType]}
           </Descriptions.Item>
-          <Descriptions.Item label="ยอดความเสียหาย">{formatter.format(lastReport.amount)} บาท</Descriptions.Item>
+          <Descriptions.Item label="ยอดความเสียหาย">{formatAmount(lastReport.amount)}</Descriptions.Item>
         </Descriptions>
       </Card>
     </section>
