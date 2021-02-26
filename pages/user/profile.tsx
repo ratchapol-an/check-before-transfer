@@ -32,7 +32,7 @@ export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ email, 
             <PageHeader title="โปรไฟล์ของคุณ" subTitle="sixteenevils3@gmail.com" />
             <Card>
               <Title level={4}>รายงานของคุณ</Title>
-              <ReportTable reports={[mockReport]} onDeleteReport={handleDeleteReport} />
+              <ReportTable onDeleteReport={handleDeleteReport} />
             </Card>
           </Container>
         </Content>
