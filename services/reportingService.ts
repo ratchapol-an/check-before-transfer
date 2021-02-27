@@ -19,7 +19,7 @@ export interface SearchResult {
   lastedReport: Report;
 }
 export const search = async (value: string, by: SearchBy): Promise<SearchResult> => {
-  const { data } = await axios.get<SearchResult>('/getReport', {
+  const { data } = await axios.get<SearchResult>('/report/get', {
     params: {
       q: value,
       by,
@@ -31,7 +31,7 @@ export const search = async (value: string, by: SearchBy): Promise<SearchResult>
 
 export const addReport = async (report: Report, token: string) => {
   const { data } = await axios.post<{ reportId: string }>(
-    '/addReport',
+    '/report/add',
     {
       body: report,
     },
@@ -53,7 +53,7 @@ interface UpdateReportReq {
 export const updateReport = (req: UpdateReportReq, token: string) => {
   axios
     .put<{ report_id: string }>(
-      '/updateReport',
+      '/report/update',
       {
         body: req,
       },
@@ -79,7 +79,7 @@ interface VerifyReportReq {
 export const verifyReport = (req: VerifyReportReq, token: string) => {
   axios
     .put<{ report_id: string }>(
-      '/verify',
+      '/report/verify',
       {
         body: req,
       },
@@ -97,7 +97,26 @@ export const verifyReport = (req: VerifyReportReq, token: string) => {
     });
 };
 
-export const deleteReport = async (reportId: string, token: string) => {};
+export const deleteReport = async (reportId: string, token: string) => {
+  console.log(reportId);
+  console.log(token);
+
+  axios
+    .delete<{ reportID: string; status: string }>('/report', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        reportID: reportId,
+      },
+    })
+    .then(({ data }) => {
+      console.log(data);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
 
 export type PaginatedReports = {
   total: number;
@@ -108,7 +127,21 @@ export const getReportsByUserId = async (
   paginationConfig: PaginationConfig,
   token: string,
 ): Promise<PaginatedReports> => {
-  return { total: 100, data: [] };
+  const resp = await axios
+    .get<PaginatedReports>('/report/list', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  if (resp) return resp.data;
+  const emptyResp: PaginatedReports = {
+    total: 0,
+    data: [],
+  };
+  return emptyResp;
 };
 
 export const getReportsByStatus = async (

@@ -195,7 +195,7 @@ export const getReports = async (req: Request, res: Response): Promise<Response<
     const reports: FirebaseFirestore.DocumentData[] = [];
     snapshot.forEach((s) => {
       const report = s.data();
-      reports.push({ reportID: s.id, ...report });
+      reports.push({ id: s.id, ...report });
     });
     return res.status(200).send({
       total: snapshot.size,
