@@ -18,7 +18,13 @@ const Header: React.FunctionComponent<HeaderProps> = ({ auth }) => {
     router.push('/report');
   };
   const handleLoginBtnClick = () => {
-    router.push('/user/login');
+    const currentQuery = router.query;
+    let redirectURL = '/';
+    if (typeof window !== 'undefined') redirectURL = window.location.pathname;
+    router.push({
+      pathname: '/user/login',
+      query: { redirectURL, ...currentQuery },
+    });
   };
   return (
     <AntdHeader className="header">
@@ -37,7 +43,7 @@ const Header: React.FunctionComponent<HeaderProps> = ({ auth }) => {
           </Button>
           {auth.email ? (
             <Button type="link" size="large" onClick={auth.signOut}>
-              ออจากระบบ
+              ออกจากระบบ
             </Button>
           ) : (
             <Button type="link" size="large" onClick={handleLoginBtnClick}>
