@@ -3,12 +3,14 @@ import { Button, Layout, Result } from 'antd';
 import { FunctionComponent } from 'react';
 import Header from '@components/Header';
 import Container from '@components/Container';
-import { useAuthUser, withAuthUserTokenSSR, withAuthUser } from 'next-firebase-auth';
+import { useAuthUser, withAuthUserTokenSSR, withAuthUser, verifyIdToken } from 'next-firebase-auth';
 import { useRouter } from 'next/router';
 
 export const ThankYouPage: FunctionComponent = () => {
   const { Content, Footer } = Layout;
   const AuthUser = useAuthUser();
+  console.log(AuthUser);
+
   const router = useRouter();
   const handleBackToHomeBtnClick = () => {
     router.push('/');

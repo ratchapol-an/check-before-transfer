@@ -6,14 +6,23 @@ import Link from 'next/link';
 import { WithAuth } from '@models/Authentication';
 import './header.less';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { parseToken } from '../../utils';
 
 type HeaderProps = {
   auth: WithAuth;
 };
-
+interface Role {
+  admin: boolean;
+  user: boolean;
+}
 const Header: React.FunctionComponent<HeaderProps> = ({ auth }) => {
   const { Header: AntdHeader } = Layout;
   const router = useRouter();
+  const [role, setRole] = useState<Role>({
+    admin: false,
+    user: false,
+  });
   const handleReportBtnClick = () => {
     router.push('/report');
   };
@@ -29,6 +38,23 @@ const Header: React.FunctionComponent<HeaderProps> = ({ auth }) => {
   const handleProfileBtnClick = () => {
     router.push('/user/profile');
   };
+
+  useEffect(() => {
+    auth.getIdToken().then((token) => {
+      if (!token) return;
+      const decodedJWT = parseToken(token);
+      if (decodedJWT.superUser || decodedJWT.admin)
+        setRole({
+          admin: true,
+          user: false,
+        });
+      if (!decodedJWT.superUser && !decodedJWT.admin)
+        setRole({
+          admin: false,
+          user: true,
+        });
+    });
+  }, [auth]);
 
   return (
     <AntdHeader className="header">
