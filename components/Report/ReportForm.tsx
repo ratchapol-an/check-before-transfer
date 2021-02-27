@@ -5,7 +5,7 @@ import { data } from 'banks-logo';
 import moment from 'moment';
 import PicturesWall from '@components/PicturesWall';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
-import Report, { BasedReport } from '@models/Report';
+import { BasedReport } from '@models/Report';
 
 const { Option } = Select;
 

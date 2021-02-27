@@ -1,6 +1,8 @@
 import Report, { mockReport } from 'models/Report';
 import SearchBy from 'models/searchBy';
 import axios from 'axios';
+import { PaginationConfig } from 'antd/lib/pagination';
+import ReportStatus from '@models/ReportStatus';
 
 // HOW TO RUN LOCAL (Node 12 Only)
 // - cd function
@@ -28,7 +30,7 @@ export const search = async (value: string, by: SearchBy): Promise<SearchResult>
 };
 
 export const addReport = async (report: Report, token: string) => {
-  await axios.post<{ report_id: string }>(
+  const { data } = await axios.post<{ reportId: string }>(
     '/addReport',
     {
       body: report,
@@ -39,6 +41,8 @@ export const addReport = async (report: Report, token: string) => {
       },
     },
   );
+
+  return data.reportId;
 };
 
 interface UpdateReportReq {
@@ -91,4 +95,26 @@ export const verifyReport = (req: VerifyReportReq, token: string) => {
     .catch((e) => {
       console.log(e);
     });
+};
+
+export const deleteReport = async (reportId: string, token: string) => {};
+
+export type PaginatedReports = {
+  total: number;
+  data: Report[];
+};
+export const getReportsByUserId = async (
+  userId: string,
+  paginationConfig: PaginationConfig,
+  token: string,
+): Promise<PaginatedReports> => {
+  return { total: 100, data: [] };
+};
+
+export const getReportsByStatus = async (
+  status: ReportStatus,
+  paginationConfig: PaginationConfig,
+  token: string,
+): Promise<PaginatedReports> => {
+  return { total: 100, data: [] };
 };
