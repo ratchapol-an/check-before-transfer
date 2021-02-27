@@ -15,27 +15,23 @@ type ReportTableProps = {
   onDeleteReport: (reportId: string) => Promise<void>;
   onLoadReports: (pagination: PaginationConfig) => Promise<PaginatedReports>;
 };
+const pageSize = 10;
 const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport, onLoadReports }) => {
   const [reports, setReports] = useState<Report[]>([mockReport]);
-  const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: 1,
-    pageSize: 10,
-  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const loadReportsCallback = useCallback(
-    async ({ position, ...restConfig }: TablePaginationConfig) => {
-      setIsLoading(true);
-      const response = await onLoadReports(restConfig);
-      setReports(response.data);
-      setPagination({ total: response.total });
-      setIsLoading(false);
-    },
-    [onLoadReports],
-  );
+  const loadReportsCallback = useCallback(async () => {
+    setIsLoading(true);
+    const response = await onLoadReports({ current: currentPage, pageSize });
+    setReports(response.data);
+    setTotal(response.total);
+    setIsLoading(false);
+  }, [currentPage, onLoadReports]);
 
   useEffect(() => {
-    loadReportsCallback(pagination);
-  }, [pagination, loadReportsCallback]);
+    loadReportsCallback();
+  }, [loadReportsCallback]);
 
   const handleDelete = (id: string) => {
     Modal.confirm({
@@ -50,13 +46,22 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
     });
   };
 
+  const handleTableChange = ({ current = 1 }: TablePaginationConfig) => {
+    setCurrentPage(current);
+  };
+
+  const pagination: TablePaginationConfig = {
+    current: currentPage,
+    showSizeChanger: false,
+    total,
+  };
   return (
     <Table
       dataSource={reports}
       rowKey={(report) => report.id}
-      pagination={pagination as TablePaginationConfig}
+      pagination={pagination}
       loading={isLoading}
-      onChange={loadReportsCallback}
+      onChange={handleTableChange}
     >
       <Table.Column<Report>
         title="วันที่ทำธุรกรรม"

@@ -40,7 +40,7 @@ export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ email, 
             {/* <PageHeader title="โปรไฟล์ของคุณ" subTitle="sixteenevils3@gmail.com" /> */}
             <Title level={3}>โปรไฟล์ของคุณ</Title>
             <Card>
-              <Space direction="vertical">
+              <Space direction="vertical" style={{ width: '100%' }}>
                 <Title level={5}>รายงานของคุณ</Title>
                 <ReportTable onLoadReports={handleLoadReport} onDeleteReport={handleDeleteReport} />
               </Space>
