@@ -7,7 +7,7 @@ import ReportStatus, { reportStatusCaptions, reportStatusColors } from '@models/
 import { Table, Tag, Space, Button, Modal } from 'antd';
 import Link from 'next/link';
 import { useState } from 'react';
-import { formatAmount } from 'utils';
+import { formatAmount, formatDate } from 'utils';
 
 type ReportTableProps = {
   onDeleteReport: (reportId: string) => Promise<void>;
@@ -28,7 +28,12 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
   };
   return (
     <Table dataSource={reports} rowKey={(report) => report.id}>
-      <Table.Column<Report> title="วันที่ทำธุรกรรม" dataIndex="eventDate" key="eventDate" />
+      <Table.Column<Report>
+        title="วันที่ทำธุรกรรม"
+        dataIndex="eventDate"
+        key="eventDate"
+        render={(value: string) => formatDate(value)}
+      />
       <Table.Column<Report>
         title="ประเภทสินค้า/บริการ"
         dataIndex="productType"

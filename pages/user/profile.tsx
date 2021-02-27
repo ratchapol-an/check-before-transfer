@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Card, Layout, PageHeader, Typography } from 'antd';
+import { Card, Layout, PageHeader, Space, Typography } from 'antd';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import { AuthAction, useAuthUser, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
@@ -29,10 +29,13 @@ export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ email, 
         <Header auth={AuthUser} />
         <Content>
           <Container>
-            <PageHeader title="โปรไฟล์ของคุณ" subTitle="sixteenevils3@gmail.com" />
+            {/* <PageHeader title="โปรไฟล์ของคุณ" subTitle="sixteenevils3@gmail.com" /> */}
+            <Title level={3}>โปรไฟล์ของคุณ</Title>
             <Card>
-              <Title level={4}>รายงานของคุณ</Title>
-              <ReportTable onDeleteReport={handleDeleteReport} />
+              <Space direction="vertical">
+                <Title level={5}>รายงานของคุณ</Title>
+                <ReportTable onDeleteReport={handleDeleteReport} />
+              </Space>
             </Card>
           </Container>
         </Content>

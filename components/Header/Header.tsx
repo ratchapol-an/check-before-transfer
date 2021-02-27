@@ -20,6 +20,10 @@ const Header: React.FunctionComponent<HeaderProps> = ({ auth }) => {
   const handleLoginBtnClick = () => {
     router.push('/user/login');
   };
+  const handleProfileBtnClick = () => {
+    router.push('/user/profile');
+  };
+
   return (
     <AntdHeader className="header">
       <Container className="header-container">
@@ -32,18 +36,23 @@ const Header: React.FunctionComponent<HeaderProps> = ({ auth }) => {
           </a>
         </Link>
         <Space direction="horizontal">
-          <Button type="primary" ghost size="large" onClick={handleReportBtnClick}>
-            รายงานการโกง
-          </Button>
           {auth.email ? (
-            <Button type="link" size="large" onClick={auth.signOut}>
-              ออจากระบบ
-            </Button>
+            <>
+              <Button type="link" size="large" onClick={handleProfileBtnClick}>
+                ประวัติของคุณ
+              </Button>
+              <Button type="link" size="large" onClick={auth.signOut}>
+                ออกจากระบบ
+              </Button>
+            </>
           ) : (
             <Button type="link" size="large" onClick={handleLoginBtnClick}>
               เข้าสู่ระบบ
             </Button>
           )}
+          <Button type="primary" ghost size="large" onClick={handleReportBtnClick}>
+            รายงานการโกง
+          </Button>
         </Space>
       </Container>
     </AntdHeader>
