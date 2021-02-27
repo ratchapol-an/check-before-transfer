@@ -13,7 +13,23 @@ export enum PaymentMethod {
   PromptPay = 3,
 }
 
-export interface Report {
+// export interface Report {
+//   bankCode?: string;
+//   bankAccountNumber?: string;
+//   name?: string;
+//   phoneNumber?: string;
+//   nationalIdNumber?: string;
+//   amount: number;
+//   eventDate: string;
+//   eventDetail: string;
+//   reporterId?: string;
+//   paymentMethod: PaymentMethod;
+//   productLink: string;
+//   status: ReportStatus;
+//   document: [];
+//   created_at?: FirebaseFirestore.FieldValue;
+// }
+export type BasedReport = {
   bankCode?: string;
   bankAccountNumber?: string;
   name?: string;
@@ -24,11 +40,15 @@ export interface Report {
   eventDetail: string;
   reporterId?: string;
   paymentMethod: PaymentMethod;
+  productType?: number;
   productLink: string;
   status: ReportStatus;
-  document: [];
+};
+
+export type Report = BasedReport & {
+  attachedFiles?: string[];
   created_at?: FirebaseFirestore.FieldValue;
-}
+};
 
 export interface ReportHistory {
   action: string;

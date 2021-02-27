@@ -18,7 +18,13 @@ const Header: React.FunctionComponent<HeaderProps> = ({ auth }) => {
     router.push('/report');
   };
   const handleLoginBtnClick = () => {
-    router.push('/user/login');
+    const currentQuery = router.query;
+    let redirectURL = '/';
+    if (typeof window !== 'undefined') redirectURL = window.location.pathname;
+    router.push({
+      pathname: '/user/login',
+      query: { redirectURL, ...currentQuery },
+    });
   };
   const handleProfileBtnClick = () => {
     router.push('/user/profile');

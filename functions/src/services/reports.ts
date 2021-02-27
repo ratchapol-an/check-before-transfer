@@ -19,7 +19,9 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
   if (!token) return res.status(401).send('Unauthorized');
 
   const { body } = req;
-  const reporterID = body.reporterId;
+  console.log(body);
+
+  const reporterID = token.uid;
   const newReport: Report = {
     bankCode: body.bankCode,
     bankAccountNumber: body.bankAccountNumber,
@@ -29,11 +31,11 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
     amount: body.amount,
     eventDate: body.eventDate,
     eventDetail: body.eventDetail,
-    reporterId: token.uid,
+    reporterId: reporterID,
     paymentMethod: body.paymentMethod,
     productLink: body.productLink,
+    productType: body.productType,
     status: 1,
-    document: [],
     created_at: firebaseAdmin.firestore.Timestamp.fromDate(dayjs().toDate()),
   };
   try {
@@ -73,7 +75,7 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
     paymentMethod: report.paymentMethod,
     productLink: report.productLink,
     status: report.status,
-    document: [],
+    productType: report.productType,
   };
   try {
     const reportRef = await db.collection(REPORT_COLLECTION).doc(reportID);
