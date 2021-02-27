@@ -3,7 +3,7 @@ import { Button, Layout, Result } from 'antd';
 import { FunctionComponent } from 'react';
 import Header from '@components/Header';
 import Container from '@components/Container';
-import { useAuthUser } from 'next-firebase-auth';
+import { useAuthUser, withAuthUserTokenSSR, withAuthUser } from 'next-firebase-auth';
 import { useRouter } from 'next/router';
 
 export const ThankYouPage: FunctionComponent = () => {
@@ -43,4 +43,12 @@ export const ThankYouPage: FunctionComponent = () => {
   );
 };
 
-export default ThankYouPage;
+export const getServerSideProps = withAuthUserTokenSSR()(async ({ AuthUser }) => {
+  return {
+    props: {
+      email: AuthUser.email,
+    },
+  };
+});
+
+export default withAuthUser()(ThankYouPage);
