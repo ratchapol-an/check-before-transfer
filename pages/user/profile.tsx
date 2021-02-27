@@ -4,8 +4,8 @@ import Header from '@components/Header';
 import Container from '@components/Container';
 import { AuthAction, useAuthUser, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
 import ReportTable from '@components/Report/ReportTable';
-import { deleteReport } from 'services/reportingService';
-import { mockReport } from '@models/Report';
+import { deleteReport, getReportsByUserId, PaginatedReports } from 'services/reportingService';
+import { PaginationConfig } from 'antd/lib/pagination';
 
 interface ProfilePageProps {
   email: string;
@@ -18,6 +18,14 @@ export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ email, 
 
   const handleDeleteReport = async (reportId: string) => {
     await deleteReport(reportId, token);
+  };
+
+  const handleLoadReport = async (pagination: PaginationConfig): Promise<PaginatedReports> => {
+    if (AuthUser.id) {
+      return getReportsByUserId(AuthUser.id, pagination, token);
+    }
+
+    return { total: 0, data: [] };
   };
   return (
     <>
@@ -34,7 +42,7 @@ export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ email, 
             <Card>
               <Space direction="vertical">
                 <Title level={5}>รายงานของคุณ</Title>
-                <ReportTable onDeleteReport={handleDeleteReport} />
+                <ReportTable onLoadReports={handleLoadReport} onDeleteReport={handleDeleteReport} />
               </Space>
             </Card>
           </Container>

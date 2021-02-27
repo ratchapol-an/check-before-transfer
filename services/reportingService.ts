@@ -1,6 +1,8 @@
 import Report, { mockReport } from 'models/Report';
 import SearchBy from 'models/searchBy';
 import axios from 'axios';
+import { PaginationConfig } from 'antd/lib/pagination';
+import ReportStatus from '@models/ReportStatus';
 
 // HOW TO RUN LOCAL (Node 12 Only)
 // - cd function
@@ -96,3 +98,23 @@ export const verifyReport = (req: VerifyReportReq, token: string) => {
 };
 
 export const deleteReport = async (reportId: string, token: string) => {};
+
+export type PaginatedReports = {
+  total: number;
+  data: Report[];
+};
+export const getReportsByUserId = async (
+  userId: string,
+  paginationConfig: PaginationConfig,
+  token: string,
+): Promise<PaginatedReports> => {
+  return { total: 100, data: [] };
+};
+
+export const getReportsByStatus = async (
+  status: ReportStatus,
+  paginationConfig: PaginationConfig,
+  token: string,
+): Promise<PaginatedReports> => {
+  return { total: 100, data: [] };
+};
