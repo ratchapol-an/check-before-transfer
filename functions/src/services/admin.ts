@@ -52,9 +52,7 @@ export const createAdmin = async (req: Request, res: Response): Promise<Response
   try {
     const { uid, role } = req.body;
 
-    if (!uid || !role) {
-      return res.status(400).send({ message: 'Missing fields' });
-    }
+    if (!uid || !role) return res.status(400).send({ message: 'Missing fields' });
 
     await firebaseAdmin.auth().setCustomUserClaims(uid, role);
 

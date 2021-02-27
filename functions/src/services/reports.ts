@@ -195,11 +195,33 @@ export const getReports = async (req: Request, res: Response): Promise<Response<
     const reports: FirebaseFirestore.DocumentData[] = [];
     snapshot.forEach((s) => {
       const report = s.data();
-      reports.push(report);
+      reports.push({ reportID: s.id, ...report });
     });
     return res.status(200).send({
       total: snapshot.size,
       data: reports,
+    });
+  } catch (e) {
+    return res.status(500).send(e.message);
+  }
+};
+
+export const deleteReport = async (req: Request, res: Response): Promise<Response<any>> => {
+  if (req.method !== 'DELETE') return res.status(403).send('Forbidden!');
+
+  const idToken = getAuthorizationToken(req);
+  if (idToken === '') return res.status(401).send('Unauthorized');
+
+  const token = await validateToken(idToken);
+  if (!token) return res.status(401).send('Unauthorized');
+
+  const { reportID } = req.body;
+
+  try {
+    await db.collection(REPORT_COLLECTION).doc(reportID).delete();
+    return res.status(200).send({
+      reportID,
+      status: 'deleted',
     });
   } catch (e) {
     return res.status(500).send(e.message);
