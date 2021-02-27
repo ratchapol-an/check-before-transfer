@@ -18,8 +18,7 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
   const token = await validateToken(idToken);
   if (!token) return res.status(401).send('Unauthorized');
 
-  const { body } = req;
-  console.log(body);
+  const { body } = req.body;
 
   const reporterID = token.uid;
   const newReport: Report = {
@@ -38,6 +37,7 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
     status: 1,
     created_at: firebaseAdmin.firestore.Timestamp.fromDate(dayjs().toDate()),
   };
+
   try {
     const writeResult = await db.collection(REPORT_COLLECTION).add(newReport);
     const reportId = writeResult.id;
@@ -81,9 +81,8 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
     const reportRef = await db.collection(REPORT_COLLECTION).doc(reportID);
     const reportDoc = await reportRef.get();
     let oldReport = {};
-    if (reportDoc.exists) {
-      oldReport = reportDoc.data() || {};
-    }
+
+    if (reportDoc.exists) oldReport = reportDoc.data() || {};
 
     await saveHistory(reporterID, ActionType.UPDATE, reportID, oldReport, newReport, db);
 
@@ -114,9 +113,9 @@ export const verify = async (req: Request, res: Response): Promise<Response<any>
     const reportRef = await db.collection(REPORT_COLLECTION).doc(report_id);
     const reportDoc = await reportRef.get();
     let oldStatus;
-    if (reportDoc.exists) {
-      oldStatus = reportDoc.data() || undefined;
-    }
+
+    if (reportDoc.exists) oldStatus = reportDoc.data() || undefined;
+
     reportRef.update({
       status,
     });
@@ -143,9 +142,9 @@ export const getReport = async (req: Request, res: Response): Promise<Response<a
       .where('status', '==', 2)
       .orderBy('created_at', 'desc')
       .get();
-    if (snapshot.empty) {
-      return res.status(200).send(null);
-    }
+
+    if (snapshot.empty) return res.status(200).send(null);
+
     const reports: FirebaseFirestore.DocumentData[] = [];
     let totalDamagedPrice = 0;
     snapshot.forEach((s) => {
@@ -165,6 +164,42 @@ export const getReport = async (req: Request, res: Response): Promise<Response<a
       totalReport: reports.length,
       totalDamagedPrice,
       lastedReport: reports[0],
+    });
+  } catch (e) {
+    return res.status(500).send(e.message);
+  }
+};
+
+export const getReports = async (req: Request, res: Response): Promise<Response<any>> => {
+  if (req.method !== 'GET') return res.status(403).send('Forbidden!');
+
+  const idToken = getAuthorizationToken(req);
+  if (idToken === '') return res.status(401).send('Unauthorized');
+
+  const token = await validateToken(idToken);
+  if (!token) return res.status(401).send('Unauthorized');
+
+  try {
+    const snapshot = await db
+      .collection(REPORT_COLLECTION)
+      .where('reporterId', '==', token.uid)
+      .orderBy('created_at', 'desc')
+      .get();
+
+    if (snapshot.empty)
+      return res.status(200).send({
+        total: 0,
+        data: [],
+      });
+
+    const reports: FirebaseFirestore.DocumentData[] = [];
+    snapshot.forEach((s) => {
+      const report = s.data();
+      reports.push(report);
+    });
+    return res.status(200).send({
+      total: snapshot.size,
+      data: reports,
     });
   } catch (e) {
     return res.status(500).send(e.message);

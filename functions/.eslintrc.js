@@ -30,6 +30,7 @@ module.exports = {
   ],
   plugins: ['@typescript-eslint', 'import'],
   rules: {
+    curly: ['error', 'multi', 'consistent'],
     camelcase: ['off', { ignoreDestructuring: true }],
     '@typescript-eslint/naming-convention': 'off',
     'no-console': 'off',

@@ -101,7 +101,7 @@ class PicturesWall extends React.Component<Props, State> {
       <>
         <Upload
           name="files"
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
           listType="picture-card"
           fileList={fileList}
           multiple
