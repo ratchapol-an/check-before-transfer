@@ -8,10 +8,16 @@ import ReportStatus from '@models/ReportStatus';
 // - cd function
 // - nvm use 12
 // - yarn build & yarn serve
+const API_HOST =
+  process.env.NODE_ENV === 'production'
+    ? 'https://asia-southeast2-check-before-transfer.cloudfunctions.net'
+    : 'http://localhost:5001';
+axios.defaults.baseURL = `${API_HOST}/check-before-transfer/asia-southeast2/api`;
 
-axios.defaults.baseURL = 'http://localhost:5001/check-before-transfer/asia-southeast2/api';
 // PROD URL
 // https://asia-southeast2-check-before-transfer.cloudfunctions.net
+
+export const apiUploadFile = `${API_HOST}/check-before-transfer/asia-southeast2/api/upload`;
 export interface SearchResult {
   name: string;
   totalReport: number;

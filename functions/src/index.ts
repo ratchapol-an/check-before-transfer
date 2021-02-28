@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import { firebaseFunction } from './services/firebase';
 import { getReport, updateReport, verify, addReport, getReports, deleteReport } from './services/reports';
 import { createAdmin, getAdminInfo } from './services/admin';
+import { filesUpload } from './services/upload';
 import 'dayjs/locale/th';
 
 dayjs.locale('th');
@@ -28,6 +29,7 @@ app.post('/admin/create', createAdmin);
 app.get('/admin/:id', getAdminInfo);
 app.get('/report/list', getReports);
 app.delete('/report', deleteReport);
+app.post('/upload', filesUpload);
 
 // Expose Express API as a single Cloud Function:
 exports.api = firebaseFunction.https.onRequest(app);

@@ -1,7 +1,8 @@
+import React from 'react';
 import { Upload, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
-import React from 'react';
+import { apiUploadFile } from '../../services/reportingService';
 
 function getBase64(file: Blob | File) {
   return new Promise<string>((resolve, reject) => {
@@ -101,7 +102,7 @@ class PicturesWall extends React.Component<Props, State> {
       <>
         <Upload
           name="files"
-          // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          action={apiUploadFile}
           listType="picture-card"
           fileList={fileList}
           multiple
