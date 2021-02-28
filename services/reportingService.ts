@@ -98,9 +98,6 @@ export const verifyReport = (req: VerifyReportReq, token: string) => {
 };
 
 export const deleteReport = async (reportId: string, token: string) => {
-  console.log(reportId);
-  console.log(token);
-
   axios
     .delete<{ reportID: string; status: string }>('/report', {
       headers: {
