@@ -35,6 +35,7 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
     productLink: body.productLink,
     productType: body.productType,
     status: 1,
+    attachedFiles: body.attachedFiles,
     created_at: firebaseAdmin.firestore.Timestamp.fromDate(dayjs().toDate()),
   };
 
@@ -152,7 +153,6 @@ export const getReport = async (req: Request, res: Response): Promise<Response<a
       totalDamagedPrice += report.amount;
       reports.push(report);
     });
-    // console.log(dayjs.unix(reports[0].created_at.seconds).add(7, 'hours').format(DATE_FORMAT));
     console.log({
       name: q,
       totalReport: reports.length,

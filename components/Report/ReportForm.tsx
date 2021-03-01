@@ -23,8 +23,7 @@ const formItemLayout = {
 };
 
 const normFile = (e: UploadChangeParam) => {
-  console.log('Upload event:', e);
-
+  // console.log('Upload event:', e);
   return e && e.fileList;
 };
 
@@ -188,7 +187,6 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish }) => {
           rules={[
             () => ({
               validator(_, value: UploadFile[]) {
-                console.log(value);
                 if (!value || value.filter((o) => o.status === 'done' || o.status === 'success').length <= 0) {
                   return Promise.reject('กรุณาอัพโหลดหลักฐานประกอบ');
                 }
@@ -211,4 +209,4 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish }) => {
 
 export default ReportForm;
 
-export type ReportFormValues = BasedReport & { uploadFiles: UploadFile[] };
+export type ReportFormValues = BasedReport & { attachedFiles: UploadFile[] };

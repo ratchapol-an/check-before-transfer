@@ -9,7 +9,6 @@ import { useRouter } from 'next/router';
 export const ThankYouPage: FunctionComponent = () => {
   const { Content, Footer } = Layout;
   const AuthUser = useAuthUser();
-  console.log(AuthUser);
 
   const router = useRouter();
   const handleBackToHomeBtnClick = () => {

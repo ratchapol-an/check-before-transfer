@@ -4,6 +4,7 @@ import Busboy from 'busboy';
 import os from 'os';
 import fs from 'fs';
 import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 import { firebaseStorage } from './firebase';
 
 interface FileRequest extends Request {
@@ -55,19 +56,26 @@ export const filesUpload = async (req: FileRequest, res: Response): Promise<void
 
   busboy.on('finish', () => {
     Promise.all(fileWrites).then(() => {
-      console.log(files);
-
       Object.keys(files).forEach(async (k) => {
         const file = files[k];
+        const token = uuidv4();
         const fileRes = await firebaseStorage.upload(file, {
           gzip: true,
           destination: `files/${k}`,
           metadata: {
             cacheControl: 'public, max-age=31536000',
+            metadata: {
+              firebaseStorageDownloadTokens: token,
+            },
           },
         });
         fs.unlinkSync(file);
-        res.send(fileRes[0].publicUrl());
+        const imgMeta = fileRes[0].metadata;
+        res.send(
+          `https://firebasestorage.googleapis.com/v0/b/${imgMeta.bucket}/o/${encodeURIComponent(
+            imgMeta.name,
+          )}?alt=media&token=${token}`,
+        );
       });
     });
   });
