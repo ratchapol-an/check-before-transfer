@@ -6,6 +6,7 @@ import moment from 'moment';
 import PicturesWall from '@components/PicturesWall';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { BasedReport } from '@models/Report';
+import { deleteFile } from '../../services/reportingService';
 
 const { Option } = Select;
 
@@ -22,10 +23,7 @@ const formItemLayout = {
   },
 };
 
-const normFile = (e: UploadChangeParam) => {
-  // console.log('Upload event:', e);
-  return e && e.fileList;
-};
+const normFile = (e: UploadChangeParam) => e && e.fileList;
 
 const bankOptions = (Object.keys(data) as Array<keyof typeof data>).map((key) => {
   const bank = data[key];
@@ -38,12 +36,19 @@ const bankOptions = (Object.keys(data) as Array<keyof typeof data>).map((key) =>
 
 type ReportFormProps = {
   onFinish: (values: ReportFormValues) => void;
+  userToken?: string;
 };
 
-const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish }) => {
+const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish, userToken }) => {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
   const handlePaymentMethodSelect = (value: PaymentMethod) => {
     setPaymentMethod(value);
+  };
+
+  const handleOnRemove = async (file: UploadFile<any>, reportSession: string): Promise<boolean> => {
+    if (!userToken) return false;
+    await deleteFile(reportSession, file.name, userToken);
+    return true;
   };
 
   return (
@@ -195,7 +200,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish }) => {
             }),
           ]}
         >
-          <PicturesWall uploadBtnVisible />
+          <PicturesWall uploadBtnVisible onRemove={handleOnRemove} />
         </Form.Item>
       </Form.Item>
       <Form.Item wrapperCol={{ md: { span: 12, offset: 8 } }}>

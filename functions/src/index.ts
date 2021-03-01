@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { firebaseFunction } from './services/firebase';
 import { getReport, updateReport, verify, addReport, getReports, deleteReport } from './services/reports';
 import { createAdmin, getAdminInfo } from './services/admin';
-import { filesUpload } from './services/upload';
+import { filesUpload, deleteFile } from './services/upload';
 import 'dayjs/locale/th';
 
 dayjs.locale('th');
@@ -14,6 +14,7 @@ dayjs.locale('th');
 const app = express();
 
 const defaultCors = cors({ origin: true });
+
 // Automatically allow cross-origin requests
 app.use(defaultCors);
 
@@ -22,14 +23,15 @@ app.use(defaultCors);
 
 // build multiple CRUD interfaces:
 app.post('/report/add', addReport);
-app.put('/report/updatet', updateReport);
+app.put('/report/update', updateReport);
 app.put('/report/verify', verify);
 app.get('/report/get', getReport);
 app.post('/admin/create', createAdmin);
 app.get('/admin/:id', getAdminInfo);
 app.get('/report/list', getReports);
 app.delete('/report', deleteReport);
-app.post('/upload', filesUpload);
+app.post('/file/upload', filesUpload);
+app.delete('/file', deleteFile);
 
 // Expose Express API as a single Cloud Function:
 exports.api = firebaseFunction.https.onRequest(app);

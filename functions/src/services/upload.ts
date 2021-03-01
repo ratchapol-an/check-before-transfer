@@ -6,6 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { firebaseStorage } from './firebase';
+import { getAuthorizationToken, validateToken } from './admin';
 
 interface FileRequest extends Request {
   files?: any;
@@ -14,6 +15,10 @@ interface FileRequest extends Request {
 
 export const filesUpload = async (req: FileRequest, res: Response): Promise<void> => {
   if (req.method !== 'POST') return res.status(405).end();
+
+  if (!req.headers['x-report-session']) return res.status(404).end();
+  const reportSession = req.headers['x-report-session'];
+
   const busboy = new Busboy({
     headers: req.headers,
     // limits: {
@@ -61,7 +66,7 @@ export const filesUpload = async (req: FileRequest, res: Response): Promise<void
         const token = uuidv4();
         const fileRes = await firebaseStorage.upload(file, {
           gzip: true,
-          destination: `files/${k}`,
+          destination: `files/${reportSession as string}/${k}`,
           metadata: {
             cacheControl: 'public, max-age=31536000',
             metadata: {
@@ -71,16 +76,39 @@ export const filesUpload = async (req: FileRequest, res: Response): Promise<void
         });
         fs.unlinkSync(file);
         const imgMeta = fileRes[0].metadata;
-        res.send(
-          `https://firebasestorage.googleapis.com/v0/b/${imgMeta.bucket}/o/${encodeURIComponent(
+        res.send({
+          dirPath: '',
+          url: `https://firebasestorage.googleapis.com/v0/b/${imgMeta.bucket}/o/${encodeURIComponent(
             imgMeta.name,
           )}?alt=media&token=${token}`,
-        );
+        });
       });
     });
   });
 
   busboy.end(req.rawBody);
+};
+
+export const deleteFile = async (req: Request, res: Response): Promise<Response<any>> => {
+  if (req.method !== 'DELETE') return res.status(403).send('Forbidden!');
+
+  const idToken = getAuthorizationToken(req);
+  if (idToken === '') return res.status(401).send('Unauthorized');
+
+  const token = await validateToken(idToken);
+  if (!token) return res.status(401).send('Unauthorized');
+
+  const { reportSession, fileName } = req.body;
+  if (!reportSession) return res.status(404).send('Bad Request');
+
+  try {
+    await firebaseStorage.deleteFiles({
+      prefix: `files/${reportSession as string}/${fileName}`,
+    });
+    return res.status(200).send();
+  } catch (e) {
+    return res.status(500).send(e.message);
+  }
 };
 
 export default {};

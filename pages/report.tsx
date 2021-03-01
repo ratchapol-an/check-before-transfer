@@ -19,6 +19,7 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ userToken }) => 
   const { Title } = Typography;
   const { confirm, error } = Modal;
   const AuthUser = useAuthUser();
+
   const router = useRouter();
 
   const handleFormFinish = async (values: ReportFormValues) => {
@@ -60,7 +61,7 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ userToken }) => 
           <Container>
             <Title level={3}>รายงานการโกง</Title>
             <Card>
-              <ReportForm onFinish={handleFormFinish} />
+              <ReportForm onFinish={handleFormFinish} userToken={userToken} />
             </Card>
           </Container>
         </Content>

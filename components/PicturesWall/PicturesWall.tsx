@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { Upload, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
@@ -17,10 +18,13 @@ interface Props {
   uploadBtnVisible: boolean;
   fileList?: UploadFile[];
   onChange?: (info: UploadChangeParam) => void;
+  onRemove: (file: UploadFile<any>, reportSession: string) => Promise<boolean>;
 }
 
 interface State {
   previewVisible: boolean;
+  reportSession: string;
+
   previewImage?: string;
   previewTitle?: string;
 }
@@ -33,6 +37,7 @@ class PicturesWall extends React.Component<Props, State> {
     super(props);
     this.state = {
       previewVisible: false,
+      reportSession: '',
       previewImage: '',
       previewTitle: '',
       // fileList: [
@@ -76,6 +81,10 @@ class PicturesWall extends React.Component<Props, State> {
     };
   }
 
+  componentDidMount() {
+    this.setState({ reportSession: uuidv4() });
+  }
+
   handleCancel = () => this.setState({ previewVisible: false });
 
   handlePreview = async (file: UploadFile) => {
@@ -90,8 +99,8 @@ class PicturesWall extends React.Component<Props, State> {
   };
 
   render() {
-    const { previewVisible, previewImage, previewTitle } = this.state;
-    const { onChange, fileList } = this.props;
+    const { previewVisible, previewImage, previewTitle, reportSession } = this.state;
+    const { onChange, fileList, onRemove } = this.props;
     const uploadButton = (
       <div>
         <PlusOutlined />
@@ -108,6 +117,8 @@ class PicturesWall extends React.Component<Props, State> {
           multiple
           onPreview={this.handlePreview}
           onChange={onChange}
+          headers={{ 'X-REPORT-SESSION': reportSession }}
+          onRemove={(file) => onRemove(file, reportSession)}
         >
           {/* {fileList.length >= 8 ? null : uploadButton} */}
           {uploadButton}
