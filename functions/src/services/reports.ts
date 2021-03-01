@@ -153,12 +153,7 @@ export const getReport = async (req: Request, res: Response): Promise<Response<a
       totalDamagedPrice += report.amount;
       reports.push(report);
     });
-    console.log({
-      name: q,
-      totalReport: reports.length,
-      totalDamagedPrice,
-      lastedReport: reports[0],
-    });
+
     return res.status(200).send({
       name: q,
       totalReport: reports.length,
