@@ -7,7 +7,7 @@ import ReportStatus, { reportStatusCaptions, reportStatusColors } from '@models/
 import { Table, Tag, Space, Button, Modal, TablePaginationConfig } from 'antd';
 import { PaginationConfig } from 'antd/lib/pagination';
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { PaginatedReports } from 'services/reportingService';
 import { formatAmount, formatDate } from 'utils';
 
@@ -30,6 +30,7 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
   }, [currentPage, onLoadReports]);
 
   useEffect(() => {
+    console.log('in effect');
     loadReportsCallback();
   }, [loadReportsCallback]);
 
@@ -116,4 +117,4 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
   );
 };
 
-export default ReportTable;
+export default memo(ReportTable);

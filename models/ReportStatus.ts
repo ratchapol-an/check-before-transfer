@@ -14,11 +14,11 @@ export const reportStatusCaptions: Record<ReportStatus, string> = {
   4: 'ขอหลักฐานเพิ่ม',
 };
 
-export const reportStatusColors: Record<ReportStatus, PresetColorType> = {
-  1: 'blue',
-  2: 'green',
-  3: 'red',
-  4: 'orange',
+export const reportStatusColors: Record<ReportStatus, string> = {
+  1: '#00589b',
+  2: '#49a35c',
+  3: '#d0021b',
+  4: '#ff8d41',
 };
 
 export default ReportStatus;

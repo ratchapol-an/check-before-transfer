@@ -3,21 +3,19 @@ import { Button, Layout, Menu, Space } from 'antd';
 import Container from '@components/Container';
 import Image from 'next/image';
 import Link from 'next/link';
-import { WithAuth } from '@models/Authentication';
 import './header.less';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useAuthUser } from 'next-firebase-auth';
 import { parseToken } from '../../utils';
 
-type HeaderProps = {
-  auth: WithAuth;
-};
 interface Role {
   admin: boolean;
   user: boolean;
 }
-const Header: React.FunctionComponent<HeaderProps> = ({ auth }) => {
+const Header: React.FunctionComponent = () => {
   const { Header: AntdHeader } = Layout;
+  const auth = useAuthUser();
   const router = useRouter();
   const [role, setRole] = useState<Role>({
     admin: false,

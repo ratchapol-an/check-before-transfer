@@ -23,7 +23,6 @@ type ResultsProps = {
   searchResult: SearchResult | null;
 };
 const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchValue, searchResult }) => {
-  const AuthUser = useAuthUser();
   return (
     <div>
       <Head>
@@ -31,7 +30,7 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchValue, searc
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="results-page-layout layout-with-bg">
-        <Header auth={AuthUser} />
+        <Header />
         <Content className="results-page-content">
           <Container>
             <SearchForm initialSearchBy={searchBy} initialValue={searchValue} />

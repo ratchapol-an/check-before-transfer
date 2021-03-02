@@ -1,11 +1,10 @@
-import { withAuthUser, useAuthUser, withAuthUserTokenSSR, AuthAction } from 'next-firebase-auth';
+import { withAuthUser, withAuthUserTokenSSR, AuthAction } from 'next-firebase-auth';
 import Header from '@components/Header';
 
 const Demo = () => {
-  const AuthUser = useAuthUser();
   return (
     <div>
-      <Header auth={AuthUser} />
+      <Header />
       Test
     </div>
   );

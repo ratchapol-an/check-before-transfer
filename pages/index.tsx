@@ -1,17 +1,16 @@
 import Head from 'next/head';
 import { Layout } from 'antd';
-import { FunctionComponent, useEffect } from 'react';
+import { FunctionComponent } from 'react';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import Hero from '@components/Hero';
-import { useAuthUser, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
+import { withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
 import { parseToken } from '../utils';
 import './index.less';
 
 export const Home: FunctionComponent = () => {
   const { Content, Footer } = Layout;
-  const AuthUser = useAuthUser();
-
+  console.log('render home');
   return (
     <>
       <Head>
@@ -19,7 +18,7 @@ export const Home: FunctionComponent = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="home-page-layout layout-with-bg">
-        <Header auth={AuthUser} />
+        <Header />
         <Content>
           <Container>
             <Hero className="home-hero" />

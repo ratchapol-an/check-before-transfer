@@ -6,6 +6,7 @@ import moment from 'moment';
 import PicturesWall from '@components/PicturesWall';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { BasedReport } from '@models/Report';
+import productTypeCaptions from '@models/productTypeCaptions';
 
 const { Option } = Select;
 
@@ -162,6 +163,23 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish }) => {
           disabledDate={(currentDate) => currentDate > moment()}
           placeholder="วัน/เดือน/ปี"
         />
+      </Form.Item>
+      <Form.Item
+        name="productType"
+        label="ประเภทสินค้าหรือบริการ"
+        hasFeedback
+        rules={[{ required: true, message: 'กรุณาเลือกประเภทสินค้าหรือบริการ' }]}
+      >
+        <Select placeholder="เลือกประเภทสินค้าหรือบริการ">
+          <Option value={1}>{productTypeCaptions[1]}</Option>
+          <Option value={2}>{productTypeCaptions[2]}</Option>
+          <Option value={3}>{productTypeCaptions[3]}</Option>
+          <Option value={4}>{productTypeCaptions[4]}</Option>
+          <Option value={5}>{productTypeCaptions[5]}</Option>
+          <Option value={6}>{productTypeCaptions[6]}</Option>
+          <Option value={7}>{productTypeCaptions[7]}</Option>
+          <Option value={0}>{productTypeCaptions[0]}</Option>
+        </Select>
       </Form.Item>
       <Form.Item
         name="productLink"

@@ -1,4 +1,4 @@
-import Report from 'models/Report';
+import Report, { mockReport } from 'models/Report';
 import SearchBy from 'models/searchBy';
 import axios from 'axios';
 import { PaginationConfig } from 'antd/lib/pagination';
@@ -153,4 +153,8 @@ export const getReportsByStatus = async (
   token: string,
 ): Promise<PaginatedReports> => {
   return { total: 100, data: [] };
+};
+
+export const getReportById = async (id: string, token: string): Promise<Report> => {
+  return Promise.resolve(mockReport);
 };

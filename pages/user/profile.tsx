@@ -1,32 +1,40 @@
 import Head from 'next/head';
-import { Card, Layout, PageHeader, Space, Typography } from 'antd';
+import { Card, Layout, Space, Typography } from 'antd';
 import Header from '@components/Header';
 import Container from '@components/Container';
-import { AuthAction, useAuthUser, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
+import { AuthAction, useAuthUser, withAuthUser } from 'next-firebase-auth';
 import ReportTable from '@components/Report/ReportTable';
 import { deleteReport, getReportsByUserId, PaginatedReports } from 'services/reportingService';
 import { PaginationConfig } from 'antd/lib/pagination';
+import { useCallback } from 'react';
 
-interface ProfilePageProps {
-  email: string;
-  token: string;
-}
-export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ email, token }) => {
+export const ProfilePage: React.FunctionComponent = () => {
   const { Content, Footer } = Layout;
   const { Title } = Typography;
   const AuthUser = useAuthUser();
 
-  const handleDeleteReport = async (reportId: string) => {
-    await deleteReport(reportId, token);
-  };
+  const handleDeleteReport = useCallback(
+    async (reportId: string) => {
+      const token = await AuthUser.getIdToken();
+      if (token) {
+        await deleteReport(reportId, token);
+      }
+    },
+    [AuthUser],
+  );
 
-  const handleLoadReport = async (pagination: PaginationConfig): Promise<PaginatedReports> => {
-    if (AuthUser.id) {
-      return getReportsByUserId(AuthUser.id, pagination, token);
-    }
+  const handleLoadReport = useCallback(
+    async (pagination: PaginationConfig): Promise<PaginatedReports> => {
+      const token = await AuthUser.getIdToken();
+      if (AuthUser.id && token) {
+        return getReportsByUserId(AuthUser.id, pagination, token);
+      }
 
-    return { total: 0, data: [] };
-  };
+      return { total: 0, data: [] };
+    },
+    [AuthUser],
+  );
+  console.log('render profile');
   return (
     <>
       <Head>
@@ -34,7 +42,7 @@ export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ email, 
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="profile-page-layout layout-with-bg">
-        <Header auth={AuthUser} />
+        <Header />
         <Content>
           <Container>
             {/* <PageHeader title="โปรไฟล์ของคุณ" subTitle="sixteenevils3@gmail.com" /> */}
@@ -52,18 +60,6 @@ export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ email, 
   );
 };
 
-export const getServerSideProps = withAuthUserTokenSSR({
-  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
-})(async ({ AuthUser }) => {
-  const token = await AuthUser.getIdToken();
-  return {
-    props: {
-      token,
-      email: AuthUser.email,
-    },
-  };
-});
-
-export default withAuthUser<ProfilePageProps>({
+export default withAuthUser({
   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
 })(ProfilePage);

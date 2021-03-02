@@ -35,7 +35,6 @@ const LoginPage: FunctionComponent<FunctionComponentProps> = () => {
   // Do not SSR FirebaseUI, because it is not supported.
   // https://github.com/firebase/firebaseui-web/issues/213
   const [renderAuth, setRenderAuth] = useState(false);
-  const AuthUser = useAuthUser();
   const { Content } = Layout;
   const { query } = useRouter();
 
@@ -62,7 +61,7 @@ const LoginPage: FunctionComponent<FunctionComponentProps> = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="home-page-layout layout-with-bg">
-        <Header auth={AuthUser} />
+        <Header />
         <Content>
           <Container>
             {renderAuth ? (
