@@ -151,6 +151,7 @@ export const getReportById = async (id: string, token: string): Promise<Report |
     })
     .catch((e) => {
       console.log(e);
+      return null;
     });
   if (resp != null) return resp.data;
   return Promise.resolve(null);
