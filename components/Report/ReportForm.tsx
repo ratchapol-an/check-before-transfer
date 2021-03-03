@@ -7,7 +7,7 @@ import PicturesWall from '@components/PicturesWall';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { BasedReport } from '@models/Report';
 import productTypeCaptions from '@models/productTypeCaptions';
-import { deleteFile } from '../../services/reportingService';
+import { deleteFile } from 'services/reportingService';
 
 const { Option } = Select;
 
