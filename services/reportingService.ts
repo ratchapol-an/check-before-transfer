@@ -160,14 +160,14 @@ export const getReportById = async (id: string, token: string): Promise<Report> 
 
 export const apiUploadFile = `${API_HOST}/check-before-transfer/asia-southeast2/api/file/upload`;
 
-export const deleteFile = async (reportSession: string, fileName: string, token: string) => {
+export const deleteFile = async (dirName: string, fileName: string, token: string) => {
   axios
     .delete('/file', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        reportSession,
+        dirName,
         fileName,
       },
     })

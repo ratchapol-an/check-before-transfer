@@ -106,12 +106,12 @@ export const deleteFile = async (req: Request, res: Response): Promise<Response<
   const token = await validateToken(idToken);
   if (!token) return res.status(401).send('Unauthorized');
 
-  const { reportSession, fileName } = req.body;
-  if (!reportSession) return res.status(404).send('Bad Request');
+  const { dirName, fileName } = req.body;
+  if (!dirName) return res.status(404).send('Bad Request');
 
   try {
     await firebaseStorage.deleteFiles({
-      prefix: `files/${reportSession as string}/${fileName}`,
+      prefix: `files/${dirName as string}/${fileName}`,
     });
     return res.status(200).send();
   } catch (e) {
