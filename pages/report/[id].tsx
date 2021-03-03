@@ -5,7 +5,7 @@ import Container from '@components/Container';
 import { ReportFormContainer, ReportFormValues } from '@components/Report';
 import { AuthAction, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
 import { getReportById, updateReport } from 'services/reportingService';
-import Report from '@models/Report';
+import Report, { UploadedFile } from '@models/Report';
 import { UploadFile } from 'antd/lib/upload/interface';
 import moment from 'moment';
 import { useCallback } from 'react';
@@ -22,7 +22,12 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report })
   const initialReport: ReportFormValues = {
     ...restReport,
     eventDate: moment(eventDate),
-    attachedFiles: attachedFiles ? attachedFiles.map((o) => ({ url: o } as UploadFile)) : [],
+    attachedFiles: attachedFiles
+      ? attachedFiles.map(
+          (o, i) =>
+            ({ url: o.url, size: o.size, name: o.name, response: o, uid: i.toString(), type: '' } as UploadFile),
+        )
+      : [],
   };
 
   const handleConfirm = useCallback(

@@ -1,5 +1,5 @@
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import Report from '@models/Report';
+import Report, { UploadedFile } from '@models/Report';
 import { Modal } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { useCallback } from 'react';
@@ -23,11 +23,13 @@ const ReportFormContainer: React.FunctionComponent<Props> = ({ initialReport, to
           'ประมวลกฎหมายอาญา กำหนดความผิดฐานหมิ่นประมาทไว้ใน มาตรา 326 โดยมีมาตรา 328 เป็นบทเพิ่มโทษบัญญัติไว้ว่า "มาตรา 326 ผู้ใดใส่ความผู้อื่นต่อบุคคลที่สาม โดยประการที่น่าจะทำให้ผู้อื่นนั้นเสียชื่อเสียง ถูกดูหมิ่น หรือถูกเกลียดชัง ผู้นั้นกระทำความผิดฐานหมิ่นประมาท ต้องระวางโทษจำคุกไม่เกินหนึ่งปี หรือปรับไม่เกินสองหมื่นบาท หรือทั้งจำทั้งปรับ"',
         async onOk() {
           const { eventDate, ...restFormValues } = formValues;
-          const newAttachedFiles = restFormValues.attachedFiles.map((f) => f.response);
+          const uploadedFiles = restFormValues.attachedFiles
+            .filter((f) => !!f.response)
+            .map((f) => f.response) as UploadedFile[];
           const newReport: Report = {
             ...restFormValues,
             eventDate: eventDate.toISOString(),
-            attachedFiles: newAttachedFiles,
+            attachedFiles: uploadedFiles,
           };
           await onConfirm(newReport);
         },

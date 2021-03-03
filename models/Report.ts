@@ -20,7 +20,7 @@ export type BasedReport = {
 export interface UploadedFile {
   name: string;
   dirName: string;
-  size: string;
+  size: number;
   accessToken: string;
   url: string;
 }

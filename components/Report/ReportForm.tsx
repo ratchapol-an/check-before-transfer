@@ -5,7 +5,7 @@ import { data } from 'banks-logo';
 import moment, { Moment } from 'moment';
 import PicturesWall from '@components/PicturesWall';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
-import { BasedReport } from '@models/Report';
+import { BasedReport, UploadedFile } from '@models/Report';
 import productTypeCaptions from '@models/productTypeCaptions';
 
 const { Option } = Select;
@@ -226,4 +226,4 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish, onRemo
 
 export default ReportForm;
 
-export type ReportFormValues = BasedReport & { attachedFiles: UploadFile[]; eventDate: Moment };
+export type ReportFormValues = BasedReport & { attachedFiles: UploadFile<UploadedFile>[]; eventDate: Moment };
