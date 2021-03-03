@@ -3,11 +3,6 @@ import ReportStatus from './ReportStatus';
 
 export type BasedReport = {
   id: string;
-  bankCode?: string;
-  bankAccountNumber?: string;
-  name?: string;
-  phoneNumber?: string;
-  nationalIdNumber?: string;
   amount: number;
   eventDate: string;
   eventDetail: string;
@@ -16,6 +11,11 @@ export type BasedReport = {
   productType: number;
   productLink: string;
   status: ReportStatus;
+  bankCode?: string;
+  bankAccountNumber?: string;
+  name?: string;
+  phoneNumber?: string;
+  nationalIdNumber?: string;
 };
 
 export interface UploadedFile {

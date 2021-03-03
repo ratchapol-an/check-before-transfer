@@ -6,7 +6,7 @@ import { ReportForm, ReportFormValues } from '@components/Report';
 
 import { AuthAction, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
 import { addReport, getReportById } from 'services/reportingService';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import Report from '@models/Report';
@@ -15,10 +15,14 @@ interface ReportPageProps {
   report?: Report;
   token?: string;
 }
-const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token }) => {
+const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report }) => {
   const { Content } = Layout;
   const { Title } = Typography;
   const router = useRouter();
+
+  useEffect(() => {
+    if (report == null) router.push('/');
+  }, [router, report]);
 
   const handleFormFinish = useCallback(
     async (values: ReportFormValues) => {
@@ -86,6 +90,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
       report = await getReportById(reportId, token);
     }
   }
+  console.log('report', report);
 
   return {
     props: {

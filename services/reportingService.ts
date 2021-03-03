@@ -51,13 +51,13 @@ export const addReport = async (report: Report, token: string) => {
 };
 
 interface UpdateReportReq {
-  report_id: string;
+  reportID: string;
   report: Report;
 }
 
 export const updateReport = (req: UpdateReportReq, token: string) => {
   axios
-    .put<{ report_id: string }>(
+    .put<{ reportID: string }>(
       '/report/update',
       {
         body: req,
@@ -69,7 +69,7 @@ export const updateReport = (req: UpdateReportReq, token: string) => {
       },
     )
     .then(({ data }) => {
-      return data.report_id;
+      return data.reportID;
     })
     .catch((e) => {
       console.log(e);
@@ -77,13 +77,13 @@ export const updateReport = (req: UpdateReportReq, token: string) => {
 };
 
 interface VerifyReportReq {
-  report_id: string;
+  reportID: string;
   status: number;
 }
 
 export const verifyReport = (req: VerifyReportReq, token: string) => {
   axios
-    .put<{ report_id: string }>(
+    .put<{ reportID: string }>(
       '/report/verify',
       {
         body: req,
@@ -95,21 +95,21 @@ export const verifyReport = (req: VerifyReportReq, token: string) => {
       },
     )
     .then(({ data }) => {
-      console.log(data.report_id);
+      console.log(data.reportID);
     })
     .catch((e) => {
       console.log(e);
     });
 };
 
-export const deleteReport = async (reportId: string, token: string) => {
+export const deleteReport = async (reportID: string, token: string) => {
   axios
     .delete<{ reportID: string; status: string }>('/report', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        reportID: reportId,
+        reportID,
       },
     })
     .then(({ data }) => {
@@ -130,7 +130,7 @@ export const getReportsByUserId = async (
   token: string,
 ): Promise<PaginatedReports> => {
   const resp = await axios
-    .get<PaginatedReports>('/report/list', {
+    .get<PaginatedReports>('/reports', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -154,8 +154,18 @@ export const getReportsByStatus = async (
   return { total: 100, data: [] };
 };
 
-export const getReportById = async (id: string, token: string): Promise<Report> => {
-  return Promise.resolve(mockReport);
+export const getReportById = async (id: string, token: string): Promise<Report | null> => {
+  const resp = await axios
+    .get<Report>(`/report/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  if (resp != null) return resp.data;
+  return Promise.resolve(null);
 };
 
 export const apiUploadFile = `${API_HOST}/check-before-transfer/asia-southeast2/api/file/upload`;

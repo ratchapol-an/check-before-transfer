@@ -110,11 +110,11 @@ export const verify = async (req: Request, res: Response): Promise<Response<any>
   const token = await validateIsAdmin(idToken);
   if (!token) return res.status(401).send('Unauthorized');
 
-  const { report_id, status } = req.body;
+  const { reportID, status } = req.body;
   const reporterID = token.sub;
 
   try {
-    const reportRef = await db.collection(REPORT_COLLECTION).doc(report_id);
+    const reportRef = await db.collection(REPORT_COLLECTION).doc(reportID);
     const reportDoc = await reportRef.get();
     let oldStatus;
 
@@ -123,16 +123,16 @@ export const verify = async (req: Request, res: Response): Promise<Response<any>
     reportRef.update({
       status,
     });
-    await saveHistory(reporterID, ActionType.UPDATE, report_id, oldStatus?.status, status, db);
+    await saveHistory(reporterID, ActionType.UPDATE, reportID, oldStatus?.status, status, db);
     return res.status(200).json({
-      reportID: report_id,
+      reportID,
     });
   } catch (e) {
     return res.status(500).send(e.message);
   }
 };
 
-export const getReport = async (req: Request, res: Response): Promise<Response<any>> => {
+export const searchReport = async (req: Request, res: Response): Promise<Response<any>> => {
   if (req.method !== 'GET') return res.status(403).send('Forbidden!');
   const { q, by } = req.query;
   const searchQuery = getSearchQuery(by as string);
@@ -167,6 +167,24 @@ export const getReport = async (req: Request, res: Response): Promise<Response<a
     return res.status(500).send(e.message);
   }
 };
+export const getReport = async (req: Request, res: Response): Promise<Response<any>> => {
+  if (req.method !== 'GET') return res.status(403).send('Forbidden!');
+  const { params } = req;
+  const reportID = params.id;
+
+  if (reportID === '') return res.status(404).send('Missing report id');
+
+  try {
+    const snapshot = await db.collection(REPORT_COLLECTION).doc(reportID).get();
+
+    if (!snapshot.exists) return res.status(200).send(null);
+    const report = snapshot.data();
+    if (report === undefined) return res.status(200).send(null);
+    return res.status(200).send(report);
+  } catch (e) {
+    return res.status(500).send(e.message);
+  }
+};
 
 export const getReports = async (req: Request, res: Response): Promise<Response<any>> => {
   if (req.method !== 'GET') return res.status(403).send('Forbidden!');
@@ -176,6 +194,7 @@ export const getReports = async (req: Request, res: Response): Promise<Response<
 
   const token = await validateToken(idToken);
   if (!token) return res.status(401).send('Unauthorized');
+  console.log(token.uid);
 
   try {
     const snapshot = await db
