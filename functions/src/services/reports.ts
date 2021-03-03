@@ -60,9 +60,10 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
   const token = await validateToken(idToken);
   if (!token) return res.status(401).send('Unauthorized');
 
-  const { report_id, report } = req.body;
-  const reportID = report_id;
-  const reporterID = token.sub;
+  const report: Report = req.body;
+  if (!report.id) return res.status(400).send('Invalid reportId');
+  const reportId = report.id;
+  const reporterId = token.sub;
 
   const newReport: Report = {
     bankCode: report.bankCode,
@@ -79,19 +80,17 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
     productType: report.productType,
   };
   try {
-    const reportRef = await db.collection(REPORT_COLLECTION).doc(reportID);
+    const reportRef = await db.collection(REPORT_COLLECTION).doc(reportId);
     const reportDoc = await reportRef.get();
     let oldReport = {};
 
     if (reportDoc.exists) oldReport = reportDoc.data() || {};
 
-    await saveHistory(reporterID, ActionType.UPDATE, reportID, oldReport, newReport, db);
+    await saveHistory(reporterId, ActionType.UPDATE, reportId, oldReport, newReport, db);
 
     await reportRef.update(newReport);
-    functions.logger.info(`Updated report ${report_id} by ${reporterID}`, { structuredData: true });
-    return res.status(200).json({
-      reportID,
-    });
+    functions.logger.info(`Updated report ${reportId} by ${reporterId}`, { structuredData: true });
+    return res.status(204);
   } catch (e) {
     return res.status(500).send(e.message);
   }

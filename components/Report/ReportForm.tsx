@@ -2,12 +2,11 @@ import { Form, Select, Input, InputNumber, Button, DatePicker } from 'antd';
 import PaymentMethod, { paymentMethodCaptions } from 'models/PaymentMethod';
 import { useState } from 'react';
 import { data } from 'banks-logo';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import PicturesWall from '@components/PicturesWall';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { BasedReport } from '@models/Report';
 import productTypeCaptions from '@models/productTypeCaptions';
-import { deleteFile } from 'services/reportingService';
 
 const { Option } = Select;
 
@@ -36,24 +35,19 @@ const bankOptions = (Object.keys(data) as Array<keyof typeof data>).map((key) =>
 });
 
 type ReportFormProps = {
+  initialReport?: ReportFormValues;
   onFinish: (values: ReportFormValues) => void;
-  userToken?: string;
+  onRemoveUploadedFile: (file: UploadFile<any>, reportSession: string) => Promise<boolean>;
 };
 
-const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish, userToken }) => {
+const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish, onRemoveUploadedFile, initialReport }) => {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
   const handlePaymentMethodSelect = (value: PaymentMethod) => {
     setPaymentMethod(value);
   };
 
-  const handleOnRemove = async (file: UploadFile<any>, reportSession: string): Promise<boolean> => {
-    if (!userToken) return false;
-    await deleteFile(reportSession, file.name, userToken);
-    return true;
-  };
-
   return (
-    <Form name="report" {...formItemLayout} onFinish={onFinish}>
+    <Form name="report" initialValues={initialReport} {...formItemLayout} onFinish={onFinish}>
       <Form.Item
         name="paymentMethod"
         label="ช่องทางการชำระเงิน"
@@ -218,7 +212,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish, userTo
             }),
           ]}
         >
-          <PicturesWall uploadBtnVisible onRemove={handleOnRemove} />
+          <PicturesWall fileList={initialReport?.attachedFiles} uploadBtnVisible onRemove={onRemoveUploadedFile} />
         </Form.Item>
       </Form.Item>
       <Form.Item wrapperCol={{ md: { span: 12, offset: 8 } }}>
@@ -232,4 +226,4 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish, userTo
 
 export default ReportForm;
 
-export type ReportFormValues = BasedReport & { attachedFiles: UploadFile[] };
+export type ReportFormValues = BasedReport & { attachedFiles: UploadFile[]; eventDate: Moment };

@@ -9,7 +9,6 @@ export type BasedReport = {
   phoneNumber?: string;
   nationalIdNumber?: string;
   amount: number;
-  eventDate: string;
   eventDetail: string;
   reporterId: string;
   paymentMethod: PaymentMethod;
@@ -20,6 +19,7 @@ export type BasedReport = {
 
 type Report = BasedReport & {
   attachedFiles?: string[];
+  eventDate: string;
 };
 
 export const mockReport: Report = {

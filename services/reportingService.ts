@@ -50,30 +50,18 @@ export const addReport = async (report: Report, token: string) => {
   return data.reportId;
 };
 
-interface UpdateReportReq {
-  report_id: string;
-  report: Report;
-}
-
-export const updateReport = (req: UpdateReportReq, token: string) => {
-  axios
-    .put<{ report_id: string }>(
-      '/report/update',
-      {
-        body: req,
+export const updateReport = async (report: Report, token: string) => {
+  return axios.put(
+    '/report/update',
+    {
+      body: report,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    )
-    .then(({ data }) => {
-      return data.report_id;
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+    },
+  );
 };
 
 interface VerifyReportReq {
