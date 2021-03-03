@@ -17,7 +17,6 @@ axios.defaults.baseURL = `${API_HOST}/check-before-transfer/asia-southeast2/api`
 // PROD URL
 // https://asia-southeast2-check-before-transfer.cloudfunctions.net
 
-export const apiUploadFile = `${API_HOST}/check-before-transfer/asia-southeast2/api/upload`;
 export interface SearchResult {
   name: string;
   totalReport: number;
@@ -157,4 +156,25 @@ export const getReportsByStatus = async (
 
 export const getReportById = async (id: string, token: string): Promise<Report> => {
   return Promise.resolve(mockReport);
+};
+
+export const apiUploadFile = `${API_HOST}/check-before-transfer/asia-southeast2/api/file/upload`;
+
+export const deleteFile = async (reportSession: string, fileName: string, token: string) => {
+  axios
+    .delete('/file', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        reportSession,
+        fileName,
+      },
+    })
+    .then(({ data }) => {
+      console.log(data);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
