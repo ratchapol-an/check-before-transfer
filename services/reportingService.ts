@@ -153,7 +153,10 @@ export const getReportById = async (id: string, token: string): Promise<Report |
       console.log(e);
       return null;
     });
-  if (resp != null) return resp.data;
+  if (resp != null) {
+    console.log(resp);
+    return resp.data;
+  }
   return Promise.resolve(null);
 };
 

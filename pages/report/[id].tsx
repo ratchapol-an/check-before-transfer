@@ -74,6 +74,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
 
   if (!report) {
     res.writeHead(302, { Location: '/report' });
+    res.end();
   }
 
   return {
