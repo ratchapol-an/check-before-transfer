@@ -18,8 +18,16 @@ export type BasedReport = {
   status: ReportStatus;
 };
 
+export interface UploadedFile {
+  name: string;
+  dirName: string;
+  size: string;
+  accessToken: string;
+  url: string;
+}
+
 type Report = BasedReport & {
-  attachedFiles?: string[];
+  attachedFiles?: UploadedFile[];
 };
 
 export const mockReport: Report = {

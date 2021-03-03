@@ -19,6 +19,7 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
   if (!token) return res.status(401).send('Unauthorized');
 
   const { body } = req.body;
+  console.log(body);
 
   const reporterID = token.uid;
   const newReport: Report = {
@@ -41,11 +42,12 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
 
   try {
     const writeResult = await db.collection(REPORT_COLLECTION).add(newReport);
-    const reportId = writeResult.id;
-    await saveHistory(reporterID, ActionType.CREATE, reportId, {}, newReport, db);
-    functions.logger.info(`Add report ${reportId} by ${reporterID}`, { structuredData: true });
+    const reportID = writeResult.id;
+    await db.collection(REPORT_COLLECTION).doc(reportID).update({ reportID });
+    await saveHistory(reporterID, ActionType.CREATE, reportID, {}, newReport, db);
+    functions.logger.info(`Add report ${reportID} by ${reporterID}`, { structuredData: true });
     return res.status(200).json({
-      reportId,
+      reportID,
     });
   } catch (e) {
     return res.status(500).send(e.message);
@@ -60,8 +62,9 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
   const token = await validateToken(idToken);
   if (!token) return res.status(401).send('Unauthorized');
 
-  const { report_id, report } = req.body;
-  const reportID = report_id;
+  const { reportID, report } = req.body;
+  if (!reportID) return res.status(404).send('Bad Request');
+
   const reporterID = token.sub;
 
   const newReport: Report = {
@@ -88,7 +91,7 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
     await saveHistory(reporterID, ActionType.UPDATE, reportID, oldReport, newReport, db);
 
     await reportRef.update(newReport);
-    functions.logger.info(`Updated report ${report_id} by ${reporterID}`, { structuredData: true });
+    functions.logger.info(`Updated report ${reportID} by ${reporterID}`, { structuredData: true });
     return res.status(200).json({
       reportID,
     });

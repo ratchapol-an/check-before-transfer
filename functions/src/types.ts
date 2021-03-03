@@ -58,3 +58,11 @@ export enum SearchBy {
   nationalID = 'nationalIdNumber',
   Name = 'name',
 }
+
+export interface UploadedFile {
+  name: string;
+  dirName: string;
+  size: string;
+  accessToken: string;
+  url: string;
+}

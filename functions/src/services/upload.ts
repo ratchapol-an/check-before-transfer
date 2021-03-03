@@ -7,6 +7,7 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { firebaseStorage } from './firebase';
 import { getAuthorizationToken, validateToken } from './admin';
+import { UploadedFile } from '../types';
 
 interface FileRequest extends Request {
   files?: any;
@@ -76,12 +77,19 @@ export const filesUpload = async (req: FileRequest, res: Response): Promise<void
         });
         fs.unlinkSync(file);
         const imgMeta = fileRes[0].metadata;
-        res.send({
-          dirPath: '',
-          url: `https://firebasestorage.googleapis.com/v0/b/${imgMeta.bucket}/o/${encodeURIComponent(
-            imgMeta.name,
-          )}?alt=media&token=${token}`,
-        });
+        console.log('file', fileRes[0].metadata);
+
+        const resp: UploadedFile = {
+          name: k,
+          dirName: reportSession as string,
+          size: imgMeta.size,
+          accessToken: token,
+          url: imgMeta.name,
+          // url: `https://firebasestorage.googleapis.com/v0/b/${imgMeta.bucket}/o/${encodeURIComponent(
+          //   imgMeta.name,
+          // )}?alt=media&token=${token}`,
+        };
+        res.send(resp);
       });
     });
   });

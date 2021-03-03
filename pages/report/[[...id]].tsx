@@ -38,9 +38,9 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token }) => {
         content:
           'ประมวลกฎหมายอาญา กำหนดความผิดฐานหมิ่นประมาทไว้ใน มาตรา 326 โดยมีมาตรา 328 เป็นบทเพิ่มโทษบัญญัติไว้ว่า "มาตรา 326 ผู้ใดใส่ความผู้อื่นต่อบุคคลที่สาม โดยประการที่น่าจะทำให้ผู้อื่นนั้นเสียชื่อเสียง ถูกดูหมิ่น หรือถูกเกลียดชัง ผู้นั้นกระทำความผิดฐานหมิ่นประมาท ต้องระวางโทษจำคุกไม่เกินหนึ่งปี หรือปรับไม่เกินสองหมื่นบาท หรือทั้งจำทั้งปรับ"',
         async onOk() {
-          const { ...report } = values;
-          const newAttachedFiles = report.attachedFiles.map((f) => f.response);
-          const newReport = { ...report, attachedFiles: newAttachedFiles };
+          const rawReport = { ...values };
+          const newAttachedFiles = rawReport.attachedFiles.map((f) => f.response);
+          const newReport: Report = { ...rawReport, attachedFiles: newAttachedFiles };
           await addReport(newReport, token);
           router.push('/thankyou');
         },
