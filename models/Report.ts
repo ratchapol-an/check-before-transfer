@@ -3,11 +3,6 @@ import ReportStatus from './ReportStatus';
 
 export type BasedReport = {
   id: string;
-  bankCode?: string;
-  bankAccountNumber?: string;
-  name?: string;
-  phoneNumber?: string;
-  nationalIdNumber?: string;
   amount: number;
   eventDetail: string;
   reporterId: string;
@@ -15,10 +10,23 @@ export type BasedReport = {
   productType: number;
   productLink: string;
   status: ReportStatus;
+  bankCode?: string;
+  bankAccountNumber?: string;
+  name?: string;
+  phoneNumber?: string;
+  nationalIdNumber?: string;
 };
 
+export interface UploadedFile {
+  name: string;
+  dirName: string;
+  size: string;
+  accessToken: string;
+  url: string;
+}
+
 type Report = BasedReport & {
-  attachedFiles?: string[];
+  attachedFiles?: UploadedFile[];
   eventDate: string;
 };
 

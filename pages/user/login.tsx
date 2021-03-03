@@ -47,7 +47,7 @@ const LoginPage: FunctionComponent<FunctionComponentProps> = () => {
   useEffect(() => {
     const currentQuery = { ...query };
     delete currentQuery.redirectURL;
-    const search = queryString.stringify(currentQuery);
+    const search = currentQuery === undefined ? '' : queryString.stringify(currentQuery);
 
     uiConfig.signInSuccessUrl = `${
       (query.redirectURL as string) === '/' ? '' : (query.redirectURL as string)
