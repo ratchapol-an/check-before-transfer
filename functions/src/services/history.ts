@@ -11,17 +11,17 @@ const REPORT_HISTORY_COLLECTION = 'report_histories';
 export const saveHistory = async (
   who: string,
   action: ActionType,
-  reportID: string,
+  reportId: string,
   oldData: FirebaseFirestore.DocumentData | Report,
   newData: FirebaseFirestore.DocumentData | Report,
   db: FirebaseFirestore.Firestore,
 ): Promise<void> => {
-  const reportHistoryRef = await db.collection(REPORT_HISTORY_COLLECTION).doc(reportID);
+  const reportHistoryRef = await db.collection(REPORT_HISTORY_COLLECTION).doc(reportId);
 
   const reportHistoryDoc = await reportHistoryRef.get();
 
   const newReportHistory: ReportHistory = {
-    reporterID: who,
+    reporterId: who,
     action,
     changed: {
       old: oldData,

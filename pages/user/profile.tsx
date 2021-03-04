@@ -2,37 +2,30 @@ import Head from 'next/head';
 import { Card, Layout, Space, Typography } from 'antd';
 import Header from '@components/Header';
 import Container from '@components/Container';
-import { AuthAction, useAuthUser, withAuthUser } from 'next-firebase-auth';
+import { AuthAction, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
 import ReportTable from '@components/Report/ReportTable';
 import { deleteReport, getReportsByUserId, PaginatedReports } from 'services/reportingService';
 import { PaginationConfig } from 'antd/lib/pagination';
 import { useCallback } from 'react';
 
-export const ProfilePage: React.FunctionComponent = () => {
+type ProfilePageProps = { token: string };
+
+export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ token }) => {
   const { Content, Footer } = Layout;
   const { Title } = Typography;
-  const AuthUser = useAuthUser();
 
   const handleDeleteReport = useCallback(
     async (reportId: string) => {
-      const token = await AuthUser.getIdToken();
-      if (token) {
-        await deleteReport(reportId, token);
-      }
+      await deleteReport(reportId, token);
     },
-    [AuthUser],
+    [token],
   );
 
   const handleLoadReport = useCallback(
     async (pagination: PaginationConfig): Promise<PaginatedReports> => {
-      const token = await AuthUser.getIdToken();
-      if (AuthUser.id && token) {
-        return getReportsByUserId(AuthUser.id, pagination, token);
-      }
-
-      return { total: 0, data: [] };
+      return getReportsByUserId(pagination, token);
     },
-    [AuthUser],
+    [token],
   );
   console.log('render profile');
   return (
@@ -60,6 +53,18 @@ export const ProfilePage: React.FunctionComponent = () => {
   );
 };
 
-export default withAuthUser({
+export const getServerSideProps = withAuthUserTokenSSR({
+  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+})(async ({ AuthUser }) => {
+  const token = await AuthUser.getIdToken();
+
+  return {
+    props: {
+      token,
+    },
+  };
+});
+
+export default withAuthUser<ProfilePageProps>({
   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
 })(ProfilePage);

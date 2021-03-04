@@ -2,7 +2,7 @@
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import PaymentMethod, { paymentMethodCaptions } from '@models/PaymentMethod';
 import productTypeCaptions from '@models/productTypeCaptions';
-import Report, { mockReport } from '@models/Report';
+import Report from '@models/Report';
 import ReportStatus, { reportStatusCaptions, reportStatusColors } from '@models/ReportStatus';
 import { Table, Tag, Space, Button, Modal, TablePaginationConfig } from 'antd';
 import { PaginationConfig } from 'antd/lib/pagination';
@@ -17,7 +17,7 @@ type ReportTableProps = {
 };
 const pageSize = 10;
 const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport, onLoadReports }) => {
-  const [reports, setReports] = useState<Report[]>([mockReport]);
+  const [reports, setReports] = useState<Report[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -56,6 +56,7 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
     showSizeChanger: false,
     total,
   };
+  console.log(isLoading);
   return (
     <Table
       dataSource={reports}

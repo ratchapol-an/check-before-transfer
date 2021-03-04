@@ -38,7 +38,7 @@ export type Report = BasedReport & {
 export interface ReportHistory {
   action: string;
   changed: ChangedOBJ;
-  reporterID: string;
+  reporterId: string;
 }
 interface ChangedOBJ {
   old: string | undefined | Record<string, unknown> | Report;

@@ -65,7 +65,7 @@ export const updateReport = async (report: Report, token: string) => {
 };
 
 interface VerifyReportReq {
-  reportID: string;
+  reportId: string;
   status: number;
 }
 
@@ -90,14 +90,14 @@ export const verifyReport = (req: VerifyReportReq, token: string) => {
     });
 };
 
-export const deleteReport = async (reportID: string, token: string) => {
+export const deleteReport = async (reportId: string, token: string) => {
   axios
-    .delete<{ reportID: string; status: string }>('/report', {
+    .delete<{ reportId: string; status: string }>('/report', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        reportID,
+        reportId,
       },
     })
     .then(({ data }) => {
@@ -113,7 +113,6 @@ export type PaginatedReports = {
   data: Report[];
 };
 export const getReportsByUserId = async (
-  userId: string,
   paginationConfig: PaginationConfig,
   token: string,
 ): Promise<PaginatedReports> => {
@@ -143,21 +142,14 @@ export const getReportsByStatus = async (
 };
 
 export const getReportById = async (id: string, token: string): Promise<Report | null> => {
-  const resp = await axios
-    .get<Report>(`/report/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .catch((e) => {
-      console.log(e);
-      return null;
-    });
-  if (resp != null) {
-    console.log(resp);
-    return resp.data;
-  }
-  return Promise.resolve(null);
+  console.log(id);
+  const resp = await axios.get<Report>(`/report/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return resp ? resp.data : null;
 };
 
 export const apiUploadFile = `${API_HOST}/check-before-transfer/asia-southeast2/api/file/upload`;

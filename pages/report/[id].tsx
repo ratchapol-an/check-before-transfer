@@ -25,11 +25,22 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report })
     attachedFiles: attachedFiles
       ? attachedFiles.map(
           (o, i) =>
-            ({ url: o.url, size: o.size, name: o.name, response: o, uid: i.toString(), type: '' } as UploadFile),
+            ({
+              url: `https://firebasestorage.googleapis.com/v0/b/${o.dirName}/o/${encodeURIComponent(
+                o.name,
+              )}?alt=media&token=${o.accessToken}`,
+              size: o.size,
+              name: o.name,
+              response: o,
+              uid: i.toString(),
+              type: '',
+            } as UploadFile),
         )
       : [],
   };
-
+  // https://firebasestorage.googleapis.com/v0/b/${imgMeta.bucket}/o/${encodeURIComponent(
+  //   //   imgMeta.name,
+  //   // )}?alt=media&token=${token}`,
   const handleConfirm = useCallback(
     async (updatingReport: Report) => {
       await updateReport(updatingReport, token);
@@ -62,7 +73,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
 })(async ({ AuthUser, params, res }) => {
   console.log(params);
-  const reportId = params && params.id ? params.id[0] : undefined;
+  const reportId = params && typeof params.id === 'string' ? params.id : undefined;
   let report: Report | null = null;
   let token: string | null = null;
   if (reportId) {

@@ -21,7 +21,7 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
   const { body } = req.body;
   console.log(body);
 
-  const reporterID = token.uid;
+  const reporterId = token.uid;
   const newReport: Report = {
     bankCode: body.bankCode,
     bankAccountNumber: body.bankAccountNumber,
@@ -31,7 +31,7 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
     amount: body.amount,
     eventDate: body.eventDate,
     eventDetail: body.eventDetail,
-    reporterId: reporterID,
+    reporterId,
     paymentMethod: body.paymentMethod,
     productLink: body.productLink,
     productType: body.productType,
@@ -42,12 +42,12 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
 
   try {
     const writeResult = await db.collection(REPORT_COLLECTION).add(newReport);
-    const reportID = writeResult.id;
-    await db.collection(REPORT_COLLECTION).doc(reportID).update({ reportID });
-    await saveHistory(reporterID, ActionType.CREATE, reportID, {}, newReport, db);
-    functions.logger.info(`Add report ${reportID} by ${reporterID}`, { structuredData: true });
+    const reportId = writeResult.id;
+    await db.collection(REPORT_COLLECTION).doc(reportId).update({ reportId });
+    await saveHistory(reporterId, ActionType.CREATE, reportId, {}, newReport, db);
+    functions.logger.info(`Add report ${reportId} by ${reporterId}`, { structuredData: true });
     return res.status(200).json({
-      reportID,
+      reportId,
     });
   } catch (e) {
     return res.status(500).send(e.message);
@@ -108,11 +108,11 @@ export const verify = async (req: Request, res: Response): Promise<Response<any>
   const token = await validateIsAdmin(idToken);
   if (!token) return res.status(401).send('Unauthorized');
 
-  const { reportID, status } = req.body;
-  const reporterID = token.sub;
+  const { reportId, status } = req.body;
+  const reporterId = token.sub;
 
   try {
-    const reportRef = await db.collection(REPORT_COLLECTION).doc(reportID);
+    const reportRef = await db.collection(REPORT_COLLECTION).doc(reportId);
     const reportDoc = await reportRef.get();
     let oldStatus;
 
@@ -121,9 +121,9 @@ export const verify = async (req: Request, res: Response): Promise<Response<any>
     reportRef.update({
       status,
     });
-    await saveHistory(reporterID, ActionType.UPDATE, reportID, oldStatus?.status, status, db);
+    await saveHistory(reporterId, ActionType.UPDATE, reportId, oldStatus?.status, status, db);
     return res.status(200).json({
-      reportID,
+      reportId,
     });
   } catch (e) {
     return res.status(500).send(e.message);
@@ -168,12 +168,14 @@ export const searchReport = async (req: Request, res: Response): Promise<Respons
 export const getReport = async (req: Request, res: Response): Promise<Response<any>> => {
   if (req.method !== 'GET') return res.status(403).send('Forbidden!');
   const { params } = req;
-  const reportID = params.id;
+  console.log('request is');
+  console.log(req);
+  const reportId = params.id;
 
-  if (reportID === '') return res.status(404).send('Missing report id');
+  if (reportId === '') return res.status(404).send('Missing report id');
 
   try {
-    const snapshot = await db.collection(REPORT_COLLECTION).doc(reportID).get();
+    const snapshot = await db.collection(REPORT_COLLECTION).doc(reportId).get();
 
     if (!snapshot.exists) return res.status(200).send(null);
     const report = snapshot.data();
@@ -230,12 +232,12 @@ export const deleteReport = async (req: Request, res: Response): Promise<Respons
   const token = await validateToken(idToken);
   if (!token) return res.status(401).send('Unauthorized');
 
-  const { reportID } = req.body;
+  const { reportId } = req.body;
 
   try {
-    await db.collection(REPORT_COLLECTION).doc(reportID).delete();
+    await db.collection(REPORT_COLLECTION).doc(reportId).delete();
     return res.status(200).send({
-      reportID,
+      reportId,
       status: 'deleted',
     });
   } catch (e) {
