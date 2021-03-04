@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Card, Divider, Layout, Typography, Modal } from 'antd';
+import { Card, Layout, Typography, Breadcrumb } from 'antd';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import { ReportFormContainer } from '@components/Report';
@@ -8,6 +8,7 @@ import Report from '@models/Report';
 import { addReport } from 'services/reportingService';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
+import Link from 'next/link';
 
 interface ReportPageProps {
   token: string;
@@ -32,11 +33,19 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token }) => {
       <Layout className="report-page-layout layout-with-bg">
         <Header />
         <Content>
-          <Divider />
           <Container>
-            <Title level={3}>รายงานการโกง</Title>
+            <Breadcrumb>
+              <Breadcrumb.Item>
+                <Link href="/">หน้าแรก</Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Link href="/user/profile">ประวัติของคุณ</Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>รายงาน</Breadcrumb.Item>
+            </Breadcrumb>
+            <Title level={3}>เพิ่มรายงานการโกง</Title>
             <Card>
-              <ReportFormContainer onConfirm={handleConfirm} token={token} />
+              <ReportFormContainer onConfirm={handleConfirm} token={token} submitBtnText="ส่งรายงาน" />
             </Card>
           </Container>
         </Content>

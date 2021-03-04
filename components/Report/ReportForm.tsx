@@ -35,12 +35,18 @@ const bankOptions = (Object.keys(data) as Array<keyof typeof data>).map((key) =>
 });
 
 type ReportFormProps = {
+  submitBtnText: string;
   initialReport?: ReportFormValues;
   onFinish: (values: ReportFormValues) => void;
   onRemoveUploadedFile: (file: UploadFile<any>, reportSession: string) => Promise<boolean>;
 };
 
-const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish, onRemoveUploadedFile, initialReport }) => {
+const ReportForm: React.FunctionComponent<ReportFormProps> = ({
+  onFinish,
+  onRemoveUploadedFile,
+  initialReport,
+  submitBtnText,
+}) => {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
   const handlePaymentMethodSelect = (value: PaymentMethod) => {
     setPaymentMethod(value);
@@ -48,6 +54,25 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish, onRemo
 
   return (
     <Form name="report" initialValues={initialReport} {...formItemLayout} onFinish={onFinish}>
+      <Form.Item
+        name="eventDate"
+        label="วันที่ทำธุรกรรม"
+        rules={[{ type: 'object' as const, required: true, message: 'กรุณากรอกวันที่ทำธุรกรรม' }]}
+        hasFeedback
+        wrapperCol={{
+          xs: { span: 8 },
+          md: { span: 6 },
+          lg: { span: 4 },
+        }}
+      >
+        <DatePicker
+          format="DD/MM/YYYY"
+          style={{ width: '100%' }}
+          showToday
+          disabledDate={(currentDate) => currentDate > moment()}
+          placeholder="วัน/เดือน/ปี"
+        />
+      </Form.Item>
       <Form.Item
         name="paymentMethod"
         label="ช่องทางการชำระเงิน"
@@ -144,25 +169,6 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish, onRemo
         />
       </Form.Item>
       <Form.Item
-        name="eventDate"
-        label="วันที่ทำธุรกรรม"
-        rules={[{ type: 'object' as const, required: true, message: 'กรุณากรอกวันที่ทำธุรกรรม' }]}
-        hasFeedback
-        wrapperCol={{
-          xs: { span: 8 },
-          md: { span: 6 },
-          lg: { span: 4 },
-        }}
-      >
-        <DatePicker
-          format="DD/MM/YYYY"
-          style={{ width: '100%' }}
-          showToday
-          disabledDate={(currentDate) => currentDate > moment()}
-          placeholder="วัน/เดือน/ปี"
-        />
-      </Form.Item>
-      <Form.Item
         name="productType"
         label="ประเภทสินค้าหรือบริการ"
         hasFeedback
@@ -217,7 +223,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({ onFinish, onRemo
       </Form.Item>
       <Form.Item wrapperCol={{ md: { span: 12, offset: 8 } }}>
         <Button type="primary" htmlType="submit" size="large">
-          ส่งรายงาน
+          {submitBtnText}
         </Button>
       </Form.Item>
     </Form>

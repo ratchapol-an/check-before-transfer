@@ -9,9 +9,10 @@ import ReportForm, { ReportFormValues } from './ReportForm';
 type Props = {
   initialReport?: ReportFormValues;
   token: string;
+  submitBtnText: string;
   onConfirm: (report: Report) => Promise<any>;
 };
-const ReportFormContainer: React.FunctionComponent<Props> = ({ initialReport, token, onConfirm }) => {
+const ReportFormContainer: React.FunctionComponent<Props> = ({ initialReport, token, onConfirm, submitBtnText }) => {
   const handleFormFinish = useCallback(
     async (formValues: ReportFormValues) => {
       const { confirm } = Modal;
@@ -50,6 +51,7 @@ const ReportFormContainer: React.FunctionComponent<Props> = ({ initialReport, to
   );
   return (
     <ReportForm
+      submitBtnText={submitBtnText}
       initialReport={initialReport}
       onFinish={handleFormFinish}
       onRemoveUploadedFile={handleRemoveUploadFile}

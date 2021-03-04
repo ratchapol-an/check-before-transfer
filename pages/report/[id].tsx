@@ -1,14 +1,30 @@
 import Head from 'next/head';
-import { Card, Divider, Layout, Typography, Modal } from 'antd';
+import { Card, Layout, Typography, PageHeader, Breadcrumb } from 'antd';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import { ReportFormContainer, ReportFormValues } from '@components/Report';
 import { AuthAction, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
 import { getReportById, updateReport } from 'services/reportingService';
-import Report, { UploadedFile } from '@models/Report';
+import Report from '@models/Report';
 import { UploadFile } from 'antd/lib/upload/interface';
 import moment from 'moment';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
+import Link from 'next/link';
+
+const routes = [
+  {
+    path: '/',
+    breadcrumbName: 'หน้าแรก',
+  },
+  {
+    path: '/user/profile',
+    breadcrumbName: 'ประวัติของคุณ',
+  },
+  {
+    path: '',
+    breadcrumbName: 'เพิ่มรายงานการโกง',
+  },
+];
 
 interface ReportPageProps {
   report: Report;
@@ -56,11 +72,24 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report })
       <Layout className="report-page-layout layout-with-bg">
         <Header />
         <Content>
-          <Divider />
           <Container>
+            <Breadcrumb>
+              <Breadcrumb.Item>
+                <Link href="/">หน้าแรก</Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Link href="/user/profile">ประวัติของคุณ</Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>รายงาน</Breadcrumb.Item>
+            </Breadcrumb>
             <Title level={3}>รายงานการโกง</Title>
             <Card>
-              <ReportFormContainer onConfirm={handleConfirm} initialReport={initialReport} token={token} />
+              <ReportFormContainer
+                onConfirm={handleConfirm}
+                initialReport={initialReport}
+                token={token}
+                submitBtnText="บันทึกรายงาน"
+              />
             </Card>
           </Container>
         </Content>
@@ -72,7 +101,6 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report })
 export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
 })(async ({ AuthUser, params, res }) => {
-  console.log(params);
   const reportId = params && typeof params.id === 'string' ? params.id : undefined;
   let report: Report | null = null;
   let token: string | null = null;
