@@ -51,7 +51,9 @@ const LoginPage: FunctionComponent<FunctionComponentProps> = () => {
     const search = currentQuery === undefined ? '' : queryString.stringify(currentQuery);
 
     uiConfig.signInSuccessUrl = `${
-      (query.redirectURL as string) === '/' ? '' : (query.redirectURL as string)
+      (query.redirectURL as string) === '/' || (query.redirectURL as string) === undefined
+        ? ''
+        : (query.redirectURL as string)
     }/?${search}`;
   }, [query]);
 
