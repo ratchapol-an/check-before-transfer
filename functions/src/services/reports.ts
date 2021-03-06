@@ -81,6 +81,7 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
     productLink: report.productLink,
     status: report.status,
     productType: report.productType,
+    attachedFiles: report.attachedFiles,
   };
   try {
     const reportRef = await db.collection(REPORT_COLLECTION).doc(reportId);
