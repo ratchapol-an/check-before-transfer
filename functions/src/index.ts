@@ -16,7 +16,7 @@ const app = express();
 const defaultCors = cors({
   origin: true,
   credentials: true,
-  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'x-report-session'],
 });
 
 // Automatically allow cross-origin requests
