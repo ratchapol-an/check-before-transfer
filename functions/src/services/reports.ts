@@ -93,7 +93,7 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
 
     await reportRef.update(newReport);
     functions.logger.info(`Updated report ${reportId} by ${reporterId}`, { structuredData: true });
-    return res.status(204);
+    return res.status(200).send(newReport);
   } catch (e) {
     return res.status(500).send(e.message);
   }

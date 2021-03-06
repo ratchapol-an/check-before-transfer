@@ -13,7 +13,11 @@ dayjs.locale('th');
 
 const app = express();
 
-const defaultCors = cors({ origin: true });
+const defaultCors = cors({
+  origin: true,
+  credentials: true,
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+});
 
 // Automatically allow cross-origin requests
 app.use(defaultCors);
