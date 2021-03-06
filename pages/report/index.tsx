@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Card, Layout, Typography, Breadcrumb } from 'antd';
+import { Card, Layout, Typography, Breadcrumb, notification } from 'antd';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import { ReportFormContainer } from '@components/Report';
@@ -19,8 +19,15 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token }) => {
   const router = useRouter();
   const handleConfirm = useCallback(
     async (report: Report) => {
-      await addReport(report, token);
-      router.push('/thankyou');
+      try {
+        await addReport(report, token);
+        router.push('/thankyou');
+      } catch {
+        notification.error({
+          message: 'เพิ่มรายงานไม่สำเร็จ',
+          description: 'ระบบเกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
+        });
+      }
     },
     [router, token],
   );

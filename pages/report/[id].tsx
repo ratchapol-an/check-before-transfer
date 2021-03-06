@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Card, Layout, Typography, PageHeader, Breadcrumb } from 'antd';
+import { Card, Layout, Typography, PageHeader, Breadcrumb, notification } from 'antd';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import { ReportFormContainer, ReportFormValues } from '@components/Report';
@@ -45,7 +45,17 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report })
   //   // )}?alt=media&token=${token}`,
   const handleConfirm = useCallback(
     async (updatingReport: Report) => {
-      await updateReport(updatingReport, token);
+      try {
+        await updateReport(updatingReport, token);
+        notification.success({
+          message: 'บันทึกข้อมูลเรียยร้อย',
+        });
+      } catch {
+        notification.error({
+          message: 'บันทึกข้อมูลไม่สำเร็จ',
+          description: 'ระบบเกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
+        });
+      }
     },
     [token],
   );
