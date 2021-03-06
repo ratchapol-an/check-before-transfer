@@ -3,11 +3,12 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase/app';
 import { withAuthUser, AuthAction, withAuthUserTokenSSR, useAuthUser } from 'next-firebase-auth';
 import Head from 'next/head';
-import { Layout } from 'antd';
+import { Layout, Row, Col } from 'antd';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import { useRouter } from 'next/router';
 import queryString from 'querystring';
+import Title from 'antd/lib/typography/Title';
 import 'firebase/auth';
 import './login.less';
 
@@ -62,10 +63,17 @@ const LoginPage: FunctionComponent<FunctionComponentProps> = () => {
       </Head>
       <Layout className="home-page-layout layout-with-bg">
         <Header />
-        <Content>
+        <Content style={{ position: 'relative' }}>
           <Container>
             {renderAuth ? (
-              <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} className="auth-box" />
+              <section className="login">
+                <Row>
+                  <Col xs={24} md={7} className="login-box">
+                    <h2>เข้าสู่ระบบ</h2>
+                    <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} className="login-option" />
+                  </Col>
+                </Row>
+              </section>
             ) : null}
           </Container>
         </Content>
