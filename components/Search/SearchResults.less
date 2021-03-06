@@ -1,6 +1,19 @@
 @import '~antd/lib/style/themes/default.less';
-.search-result-item{
-    @media only screen and (min-width: @screen-md-min) {
-        min-width: 712px;
+
+.search-results {
+    .latest-report--lg {
+        display: none;
+        @media only screen and (min-width: @screen-sm-min) {
+            display: block;
+            .ant-descriptions-item-label {
+                width: 30%;
+            }
+        }
+    }
+
+    .latest-report {
+        @media only screen and (min-width: @screen-sm-min) {
+            display: none;
+        }
     }
 }

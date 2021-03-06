@@ -15,6 +15,7 @@ type Props = {
 const ReportFormContainer: React.FunctionComponent<Props> = ({ initialReport, token, onConfirm, submitBtnText }) => {
   const handleFormFinish = useCallback(
     async (formValues: ReportFormValues) => {
+      console.log(formValues);
       const { confirm } = Modal;
 
       confirm({
@@ -29,6 +30,7 @@ const ReportFormContainer: React.FunctionComponent<Props> = ({ initialReport, to
             .map((f) => f.response) as UploadedFile[];
           const newReport: Report = {
             ...restFormValues,
+            reportId: initialReport?.reportId,
             eventDate: eventDate.toISOString(),
             attachedFiles: uploadedFiles,
           };
@@ -39,7 +41,7 @@ const ReportFormContainer: React.FunctionComponent<Props> = ({ initialReport, to
         cancelText: 'ยกเลิก',
       });
     },
-    [onConfirm],
+    [initialReport?.reportId, onConfirm],
   );
 
   const handleRemoveUploadFile = useCallback(

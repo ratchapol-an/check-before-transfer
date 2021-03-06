@@ -35,33 +35,21 @@ export const search = async (value: string, by: SearchBy): Promise<SearchResult>
 };
 
 export const addReport = async (report: Report, token: string) => {
-  const { data } = await axios.post<{ reportId: string }>(
-    '/report/add',
-    {
-      body: report,
+  const { data } = await axios.post<{ reportId: string }>('/report/add', report, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
+  });
 
   return data.reportId;
 };
 
 export const updateReport = async (report: Report, token: string) => {
-  return axios.put(
-    '/report/update',
-    {
-      body: report,
+  return axios.put('/report/update', report, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
+  });
 };
 
 interface VerifyReportReq {

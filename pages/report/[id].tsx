@@ -11,21 +11,6 @@ import moment from 'moment';
 import React, { useCallback } from 'react';
 import Link from 'next/link';
 
-const routes = [
-  {
-    path: '/',
-    breadcrumbName: 'หน้าแรก',
-  },
-  {
-    path: '/user/profile',
-    breadcrumbName: 'ประวัติของคุณ',
-  },
-  {
-    path: '',
-    breadcrumbName: 'เพิ่มรายงานการโกง',
-  },
-];
-
 interface ReportPageProps {
   report: Report;
   token: string;
@@ -42,14 +27,15 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report })
       ? attachedFiles.map(
           (o, i) =>
             ({
-              url: `https://firebasestorage.googleapis.com/v0/b/${o.dirName}/o/${encodeURIComponent(
-                o.name,
+              url: `https://firebasestorage.googleapis.com/v0/b/check-before-transfer.appspot.com/o/files${encodeURIComponent(
+                `/${o.dirName}/${o.name}`,
               )}?alt=media&token=${o.accessToken}`,
               size: o.size,
               name: o.name,
               response: o,
               uid: i.toString(),
               type: '',
+              status: 'done',
             } as UploadFile),
         )
       : [],

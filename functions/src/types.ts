@@ -27,7 +27,7 @@ export type BasedReport = {
   productType?: number;
   productLink: string;
   status: ReportStatus;
-  id?: string;
+  reportId?: string;
 };
 
 export type Report = BasedReport & {

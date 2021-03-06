@@ -18,25 +18,25 @@ export const addReport = async (req: Request, res: Response): Promise<Response<a
   const token = await validateToken(idToken);
   if (!token) return res.status(401).send('Unauthorized');
 
-  const { body } = req.body;
-  console.log(body);
+  const report = req.body;
+  console.log(report);
 
   const reporterId = token.uid;
   const newReport: Report = {
-    bankCode: body.bankCode,
-    bankAccountNumber: body.bankAccountNumber,
-    name: body.name,
-    phoneNumber: body.phoneNumber,
-    nationalIdNumber: body.nationalIdNumber,
-    amount: body.amount,
-    eventDate: body.eventDate,
-    eventDetail: body.eventDetail,
+    bankCode: report.bankCode,
+    bankAccountNumber: report.bankAccountNumber,
+    name: report.name,
+    phoneNumber: report.phoneNumber,
+    nationalIdNumber: report.nationalIdNumber,
+    amount: report.amount,
+    eventDate: report.eventDate,
+    eventDetail: report.eventDetail,
     reporterId,
-    paymentMethod: body.paymentMethod,
-    productLink: body.productLink,
-    productType: body.productType,
+    paymentMethod: report.paymentMethod,
+    productLink: report.productLink,
+    productType: report.productType,
     status: 1,
-    attachedFiles: body.attachedFiles,
+    attachedFiles: report.attachedFiles,
     created_at: firebaseAdmin.firestore.Timestamp.fromDate(dayjs().toDate()),
   };
 
@@ -63,8 +63,9 @@ export const updateReport = async (req: Request, res: Response): Promise<Respons
   if (!token) return res.status(401).send('Unauthorized');
 
   const report: Report = req.body;
-  if (!report.id) return res.status(400).send('Invalid reportId');
-  const reportId = report.id;
+
+  if (!report.reportId) return res.status(400).send('Invalid reportId');
+  const { reportId } = report;
   const reporterId = token.sub;
 
   const newReport: Report = {
@@ -168,8 +169,6 @@ export const searchReport = async (req: Request, res: Response): Promise<Respons
 export const getReport = async (req: Request, res: Response): Promise<Response<any>> => {
   if (req.method !== 'GET') return res.status(403).send('Forbidden!');
   const { params } = req;
-  console.log('request is');
-  console.log(req);
   const reportId = params.id;
 
   if (reportId === '') return res.status(404).send('Missing report id');
@@ -180,6 +179,7 @@ export const getReport = async (req: Request, res: Response): Promise<Response<a
     if (!snapshot.exists) return res.status(200).send(null);
     const report = snapshot.data();
     if (report === undefined) return res.status(200).send(null);
+    console.log(report);
     return res.status(200).send(report);
   } catch (e) {
     return res.status(500).send(e.message);

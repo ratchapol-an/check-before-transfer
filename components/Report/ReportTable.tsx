@@ -30,7 +30,6 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
   }, [currentPage, onLoadReports]);
 
   useEffect(() => {
-    console.log('in effect');
     loadReportsCallback();
   }, [loadReportsCallback]);
 
@@ -56,11 +55,11 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
     showSizeChanger: false,
     total,
   };
-  console.log(isLoading);
+
   return (
     <Table
       dataSource={reports}
-      rowKey={(report) => report.id}
+      rowKey={(report) => report.reportId}
       pagination={pagination}
       loading={isLoading}
       onChange={handleTableChange}
@@ -104,10 +103,10 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
         render={(_, report: Report) => {
           return (
             <Space size="middle" key="action">
-              <Link href={`/report/${report.id}`}>
+              <Link href={`/report/${report.reportId}`}>
                 <a>ดูรายละเอียด</a>
               </Link>
-              <Button type="link" onClick={() => handleDelete(report.id)}>
+              <Button type="link" onClick={() => handleDelete(report.reportId)}>
                 ลบ
               </Button>
             </Space>
