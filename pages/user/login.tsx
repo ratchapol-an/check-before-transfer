@@ -14,7 +14,7 @@ import 'firebase/auth';
 import './login.less';
 
 // Configure FirebaseUI.
-const uiConfig = {
+const uiConfig: firebaseui.auth.Config = {
   // Popup signin flow rather than redirect flow.
   signInFlow: 'popup',
   // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
@@ -28,6 +28,14 @@ const uiConfig = {
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.FacebookAuthProvider.PROVIDER_ID,
   ],
+  callbacks: {
+    signInSuccessWithAuthResult(authResult) {
+      if (authResult.additionalUserInfo.isNewUser) {
+        authResult.user.sendEmailVerification();
+      }
+      return true;
+    },
+  },
 };
 
 interface FunctionComponentProps {

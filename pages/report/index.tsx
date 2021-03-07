@@ -64,6 +64,15 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token }) => {
 export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
 })(async ({ AuthUser }) => {
+  console.log(AuthUser);
+  if (!AuthUser.emailVerified) {
+    return {
+      redirect: {
+        destination: `/user/verify-email`,
+        permanent: false,
+      },
+    };
+  }
   const token = await AuthUser.getIdToken();
   return {
     props: {
