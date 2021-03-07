@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Button, Layout, Result } from 'antd';
+import { Button, Layout, notification, Result } from 'antd';
 import { FunctionComponent } from 'react';
 import Header from '@components/Header';
 import Container from '@components/Container';
@@ -13,8 +13,12 @@ export const VerifyEmailPage: FunctionComponent = () => {
   const handleBackToHomeBtnClick = () => {
     router.push('/');
   };
-  const handleSendEmailBtnClick = () => {
-    authUser.firebaseUser?.sendEmailVerification();
+  const handleSendEmailBtnClick = async () => {
+    await authUser.firebaseUser?.sendEmailVerification();
+    notification.success({
+      message: 'ส่งอีเมล์ยืนยันสำเร็จ',
+      description: 'กรูณาตรวจสอบได้ที่อีเมลที่ลงทะเบียนไว้',
+    });
   };
   return (
     <>
@@ -47,9 +51,9 @@ export const VerifyEmailPage: FunctionComponent = () => {
 };
 
 export const getServerSideProps = withAuthUserTokenSSR({
-  whenAuthed: AuthAction.REDIRECT_TO_APP,
+  // whenAuthed: AuthAction.REDIRECT_TO_APP,
 })(async ({ AuthUser }) => {
-  if (!AuthUser.emailVerified) {
+  if (AuthUser.emailVerified) {
     return {
       redirect: {
         destination: `/`,

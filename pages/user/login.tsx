@@ -67,7 +67,7 @@ const LoginPage: FunctionComponent = () => {
 };
 
 export const getServerSideProps = withAuthUserTokenSSR({
-  whenAuthed: AuthAction.REDIRECT_TO_APP,
+  // whenAuthed: AuthAction.REDIRECT_TO_APP,
 })(async () => {
   return {
     props: {},
