@@ -17,7 +17,7 @@ export const Home: FunctionComponent = () => {
         <title>เช็คก่อนโอน</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout className="home-page-layout layout-with-bg">
+      <Layout className="home-page-layout layout-with-bg bg-main">
         <Header />
         <Content>
           <Container>

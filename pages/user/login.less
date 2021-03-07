@@ -1,44 +1,65 @@
-.login {
+@import '~antd/lib/style/themes/default.less';
+
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    .login-box {
-        h2 {
-            font-weight: bold;
-        }
-    }
+    padding-bottom: 260px;
+
     .login-option {
-        .firebaseui-card-content {
-            padding: 0px;
-        }
-        .firebaseui-idp-button {
-            max-width: unset;
-            padding: 1rem 0.5rem;
-        }
-        .firebaseui-idp-text {
-            width: 100%;
-            text-align: center;
-            padding-left: 0px;
-            padding-right: 18px;
-        }
-    }
-    .firebaseui-container {
-        box-shadow: none;
-        .firebaseui-card-header {
-            display: none;
+        margin-top: @margin-lg;
+        width: 100%;
+        @media only screen and (min-width: @screen-sm-min) {
+            width: auto;
+            min-width: 560px;
         }
     }
 }
-@media screen and (min-width: 768px) {
-    .login {
-        position: absolute;
-        left: 50%;
-        top: 40%;
-        transform: translate(-50%, -50%);
-        .login-box {
-            width: fit-content;
-            margin: 0rem auto;
-            padding: 1.5rem 1rem;
-            box-shadow: 0 3px 6px 0 rgb(0 0 0 / 23%);
-            border-radius: 4px;
-        }
-    }
-}
+
+// .login {
+//     width: 100%;
+//     .login-box {
+//         h2 {
+//             font-weight: bold;
+//         }
+//     }
+//     .login-option {
+//         .firebaseui-card-content {
+//             padding: 0px;
+//         }
+//         .firebaseui-idp-button {
+//             max-width: unset;
+//             padding: 1rem 0.5rem;
+//         }
+//         .firebaseui-idp-text {
+//             width: 100%;
+//             text-align: center;
+//             padding-left: 0px;
+//             padding-right: 18px;
+//         }
+//     }
+//     .firebaseui-container {
+//         box-shadow: none;
+//         .firebaseui-card-header {
+//             display: none;
+//         }
+//     }
+// }
+// @media screen and (min-width: 768px) {
+//     .login {
+//         position: absolute;
+//         left: 50%;
+//         top: 40%;
+//         transform: translate(-50%, -50%);
+//         .login-box {
+//             width: fit-content;
+//             margin: 0rem auto;
+//             padding: 1.5rem 1rem;
+//             box-shadow: 0 3px 6px 0 rgb(0 0 0 / 23%);
+//             border-radius: 4px;
+//         }
+//     }
+// }
