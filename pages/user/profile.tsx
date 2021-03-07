@@ -1,16 +1,17 @@
 import Head from 'next/head';
-import { Card, Layout, Space, Typography } from 'antd';
+import { Card, Layout, Space, Typography, Breadcrumb } from 'antd';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import { AuthAction, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
 import ReportTable from '@components/Report/ReportTable';
 import { deleteReport, getReportsByUserId, PaginatedReports } from 'services/reportingService';
 import { PaginationConfig } from 'antd/lib/pagination';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
+import Link from 'next/link';
 
-type ProfilePageProps = { token: string };
+type ProfilePageProps = { token: string; email: string };
 
-export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ token }) => {
+export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ token, email }) => {
   const { Content, Footer } = Layout;
   const { Title } = Typography;
 
@@ -27,7 +28,7 @@ export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ token }
     },
     [token],
   );
-  console.log('render profile');
+
   return (
     <>
       <Head>
@@ -38,8 +39,15 @@ export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ token }
         <Header />
         <Content>
           <Container>
-            {/* <PageHeader title="โปรไฟล์ของคุณ" subTitle="sixteenevils3@gmail.com" /> */}
-            <Title level={3}>โปรไฟล์ของคุณ</Title>
+            <Breadcrumb>
+              <Breadcrumb.Item>
+                <Link href="/">หน้าแรก</Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>ประวัติของคุณ</Breadcrumb.Item>
+            </Breadcrumb>
+            <Title level={3} className="page-title">
+              {email}
+            </Title>
             <Card>
               <Space direction="vertical" style={{ width: '100%' }}>
                 <Title level={5}>รายงานของคุณ</Title>
@@ -61,6 +69,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
   return {
     props: {
       token,
+      email: AuthUser.email,
     },
   };
 });

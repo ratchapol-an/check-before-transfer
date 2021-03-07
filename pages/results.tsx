@@ -1,9 +1,9 @@
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import { GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
-import { withAuthUser, useAuthUser, withAuthUserTokenSSR, SSRPropsContext } from 'next-firebase-auth';
+import { withAuthUser, withAuthUserTokenSSR, SSRPropsContext } from 'next-firebase-auth';
 
-import { Divider } from 'antd';
+import { Breadcrumb, Divider } from 'antd';
 import Layout, { Content } from 'antd/lib/layout/layout';
 
 import Container from '@components/Container';
@@ -14,6 +14,7 @@ import { search, SearchResult } from 'services/reportingService';
 
 import './results.less';
 import { ParsedUrlQuery } from 'querystring';
+import Link from 'next/link';
 
 // type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -37,6 +38,12 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchValue, searc
           </Container>
           <Divider />
           <Container>
+            <Breadcrumb>
+              <Breadcrumb.Item>
+                <Link href="/">หน้าแรก</Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>ผลการค้นหา</Breadcrumb.Item>
+            </Breadcrumb>
             {searchResult ? (
               <SearchResults
                 lastReport={searchResult.lastedReport}

@@ -20,9 +20,11 @@ const SearchResults: React.FunctionComponent<SearchResultsProps> = ({
 
   return (
     <section className="search-results">
-      <Title level={3}>พบรายงานการโกง</Title>
+      <Title level={3} className="page-title">
+        พบรายงานการโกง
+      </Title>
       <Card className="search-result-item">
-        <Title level={4}>{lastReport.name}</Title>
+        {lastReport.name && <Title level={4}>{lastReport.name}</Title>}
         <Row gutter={16}>
           <Col sm={12} xs={12}>
             <Statistic title="จำนวนครั้งที่ถูกรายงาน" value={totalNumberOfReports} />
