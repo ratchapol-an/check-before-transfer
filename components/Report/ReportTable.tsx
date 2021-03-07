@@ -15,16 +15,17 @@ type ReportTableProps = {
   onDeleteReport: (reportId: string) => Promise<void>;
   onLoadReports: (pagination: PaginationConfig) => Promise<PaginatedReports>;
 };
+type ReportItem = Report & { reportId: string };
 const pageSize = 10;
 const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport, onLoadReports }) => {
-  const [reports, setReports] = useState<Report[]>([]);
+  const [reports, setReports] = useState<ReportItem[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const loadReportsCallback = useCallback(async () => {
     setIsLoading(true);
     const response = await onLoadReports({ current: currentPage, pageSize });
-    setReports(response.data);
+    setReports(response.data as ReportItem[]);
     setTotal(response.total);
     setIsLoading(false);
   }, [currentPage, onLoadReports]);
@@ -64,31 +65,31 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
       loading={isLoading}
       onChange={handleTableChange}
     >
-      <Table.Column<Report>
+      <Table.Column<ReportItem>
         title="วันที่ทำธุรกรรม"
         dataIndex="eventDate"
         key="eventDate"
         render={(value: string) => formatDate(value)}
       />
-      <Table.Column<Report>
+      <Table.Column<ReportItem>
         title="ประเภทสินค้า/บริการ"
         dataIndex="productType"
         key="productType"
         render={(value: number) => productTypeCaptions[value]}
       />
-      <Table.Column<Report>
+      <Table.Column<ReportItem>
         title="ช่องทาง"
         dataIndex="paymentMethod"
         key="paymentMethod"
         render={(value: PaymentMethod) => paymentMethodCaptions[value]}
       />
-      <Table.Column<Report>
+      <Table.Column<ReportItem>
         title="จำนวนเงิน"
         dataIndex="amount"
         key="amount"
         render={(value: number) => formatAmount(value)}
       />
-      <Table.Column<Report>
+      <Table.Column<ReportItem>
         title="สถานะ"
         dataIndex="status"
         key="status"
@@ -98,9 +99,9 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
           </Tag>
         )}
       />
-      <Table.Column<Report>
+      <Table.Column<ReportItem>
         key="action"
-        render={(_, report: Report) => {
+        render={(_, report: ReportItem) => {
           return (
             <Space size="middle" key="action">
               <Link href={`/report/${report.reportId}`}>
