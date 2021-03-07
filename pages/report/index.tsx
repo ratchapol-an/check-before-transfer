@@ -60,11 +60,11 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token }) => {
     </>
   );
 };
-
 export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+  authPageURL: `/user/login?signInSuccessUrl=${encodeURIComponent('/report')}`,
 })(async ({ AuthUser }) => {
-  console.log(AuthUser);
+  const token = await AuthUser.getIdToken();
   if (!AuthUser.emailVerified) {
     return {
       redirect: {
@@ -73,7 +73,6 @@ export const getServerSideProps = withAuthUserTokenSSR({
       },
     };
   }
-  const token = await AuthUser.getIdToken();
   return {
     props: {
       token,
@@ -82,5 +81,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
 });
 
 export default withAuthUser<ReportPageProps>({
+  whenUnauthedBeforeInit: AuthAction.REDIRECT_TO_LOGIN,
   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+  authPageURL: `/user/login?signInSuccessUrl=${encodeURIComponent('/report')}`,
 })(ReportPage);

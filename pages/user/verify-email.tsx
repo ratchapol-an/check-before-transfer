@@ -3,7 +3,7 @@ import { Button, Layout, Result } from 'antd';
 import { FunctionComponent } from 'react';
 import Header from '@components/Header';
 import Container from '@components/Container';
-import { withAuthUserTokenSSR, withAuthUser, useAuthUser } from 'next-firebase-auth';
+import { withAuthUserTokenSSR, withAuthUser, useAuthUser, AuthAction } from 'next-firebase-auth';
 import { useRouter } from 'next/router';
 
 export const VerifyEmailPage: FunctionComponent = () => {
@@ -46,7 +46,9 @@ export const VerifyEmailPage: FunctionComponent = () => {
   );
 };
 
-export const getServerSideProps = withAuthUserTokenSSR()(async ({ AuthUser }) => {
+export const getServerSideProps = withAuthUserTokenSSR({
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
+})(async ({ AuthUser }) => {
   if (!AuthUser.emailVerified) {
     return {
       redirect: {
@@ -60,4 +62,7 @@ export const getServerSideProps = withAuthUserTokenSSR()(async ({ AuthUser }) =>
   };
 });
 
-export default withAuthUser()(VerifyEmailPage);
+export default withAuthUser({
+  whenUnauthedBeforeInit: AuthAction.REDIRECT_TO_LOGIN,
+  whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+})(VerifyEmailPage);
