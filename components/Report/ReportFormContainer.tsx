@@ -26,7 +26,7 @@ const ReportFormContainer: React.FunctionComponent<Props> = ({ initialReport, to
         async onOk() {
           const { eventDate, ...restFormValues } = formValues;
           const uploadedFiles = restFormValues.attachedFiles
-            .filter((f) => !!f.response)
+            .filter((f) => !!f.response && f.status !== 'uploading')
             .map((f) => f.response) as UploadedFile[];
           const newReport: Report = {
             ...restFormValues,

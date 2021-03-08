@@ -1,12 +1,12 @@
 import { Form, Select, Input, InputNumber, Button, DatePicker } from 'antd';
 import PaymentMethod, { paymentMethodCaptions } from 'models/PaymentMethod';
 import { useState } from 'react';
-import { data } from 'banks-logo';
 import moment, { Moment } from 'moment';
 import PicturesWall from '@components/PicturesWall';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { BasedReport, UploadedFile } from '@models/Report';
 import productTypeCaptions from '@models/productTypeCaptions';
+import banks from '@models/banks';
 
 const { Option } = Select;
 
@@ -25,11 +25,10 @@ const formItemLayout = {
 
 const normFile = (e: UploadChangeParam) => e && e.fileList;
 
-const bankOptions = (Object.keys(data) as Array<keyof typeof data>).map((key) => {
-  const bank = data[key];
+const bankOptions = banks.map((bank) => {
   return (
-    <Option value={bank.code} key={bank.code}>
-      {bank.official_name_thai}
+    <Option value={bank.bankCode} key={bank.bankCode}>
+      {bank.name}
     </Option>
   );
 });
@@ -210,7 +209,11 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
           rules={[
             () => ({
               validator(_, value: UploadFile[]) {
-                if (!value || value.filter((o) => o.status === 'done' || o.status === 'success').length <= 0) {
+                if (
+                  !value ||
+                  value.filter((o) => o.status === 'done' || o.status === 'success' || o.status === 'uploading')
+                    .length <= 0
+                ) {
                   return Promise.reject('กรุณาอัพโหลดหลักฐานประกอบ');
                 }
                 return Promise.resolve();
