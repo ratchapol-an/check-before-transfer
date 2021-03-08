@@ -40,7 +40,7 @@ const LoginPage: FunctionComponent = () => {
         setTimeout(() => {
           window.location.href = `http://localhost:3000${redirectUrl || '/'}`;
           return false;
-        }, 1000);
+        }, 1500);
         return false;
       },
     },
