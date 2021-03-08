@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase/app';
 import { withAuthUser, AuthAction, withAuthUserTokenSSR } from 'next-firebase-auth';
@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { Layout } from 'antd';
 import 'firebase/auth';
 import './login.less';
+import Link from 'next/link';
 
 const LoginPage: FunctionComponent = () => {
   // Do not SSR FirebaseUI, because it is not supported.
@@ -56,7 +57,11 @@ const LoginPage: FunctionComponent = () => {
         <Content className="login-container">
           {renderAuth ? (
             <>
-              <Image width={140} height={31.96} alt="whoscheat" src="/logo3.png" />
+              <Link href="/">
+                <a className="header-logo-link" target="_self">
+                  <Image width={140} height={31.96} alt="whoscheat" src="/logo3.png" />
+                </a>
+              </Link>
               <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} className="login-option" />
             </>
           ) : null}

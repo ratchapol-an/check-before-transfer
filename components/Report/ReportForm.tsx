@@ -47,7 +47,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
   initialReport,
   submitBtnText,
 }) => {
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | undefined>(initialReport?.paymentMethod);
   const handlePaymentMethodSelect = (value: PaymentMethod) => {
     setPaymentMethod(value);
   };
