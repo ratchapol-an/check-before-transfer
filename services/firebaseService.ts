@@ -1,5 +1,5 @@
 import { init } from 'next-firebase-auth';
-// import firebaseAccountCredentials from '../serviceAccountKey.json';
+import { NextApiRequest } from 'next';
 
 const initAuth = () => {
   init({
@@ -13,9 +13,7 @@ const initAuth = () => {
         projectId: 'check-before-transfer',
         clientEmail: 'firebase-adminsdk-1jj8q@check-before-transfer.iam.gserviceaccount.com',
         // The private key must not be accesssible on the client side.
-        privateKey: process.env.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY
-          ? process.env.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
-          : '',
+        privateKey: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') : '',
       },
       databaseURL: 'https://check-before-transfer.firebaseio.com',
     },
@@ -29,7 +27,7 @@ const initAuth = () => {
       name: 'checkBeforeTransfer', // required
       // Keys are required unless you set `signed` to `false`.
       // The keys cannot be accessible on the client side.
-      keys: [process.env.NEXT_PUBLIC_COOKIE_SECRET_CURRENT, process.env.NEXT_PUBLIC_COOKIE_SECRET_PREVIOUS],
+      keys: [process.env.COOKIE_SECRET_CURRENT, process.env.COOKIE_SECRET_PREVIOUS],
       httpOnly: true,
       maxAge: 12 * 60 * 60 * 24 * 1000, // twelve days
       overwrite: true,
@@ -40,6 +38,14 @@ const initAuth = () => {
       domain: 'localhost',
     },
   });
+};
+
+export const getAuthorizationToken = (req: NextApiRequest): string => {
+  const { authorization } = req.headers;
+  if (!authorization) return '';
+
+  const split = authorization.split('Bearer ');
+  return split[1];
 };
 
 export default initAuth;
