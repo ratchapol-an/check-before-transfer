@@ -10,9 +10,16 @@ type Props = {
   initialReport?: ReportFormValues;
   token: string;
   submitBtnText: string;
+  viewOnly?: boolean;
   onConfirm: (report: Report) => Promise<any>;
 };
-const ReportFormContainer: React.FunctionComponent<Props> = ({ initialReport, token, onConfirm, submitBtnText }) => {
+const ReportFormContainer: React.FunctionComponent<Props> = ({
+  initialReport,
+  token,
+  onConfirm,
+  submitBtnText,
+  viewOnly,
+}) => {
   const handleFormFinish = useCallback(
     async (formValues: ReportFormValues) => {
       console.log(formValues);
@@ -53,6 +60,7 @@ const ReportFormContainer: React.FunctionComponent<Props> = ({ initialReport, to
   );
   return (
     <ReportForm
+      viewOnly={viewOnly}
       submitBtnText={submitBtnText}
       initialReport={initialReport}
       onFinish={handleFormFinish}

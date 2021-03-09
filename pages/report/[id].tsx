@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Card, Layout, Typography, PageHeader, Breadcrumb, notification } from 'antd';
+import { Card, Layout, Typography, Breadcrumb, notification, Space, Tag } from 'antd';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import { ReportFormContainer, ReportFormValues } from '@components/Report';
@@ -10,6 +10,7 @@ import { UploadFile } from 'antd/lib/upload/interface';
 import moment from 'moment';
 import React, { useCallback } from 'react';
 import Link from 'next/link';
+import ReportStatus, { reportStatusCaptions, reportStatusColors } from '@models/ReportStatus';
 
 interface ReportPageProps {
   report: Report;
@@ -78,9 +79,12 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report })
               </Breadcrumb.Item>
               <Breadcrumb.Item>รายงาน</Breadcrumb.Item>
             </Breadcrumb>
-            <Title level={3}>รายงานการโกง</Title>
+            <Title level={3} className="page-title">
+              รายงานการโกง <Tag color={reportStatusColors[report.status]}>{reportStatusCaptions[report.status]}</Tag>
+            </Title>
             <Card>
               <ReportFormContainer
+                viewOnly={report.status === ReportStatus.Approved || report.status === ReportStatus.Rejected}
                 onConfirm={handleConfirm}
                 initialReport={initialReport}
                 token={token}

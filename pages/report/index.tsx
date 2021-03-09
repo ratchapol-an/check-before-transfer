@@ -50,7 +50,9 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token }) => {
               </Breadcrumb.Item>
               <Breadcrumb.Item>รายงาน</Breadcrumb.Item>
             </Breadcrumb>
-            <Title level={3}>เพิ่มรายงานการโกง</Title>
+            <Title level={3} className="page-title">
+              เพิ่มรายงานการโกง
+            </Title>
             <Card>
               <ReportFormContainer onConfirm={handleConfirm} token={token} submitBtnText="ส่งรายงาน" />
             </Card>

@@ -43,6 +43,7 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
       cancelText: 'ยกเลิก',
       async onOk() {
         await onDeleteReport(id);
+        setReports(reports.filter((report) => report.reportId !== id));
       },
     });
   };
