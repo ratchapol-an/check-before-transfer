@@ -15,7 +15,7 @@ function getBase64(file: Blob | File) {
 }
 
 interface Props {
-  uploadBtnVisible: boolean;
+  viewOnly?: boolean;
   fileList?: UploadFile[];
   onChange?: (info: UploadChangeParam) => void;
   onRemove: (file: UploadFile<any>, reportSession: string) => Promise<boolean>;
@@ -100,7 +100,7 @@ class PicturesWall extends React.Component<Props, State> {
 
   render() {
     const { previewVisible, previewImage, previewTitle, reportSession } = this.state;
-    const { onChange, fileList, onRemove } = this.props;
+    const { onChange, fileList, onRemove, viewOnly } = this.props;
     const uploadButton = (
       <div>
         <PlusOutlined />
@@ -115,13 +115,14 @@ class PicturesWall extends React.Component<Props, State> {
           listType="picture-card"
           fileList={fileList}
           multiple
+          disabled={viewOnly}
           onPreview={this.handlePreview}
           onChange={onChange}
           headers={{ 'X-REPORT-SESSION': reportSession }}
           onRemove={(file) => onRemove(file, reportSession)}
         >
           {/* {fileList.length >= 8 ? null : uploadButton} */}
-          {uploadButton}
+          {!viewOnly && uploadButton}
         </Upload>
         <Modal visible={previewVisible} title={previewTitle} footer={null} onCancel={this.handleCancel}>
           <img alt="example" style={{ width: '100%' }} src={previewImage} />
