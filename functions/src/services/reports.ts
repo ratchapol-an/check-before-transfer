@@ -167,6 +167,7 @@ export const searchReport = async (req: Request, res: Response): Promise<Respons
     return res.status(500).send(e.message);
   }
 };
+
 export const getReport = async (req: Request, res: Response): Promise<Response<any>> => {
   if (req.method !== 'GET') return res.status(403).send('Forbidden!');
   const { params } = req;
