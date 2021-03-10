@@ -42,6 +42,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const result = await ReportModel.findAndCountAll({
       where: {
         [searchQuery]: q,
+        isDeleted: false,
       },
       order: [['createdAt', 'DESC']],
     });

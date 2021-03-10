@@ -8,36 +8,33 @@ import initAuth, { getAuthorizationToken } from '../../../services/firebaseServi
 initAuth();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method !== 'POST') return res.status(403).send('Forbidden!');
+  if (req.method !== 'DELETE') return res.status(403).send('Forbidden!');
+
   const idToken = getAuthorizationToken(req);
   if (idToken === '') return res.status(401).send('Unauthorized');
 
   try {
     const user = await verifyIdToken(idToken);
-    console.log('user', user);
+
     const reporterID = user.id;
+    const { reportID } = req.body;
 
     const ReportModel = Reports(db, Sequelize);
 
-    const report = req.body;
-    const resp = await ReportModel.create({
-      name: report.name,
-      amount: report.amount,
-      eventDetail: report.eventDetail,
+    await ReportModel.update(
+      {
+        isDeleted: true,
+      },
+      {
+        where: {
+          id: reportID,
+        },
+      },
+    );
+    return res.status(200).json({
       reporterID,
-      paymentMethod: report.paymentMethod,
-      productType: report.productType,
-      productLink: report.productLink,
-      bankCode: report.bankCode,
-      bankAccountNumber: report.bankAccountNumber,
-      phoneNumber: report.phoneNumber,
-      nationalIdNumber: report.nationalIdNumber,
-      eventDate: report.eventDate,
-      status: 1,
-      attachedFiles: report.attachedFiles,
-      isDeleted: false,
+      status: 'deleted',
     });
-    return res.status(200).json({ success: resp.toJSON() });
   } catch (e) {
     console.log(e);
     return res.status(401).send('Unauthorized');

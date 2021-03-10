@@ -59,6 +59,11 @@ module.exports = {
         type: DataTypes.JSONB,
         allowNull: true,
       },
+      isDeleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        default: false,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,

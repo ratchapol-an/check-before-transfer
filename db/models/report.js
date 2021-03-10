@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       eventDate: DataTypes.DATE,
       status: DataTypes.INTEGER,
       attachedFiles: DataTypes.JSONB,
+      isDeleted: DataTypes.BOOLEAN,
     },
     {
       sequelize,

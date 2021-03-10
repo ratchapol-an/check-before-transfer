@@ -28,13 +28,15 @@ app.use(defaultCors);
 // build multiple CRUD interfaces:
 app.post('/report/add', addReport);
 app.put('/report/update', updateReport);
-app.put('/report/verify', verify);
 app.get('/report/get', searchReport);
+app.delete('/report', deleteReport);
+
+app.put('/report/verify', verify);
 app.get('/report/:id', getReport);
 app.get('/reports', getReports);
+
 app.post('/admin/create', createAdmin);
 app.get('/admin/:id', getAdminInfo);
-app.delete('/report', deleteReport);
 app.post('/file/upload', filesUpload);
 app.delete('/file', deleteFile);
 
