@@ -18,8 +18,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const user = await verifyIdToken(idToken);
     reporterID = user.id as string;
     const decodedVerifyToken = jwt.decode(idToken) as { [key: string]: any };
-    console.log(decodedVerifyToken);
-
     if (decodedVerifyToken.superUser !== true) {
       if (decodedVerifyToken.admin !== true) Promise.reject();
     }

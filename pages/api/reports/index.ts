@@ -8,33 +8,62 @@ import initAuth, { getAuthorizationToken } from '../../../services/firebaseServi
 initAuth();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method !== 'DELETE') return res.status(403).send('Forbidden!');
+  switch (req.method) {
+    case 'DELETE':
+    case 'GET':
+      break;
+    default:
+      return res.status(403).send('Forbidden!');
+  }
 
   const idToken = getAuthorizationToken(req);
   if (idToken === '') return res.status(401).send('Unauthorized');
-
+  let reporterID = '';
   try {
     const user = await verifyIdToken(idToken);
+    reporterID = user.id as string;
+  } catch (e) {
+    return res.status(401).send('Unauthorized');
+  }
 
-    const reporterID = user.id;
-    const { reportID } = req.body;
-
+  try {
     const ReportModel = Reports(db, Sequelize);
 
-    await ReportModel.update(
-      {
-        isDeleted: true,
-      },
-      {
-        where: {
-          id: reportID,
-        },
-      },
-    );
-    return res.status(200).json({
-      reporterID,
-      status: 'deleted',
-    });
+    switch (req.method) {
+      case 'DELETE': {
+        const { reportID } = req.body;
+
+        await ReportModel.update(
+          {
+            isDeleted: true,
+          },
+          {
+            where: {
+              id: reportID,
+            },
+          },
+        );
+        return res.status(200).json({
+          reporterID,
+          status: 'deleted',
+        });
+      }
+      case 'GET': {
+        const result = await ReportModel.findAndCountAll({
+          where: {
+            reporterID,
+            isDeleted: false,
+          },
+          order: [['createdAt', 'DESC']],
+        });
+        return res.status(200).json({
+          total: result.count,
+          data: result.rows,
+        });
+      }
+      default:
+        return res.status(403).send('Forbidden!');
+    }
   } catch (e) {
     console.log(e);
     return res.status(401).send('Unauthorized');
