@@ -49,11 +49,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         });
       }
       case 'GET': {
+        const { offset, limit } = req.query;
         const result = await ReportModel.findAndCountAll({
           where: {
             reporterID,
             isDeleted: false,
           },
+          offset: parseInt(offset as string, 10) || 0,
+          limit: parseInt(limit as string, 10) || 10,
           order: [['createdAt', 'DESC']],
         });
         return res.status(200).json({

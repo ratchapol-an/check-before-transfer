@@ -126,11 +126,31 @@ export const getReportsByStatus = async (
   paginationConfig: PaginationConfig,
   token: string,
 ): Promise<PaginatedReports> => {
-  return { total: 100, data: [] };
+  // const { pageSize, current } = paginationConfig;
+  // const offset = current === 1 ? 0 : (current || 1) * (pageSize || 10);
+  // const resp = await axios
+  //   .get<PaginatedReports>('/admins/reports', {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //     params: {
+  //       status,
+  //       offset,
+  //       limit: pageSize || 10,
+  //     },
+  //   })
+  //   .catch((e) => {
+  //     console.log(e);
+  //   });
+  // if (resp) return resp.data;
+  const emptyResp: PaginatedReports = {
+    total: 0,
+    data: [],
+  };
+  return emptyResp;
 };
 
 export const getReportById = async (id: string, token: string): Promise<Report | null> => {
-  console.log(id);
   const resp = await axios.get<Report>(`/report/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
