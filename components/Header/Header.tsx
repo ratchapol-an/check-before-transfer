@@ -26,11 +26,11 @@ const Header: React.FunctionComponent = () => {
   };
   const handleLoginBtnClick = () => {
     const currentQuery = router.query;
-    let redirectURL = '/';
-    if (typeof window !== 'undefined') redirectURL = window.location.pathname;
+    let signInSuccessUrl = '/';
+    if (typeof window !== 'undefined') signInSuccessUrl = window.location.pathname;
     router.push({
       pathname: '/user/login',
-      query: { redirectURL, ...currentQuery },
+      query: { signInSuccessUrl, ...currentQuery },
     });
   };
   const handleProfileBtnClick = () => {
@@ -71,7 +71,13 @@ const Header: React.FunctionComponent = () => {
               <Button type="link" size="large" onClick={handleProfileBtnClick}>
                 ประวัติของคุณ
               </Button>
-              <Button type="link" size="large" onClick={auth.signOut}>
+              <Button
+                type="link"
+                size="large"
+                onClick={() => {
+                  auth.signOut().then(() => window.location.reload());
+                }}
+              >
                 ออกจากระบบ
               </Button>
             </>

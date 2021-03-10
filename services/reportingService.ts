@@ -9,7 +9,7 @@ import ReportStatus from '@models/ReportStatus';
 // - nvm use 12
 // - yarn build & yarn serve
 const API_HOST =
-  process.env.NODE_ENV === 'production'
+  process.env.NEXT_PUBLIC_APP_STAGE === 'production'
     ? 'https://asia-southeast2-check-before-transfer.cloudfunctions.net'
     : 'http://localhost:5001';
 axios.defaults.baseURL = `${API_HOST}/check-before-transfer/asia-southeast2/api`;

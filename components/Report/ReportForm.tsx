@@ -1,12 +1,12 @@
 import { Form, Select, Input, InputNumber, Button, DatePicker } from 'antd';
 import PaymentMethod, { paymentMethodCaptions } from 'models/PaymentMethod';
 import { useState } from 'react';
-import { data } from 'banks-logo';
 import moment, { Moment } from 'moment';
 import PicturesWall from '@components/PicturesWall';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { BasedReport, UploadedFile } from '@models/Report';
 import productTypeCaptions from '@models/productTypeCaptions';
+import banks from '@models/banks';
 
 const { Option } = Select;
 
@@ -25,11 +25,10 @@ const formItemLayout = {
 
 const normFile = (e: UploadChangeParam) => e && e.fileList;
 
-const bankOptions = (Object.keys(data) as Array<keyof typeof data>).map((key) => {
-  const bank = data[key];
+const bankOptions = banks.map((bank) => {
   return (
-    <Option value={bank.code} key={bank.code}>
-      {bank.official_name_thai}
+    <Option value={bank.bankCode} key={bank.bankCode}>
+      {bank.name}
     </Option>
   );
 });
@@ -37,6 +36,7 @@ const bankOptions = (Object.keys(data) as Array<keyof typeof data>).map((key) =>
 type ReportFormProps = {
   submitBtnText: string;
   initialReport?: ReportFormValues;
+  viewOnly?: boolean;
   onFinish: (values: ReportFormValues) => void;
   onRemoveUploadedFile: (file: UploadFile<any>, reportSession: string) => Promise<boolean>;
 };
@@ -46,8 +46,9 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
   onRemoveUploadedFile,
   initialReport,
   submitBtnText,
+  viewOnly,
 }) => {
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | undefined>(initialReport?.paymentMethod);
   const handlePaymentMethodSelect = (value: PaymentMethod) => {
     setPaymentMethod(value);
   };
@@ -69,6 +70,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
           format="DD/MM/YYYY"
           style={{ width: '100%' }}
           showToday
+          disabled={viewOnly}
           disabledDate={(currentDate) => currentDate > moment()}
           placeholder="วัน/เดือน/ปี"
         />
@@ -79,7 +81,12 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
         hasFeedback
         rules={[{ required: true, message: 'กรุณาเลือกช่องทางการชำระเงิน' }]}
       >
-        <Select placeholder="เลือกช่องทางการชำระเงิน" value={paymentMethod} onSelect={handlePaymentMethodSelect}>
+        <Select
+          placeholder="เลือกช่องทางการชำระเงิน"
+          value={paymentMethod}
+          onSelect={handlePaymentMethodSelect}
+          disabled={viewOnly}
+        >
           <Option value={PaymentMethod.BankAccountTransfer}>
             {paymentMethodCaptions[PaymentMethod.BankAccountTransfer]}
           </Option>
@@ -96,7 +103,9 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
             rules={[{ required: true, message: 'กรุณาเลือกธนาคาร' }]}
             hasFeedback
           >
-            <Select placeholder="เลือกธนาคาร">{bankOptions}</Select>
+            <Select placeholder="เลือกธนาคาร" disabled={viewOnly}>
+              {bankOptions}
+            </Select>
           </Form.Item>
           <Form.Item
             name="bankAccountNo"
@@ -107,7 +116,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
               { pattern: /^[\d-]*\d[\d-]*$/, message: 'เลขบัญชีธนาคารไม่ถูกต้อง' },
             ]}
           >
-            <Input type="tel" maxLength={20} />
+            <Input type="tel" maxLength={20} disabled={viewOnly} />
           </Form.Item>
         </>
       )}
@@ -129,7 +138,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
           { pattern: /^[\d-]*\d[\d-]*$/, message: 'เบอร์โทรศัพท์มือถือไม่ถูกต้อง' },
         ]}
       >
-        <Input type="tel" maxLength={13} />
+        <Input type="tel" maxLength={13} disabled={viewOnly} />
       </Form.Item>
       <Form.Item
         name="idNumber"
@@ -149,7 +158,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
           { pattern: /^[\d-]*\d[\d-]*$/, message: 'เลขประจำตัวประชาชนไม่ถูกต้อง' },
         ]}
       >
-        <Input type="tel" maxLength={17} />
+        <Input type="tel" maxLength={17} disabled={viewOnly} />
       </Form.Item>
       <Form.Item
         name="amount"
@@ -166,6 +175,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
           style={{ width: '100%' }}
           formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           parser={(value) => (value ? value.replace(/(,*)/g, '') : '')}
+          disabled={viewOnly}
         />
       </Form.Item>
       <Form.Item
@@ -174,7 +184,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
         hasFeedback
         rules={[{ required: true, message: 'กรุณาเลือกประเภทสินค้าหรือบริการ' }]}
       >
-        <Select placeholder="เลือกประเภทสินค้าหรือบริการ">
+        <Select placeholder="เลือกประเภทสินค้าหรือบริการ" disabled={viewOnly}>
           <Option value={1}>{productTypeCaptions[1]}</Option>
           <Option value={2}>{productTypeCaptions[2]}</Option>
           <Option value={3}>{productTypeCaptions[3]}</Option>
@@ -191,7 +201,11 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
         rules={[{ required: true, message: 'กรุณากรอกที่มาของสินค้าหรือบริการ' }]}
         hasFeedback
       >
-        <Input type="url" placeholder="ลิงค์ไปยังสินค้าหรือบริการ เช่น http://www.cheatshop.com/example/1234" />
+        <Input
+          type="url"
+          placeholder="ลิงค์ไปยังสินค้าหรือบริการ เช่น http://www.cheatshop.com/example/1234"
+          disabled={viewOnly}
+        />
       </Form.Item>
       <Form.Item
         name="eventDetail"
@@ -199,7 +213,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
         rules={[{ required: true, message: 'กรุณากรอกรายละเอียดของเหตุการณ์' }]}
         hasFeedback
       >
-        <Input.TextArea />
+        <Input.TextArea disabled={viewOnly} />
       </Form.Item>
       <Form.Item label="หลักฐานประกอบ" required>
         <Form.Item
@@ -210,7 +224,11 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
           rules={[
             () => ({
               validator(_, value: UploadFile[]) {
-                if (!value || value.filter((o) => o.status === 'done' || o.status === 'success').length <= 0) {
+                if (
+                  !value ||
+                  value.filter((o) => o.status === 'done' || o.status === 'success' || o.status === 'uploading')
+                    .length <= 0
+                ) {
                   return Promise.reject('กรุณาอัพโหลดหลักฐานประกอบ');
                 }
                 return Promise.resolve();
@@ -218,11 +236,11 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
             }),
           ]}
         >
-          <PicturesWall fileList={initialReport?.attachedFiles} uploadBtnVisible onRemove={onRemoveUploadedFile} />
+          <PicturesWall fileList={initialReport?.attachedFiles} viewOnly={viewOnly} onRemove={onRemoveUploadedFile} />
         </Form.Item>
       </Form.Item>
       <Form.Item wrapperCol={{ md: { span: 12, offset: 8 } }}>
-        <Button type="primary" htmlType="submit" size="large">
+        <Button type="primary" htmlType="submit" size="large" disabled={viewOnly}>
           {submitBtnText}
         </Button>
       </Form.Item>

@@ -50,7 +50,9 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token }) => {
               </Breadcrumb.Item>
               <Breadcrumb.Item>รายงาน</Breadcrumb.Item>
             </Breadcrumb>
-            <Title level={3}>เพิ่มรายงานการโกง</Title>
+            <Title level={3} className="page-title">
+              เพิ่มรายงานการโกง
+            </Title>
             <Card>
               <ReportFormContainer onConfirm={handleConfirm} token={token} submitBtnText="ส่งรายงาน" />
             </Card>
@@ -60,11 +62,19 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token }) => {
     </>
   );
 };
-
 export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+  authPageURL: `/user/login?signInSuccessUrl=${encodeURIComponent('/report')}`,
 })(async ({ AuthUser }) => {
   const token = await AuthUser.getIdToken();
+  if (!AuthUser.emailVerified) {
+    return {
+      redirect: {
+        destination: `/user/verify-email`,
+        permanent: false,
+      },
+    };
+  }
   return {
     props: {
       token,
@@ -73,5 +83,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
 });
 
 export default withAuthUser<ReportPageProps>({
+  whenUnauthedBeforeInit: AuthAction.REDIRECT_TO_LOGIN,
   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+  authPageURL: `/user/login?signInSuccessUrl=${encodeURIComponent('/report')}`,
 })(ReportPage);

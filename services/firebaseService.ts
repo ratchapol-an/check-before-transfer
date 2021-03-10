@@ -1,5 +1,5 @@
 import { init } from 'next-firebase-auth';
-// import firebaseAccountCredentials from '../serviceAccountKey.json';
+import { NextApiRequest } from 'next';
 
 const initAuth = () => {
   init({
@@ -33,11 +33,19 @@ const initAuth = () => {
       overwrite: true,
       path: '/',
       sameSite: 'strict',
-      secure: process.env.APP_STAGE === 'production' || false, // set this to false in local (non-HTTPS) development
+      secure: process.env.NEXT_PUBLIC_APP_STAGE === 'production' || false, // set this to false in local (non-HTTPS) development
       signed: true,
       domain: 'localhost',
     },
   });
+};
+
+export const getAuthorizationToken = (req: NextApiRequest): string => {
+  const { authorization } = req.headers;
+  if (!authorization) return '';
+
+  const split = authorization.split('Bearer ');
+  return split[1];
 };
 
 export default initAuth;
