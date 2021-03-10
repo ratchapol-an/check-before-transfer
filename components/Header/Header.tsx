@@ -61,7 +61,7 @@ const Header: React.FunctionComponent = () => {
           <Menu.Item key="1">เข้าสู่ระบบ</Menu.Item>
         </Menu> */}
         <Link href="/">
-          <a className="header-logo-link" target="_self">
+          <a className="header-logo-link">
             <Image width={197.15} height={45} alt="whoscheat" src="/logo3.png" />
           </a>
         </Link>
