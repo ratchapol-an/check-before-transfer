@@ -11,12 +11,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') return res.status(403).send('Forbidden!');
   const idToken = getAuthorizationToken(req);
   if (idToken === '') return res.status(401).send('Unauthorized');
+  let reporterID = '';
 
   try {
     const user = await verifyIdToken(idToken);
-    console.log('user', user);
-    const reporterID = user.id;
+    reporterID = user.id as string;
+  } catch (e) {
+    return res.status(401).send('Unauthorized');
+  }
 
+  try {
     const ReportModel = Reports(db, Sequelize);
 
     const report = req.body;
@@ -40,7 +44,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(200).json({ success: resp.toJSON() });
   } catch (e) {
     console.log(e);
-    return res.status(401).send('Unauthorized');
+    return res.status(500).send('Internal Error');
   }
 };
 
