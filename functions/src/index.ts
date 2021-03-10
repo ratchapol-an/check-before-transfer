@@ -32,7 +32,6 @@ app.get('/report/get', searchReport);
 app.delete('/report', deleteReport);
 app.put('/report/verify', verify);
 app.get('/reports', getReports);
-
 app.get('/report/:id', getReport);
 
 app.post('/admin/create', createAdmin);
