@@ -37,6 +37,7 @@ type ReportFormProps = {
   submitBtnText: string;
   initialReport?: ReportFormValues;
   viewOnly?: boolean;
+  isReviewing?: boolean;
   onFinish: (values: ReportFormValues) => void;
   onRemoveUploadedFile: (file: UploadFile<any>, reportSession: string) => Promise<boolean>;
 };
@@ -44,6 +45,7 @@ type ReportFormProps = {
 const ReportForm: React.FunctionComponent<ReportFormProps> = ({
   onFinish,
   onRemoveUploadedFile,
+  isReviewing,
   initialReport,
   submitBtnText,
   viewOnly,
@@ -243,6 +245,19 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
         <Button type="primary" htmlType="submit" size="large" disabled={viewOnly}>
           {submitBtnText}
         </Button>
+        {isReviewing && (
+          <>
+            <Button type="primary" htmlType="button" size="large">
+              อนุมัติ
+            </Button>
+            <Button type="primary" danger htmlType="button" size="large">
+              ปฏิเสธ
+            </Button>
+            <Button danger htmlType="button" size="large">
+              ขอเอกสารเพิ่มเติม
+            </Button>
+          </>
+        )}
       </Form.Item>
     </Form>
   );

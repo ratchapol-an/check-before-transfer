@@ -64,12 +64,6 @@ export const AdminPage: React.FunctionComponent<AdminPageProps> = ({ token, emai
               </Select>
             </div>
             <ReportTable onLoadReports={handleLoadReport} onDeleteReport={handleDeleteReport} />
-            {/* <Card>
-              <Space direction="vertical" style={{ width: '100%' }}>
-                
-                
-              </Space>
-            </Card> */}
           </Container>
         </Content>
       </Layout>
