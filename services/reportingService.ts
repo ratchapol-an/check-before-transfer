@@ -14,7 +14,7 @@ const API_HOST =
 
 const API_FIREBASE_HOST =
   process.env.NEXT_PUBLIC_APP_STAGE === 'production'
-    ? 'https://asia-southeast2-check-before-transfer.cloudfunctions.net'
+    ? 'https://asia-southeast2-check-before-transfer.cloudfunctions.net/api'
     : 'http://localhost:5001';
 // axios.defaults.baseURL = `${API_HOST}/check-before-transfer/asia-southeast2/api`;\
 axios.defaults.baseURL = `${API_HOST}/api`;
