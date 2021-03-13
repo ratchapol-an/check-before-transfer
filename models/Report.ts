@@ -2,7 +2,7 @@ import PaymentMethod from './PaymentMethod';
 import ReportStatus from './ReportStatus';
 
 export type BasedReport = {
-  reportId?: string;
+  id: string;
   amount: number;
   eventDetail: string;
   reporterId: string;
@@ -11,10 +11,10 @@ export type BasedReport = {
   productLink: string;
   status: ReportStatus;
   bankCode?: string;
-  bankAccountNumber?: string;
+  bankAccountNo?: string;
   name?: string;
   phoneNumber?: string;
-  nationalIdNumber?: string;
+  idNumber?: string;
 };
 
 export interface UploadedFile {
@@ -26,12 +26,14 @@ export interface UploadedFile {
 }
 
 type Report = BasedReport & {
-  attachedFiles?: UploadedFile[];
+  attachedFiles?: {
+    files: UploadedFile[];
+  };
   eventDate: string;
 };
 
 export const mockReport: Report = {
-  reportId: '0ikgg3hLqgbHLQucpxsy',
+  id: '0ikgg3hLqgbHLQucpxsy',
   amount: 5241.63,
   eventDate: new Date('October 13, 2014').toISOString(),
   eventDetail:
@@ -44,7 +46,9 @@ export const mockReport: Report = {
   status: ReportStatus.Approved,
   phoneNumber: '0945603070',
   name: 'สมชาย ใจดี',
-  attachedFiles: [],
+  attachedFiles: {
+    files: [],
+  },
 };
 
 export default Report;

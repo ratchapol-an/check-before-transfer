@@ -37,9 +37,11 @@ const ReportFormContainer: React.FunctionComponent<Props> = ({
             .map((f) => f.response) as UploadedFile[];
           const newReport: Report = {
             ...restFormValues,
-            reportId: initialReport?.reportId,
+            id: initialReport?.id || '0',
             eventDate: eventDate.toISOString(),
-            attachedFiles: uploadedFiles,
+            attachedFiles: {
+              files: uploadedFiles,
+            },
           };
           await onConfirm(newReport);
         },
@@ -48,7 +50,7 @@ const ReportFormContainer: React.FunctionComponent<Props> = ({
         cancelText: 'ยกเลิก',
       });
     },
-    [initialReport?.reportId, onConfirm],
+    [initialReport?.id, onConfirm],
   );
 
   const handleRemoveUploadFile = useCallback(

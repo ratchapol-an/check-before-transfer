@@ -8,7 +8,7 @@ initAuth();
 enum SearchField {
   Payment = 'paymentMethod',
   PhoneNumber = 'phoneNumber',
-  nationalID = 'nationalIdNumber',
+  nationalID = 'idNumber',
   Name = 'name',
 }
 
@@ -50,6 +50,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     let totalDamagedPrice = 0;
     result.rows.forEach((r) => {
       totalDamagedPrice += r.getDataValue('amount');
+    });
+
+    console.log({
+      name: q,
+      totalReport,
+      totalDamagedPrice,
+      lastedReport: result.rows[0],
     });
 
     return res.status(200).json({
