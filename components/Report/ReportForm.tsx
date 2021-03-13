@@ -123,6 +123,15 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
         </>
       )}
       <Form.Item
+        name="name"
+        label={paymentMethod === PaymentMethod.BankAccountTransfer ? 'ชื่อบัญชี' : 'ชื่อ-นามสกุล'}
+        hasFeedback
+        required={paymentMethod === PaymentMethod.BankAccountTransfer}
+        rules={[{ required: paymentMethod === PaymentMethod.BankAccountTransfer, message: 'กรุุณากรอกชื่อบัญชี' }]}
+      >
+        <Input type="text" maxLength={255} disabled={viewOnly} />
+      </Form.Item>
+      <Form.Item
         name="phoneNumber"
         label="เบอร์โทรศัพท์มือถือ"
         hasFeedback
