@@ -15,7 +15,7 @@ type ReportTableProps = {
   onDeleteReport: (reportId: string) => Promise<void>;
   onLoadReports: (pagination: PaginationConfig) => Promise<PaginatedReports>;
 };
-type ReportItem = Report & { reportId: string };
+type ReportItem = Report;
 const pageSize = 10;
 const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport, onLoadReports }) => {
   const [reports, setReports] = useState<ReportItem[]>([]);
@@ -25,6 +25,7 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
   const loadReportsCallback = useCallback(async () => {
     setIsLoading(true);
     const response = await onLoadReports({ current: currentPage, pageSize });
+    console.log(response.data);
     setReports(response.data as ReportItem[]);
     setTotal(response.total);
     setIsLoading(false);
@@ -43,7 +44,7 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
       cancelText: 'ยกเลิก',
       async onOk() {
         await onDeleteReport(id);
-        setReports(reports.filter((report) => report.reportId !== id));
+        setReports(reports.filter((report) => report.id !== id));
       },
     });
   };
@@ -61,7 +62,7 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
   return (
     <Table
       dataSource={reports}
-      rowKey={(report) => report.reportId}
+      rowKey={(report) => report.id}
       pagination={pagination}
       loading={isLoading}
       onChange={handleTableChange}
@@ -105,10 +106,10 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
         render={(_, report: ReportItem) => {
           return (
             <Space size="middle" key="action">
-              <Link href={`/report/${report.reportId}`}>
+              <Link href={`/report/${report.id}`}>
                 <a>ดูรายละเอียด</a>
               </Link>
-              <Button type="link" onClick={() => handleDelete(report.reportId)}>
+              <Button type="link" onClick={() => handleDelete(report.id)}>
                 ลบ
               </Button>
             </Space>

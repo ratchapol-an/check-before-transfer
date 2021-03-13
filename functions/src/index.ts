@@ -3,7 +3,6 @@ import express from 'express';
 import cors from 'cors';
 import dayjs from 'dayjs';
 import { firebaseFunction } from './services/firebase';
-import { searchReport, updateReport, verify, addReport, getReports, deleteReport, getReport } from './services/reports';
 import { createAdmin, getAdminInfo } from './services/admin';
 import { filesUpload, deleteFile } from './services/upload';
 import 'dayjs/locale/th';
@@ -26,14 +25,6 @@ app.use(defaultCors);
 // app.use(myMiddleware);
 
 // build multiple CRUD interfaces:
-app.post('/report/add', addReport);
-app.put('/report/update', updateReport);
-app.get('/report/get', searchReport);
-app.delete('/report', deleteReport);
-app.put('/report/verify', verify);
-app.get('/reports', getReports);
-app.get('/report/:id', getReport);
-
 app.post('/admin/create', createAdmin);
 app.get('/admin/:id', getAdminInfo);
 app.post('/file/upload', filesUpload);

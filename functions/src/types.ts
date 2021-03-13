@@ -15,10 +15,10 @@ export enum PaymentMethod {
 
 export type BasedReport = {
   bankCode?: string;
-  bankAccountNumber?: string;
+  bankAccountNo?: string;
   name?: string;
   phoneNumber?: string;
-  nationalIdNumber?: string;
+  idNumber?: string;
   amount: number;
   eventDate: string;
   eventDetail: string;
@@ -55,7 +55,7 @@ export enum ActionType {
 export enum SearchBy {
   Payment = 'paymentMethod',
   PhoneNumber = 'phoneNumber',
-  nationalID = 'nationalIdNumber',
+  nationalID = 'idNumber',
   Name = 'name',
 }
 
