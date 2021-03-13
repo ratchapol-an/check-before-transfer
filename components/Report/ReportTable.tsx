@@ -17,7 +17,7 @@ type ReportTableProps = {
   isAdmin?: boolean;
 };
 type ReportItem = Report;
-const pageSize = 10;
+const pageSize = 7;
 const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport, onLoadReports, isAdmin }) => {
   const [reports, setReports] = useState<ReportItem[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,6 +68,7 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
       loading={isLoading}
       onChange={handleTableChange}
     >
+      <Table.Column<ReportItem> title="รหัสรายงาน" dataIndex="id" key="id" />
       <Table.Column<ReportItem>
         title="วันที่ทำธุรกรรม"
         dataIndex="eventDate"

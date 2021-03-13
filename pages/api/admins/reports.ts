@@ -29,15 +29,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { status, offset, limit } = req.query;
 
-    const searchStatus = status || 1;
-
     const ReportModel = Reports(db, Sequelize);
-
+    const where = status !== '0' ? { status, isDeleted: false } : { isDeleted: false };
     const result = await ReportModel.findAndCountAll({
-      where: {
-        status: searchStatus,
-        isDeleted: false,
-      },
+      where,
       offset: parseInt(offset as string, 10),
       limit: parseInt(limit as string, 10),
       order: [['createdAt', 'DESC']],

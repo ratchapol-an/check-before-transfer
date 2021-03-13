@@ -1,10 +1,10 @@
 import Head from 'next/head';
-import { Card, Layout, Space, Typography, Breadcrumb, Radio, Select } from 'antd';
+import { Layout, Typography, Breadcrumb, Select } from 'antd';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import { AuthAction, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
 import ReportTable from '@components/Report/ReportTable';
-import { deleteReport, getReportsByUserId, PaginatedReports } from 'services/reportingService';
+import { deleteReport, getReportsByStatus, PaginatedReports } from 'services/reportingService';
 import { PaginationConfig } from 'antd/lib/pagination';
 import React, { useCallback, useState } from 'react';
 import Link from 'next/link';
@@ -27,9 +27,9 @@ export const AdminPage: React.FunctionComponent<AdminPageProps> = ({ token, emai
 
   const handleLoadReport = useCallback(
     async (pagination: PaginationConfig): Promise<PaginatedReports> => {
-      return getReportsByUserId(pagination, token);
+      return getReportsByStatus(reportStatus, pagination, token);
     },
-    [token],
+    [reportStatus, token],
   );
 
   const handleReportStatusChange = (value: ReportStatus) => {
@@ -56,11 +56,11 @@ export const AdminPage: React.FunctionComponent<AdminPageProps> = ({ token, emai
               <Title level={3} className="page-title">
                 รายงานทั้งหมด
               </Title>
-              <Select value={reportStatus} onChange={handleReportStatusChange} style={{ width: 120 }}>
+              <Select value={reportStatus} onChange={handleReportStatusChange} style={{ width: 160 }}>
                 <Select.Option value={ReportStatus.WaitingForReview}>{reportStatusCaptions[1]}</Select.Option>
-                <Select.Option value={ReportStatus.RequestMoreDocument}>{reportStatusCaptions[3]}</Select.Option>
+                <Select.Option value={ReportStatus.RequestMoreDocument}>{reportStatusCaptions[4]}</Select.Option>
                 <Select.Option value={ReportStatus.Approved}>{reportStatusCaptions[2]}</Select.Option>
-                <Select.Option value={ReportStatus.Rejected}>{reportStatusCaptions[4]}</Select.Option>
+                <Select.Option value={ReportStatus.Rejected}>{reportStatusCaptions[3]}</Select.Option>
                 <Select.Option value={0}>ทั้งหมด</Select.Option>
               </Select>
             </div>
