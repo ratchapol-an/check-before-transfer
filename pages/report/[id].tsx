@@ -4,24 +4,26 @@ import Header from '@components/Header';
 import Container from '@components/Container';
 import { ReportFormContainer, ReportFormValues } from '@components/Report';
 import { AuthAction, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
-import { getReportById, updateReport } from 'services/reportingService';
+import { getReportById, updateReport, updateReportStatus } from 'services/reportingService';
 import Report from '@models/Report';
 import { UploadFile } from 'antd/lib/upload/interface';
 import moment from 'moment';
 import React, { useCallback } from 'react';
 import Link from 'next/link';
 import ReportStatus, { reportStatusCaptions, reportStatusColors } from '@models/ReportStatus';
+import { isAdminRole, notifyError } from 'utils';
+import { useRouter } from 'next/router';
 
 interface ReportPageProps {
   report: Report;
   token: string;
+  isAdmin: boolean;
 }
-const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report }) => {
+const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report, isAdmin }) => {
   const { Content } = Layout;
   const { Title } = Typography;
-
+  const router = useRouter();
   const { attachedFiles, eventDate, ...restReport } = report;
-  console.log(attachedFiles);
 
   const initialReport: ReportFormValues = {
     ...restReport,
@@ -54,13 +56,24 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report })
           message: 'บันทึกข้อมูลเรียยร้อย',
         });
       } catch {
-        notification.error({
-          message: 'บันทึกข้อมูลไม่สำเร็จ',
-          description: 'ระบบเกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
-        });
+        notifyError();
       }
     },
     [token],
+  );
+  const handleStatusChange = useCallback(
+    async (id: string, status: ReportStatus) => {
+      if (!isAdmin) {
+        return;
+      }
+      try {
+        await updateReportStatus(id, status, token);
+        router.push('/admin');
+      } catch {
+        notifyError();
+      }
+    },
+    [isAdmin, router, token],
   );
   return (
     <>
@@ -86,11 +99,13 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report })
             </Title>
             <Card>
               <ReportFormContainer
-                viewOnly={report.status === ReportStatus.Approved || report.status === ReportStatus.Rejected}
+                viewOnly={isAdmin || report.status === ReportStatus.Approved || report.status === ReportStatus.Rejected}
                 onConfirm={handleConfirm}
                 initialReport={initialReport}
                 token={token}
                 submitBtnText="บันทึกรายงาน"
+                isReviewing={isAdmin}
+                onStatusChange={handleStatusChange}
               />
             </Card>
           </Container>
@@ -102,7 +117,7 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report })
 
 export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
-})(async ({ AuthUser, params, res }) => {
+})(async ({ AuthUser, params }) => {
   const reportId = params && typeof params.id === 'string' ? params.id : undefined;
   let report: Report | null = null;
   let token: string | null = null;
@@ -114,14 +129,19 @@ export const getServerSideProps = withAuthUserTokenSSR({
   }
 
   if (!report) {
-    res.writeHead(302, { Location: '/report' });
-    res.end();
+    return {
+      redirect: {
+        destination: '/report',
+        permanent: false,
+      },
+    };
   }
 
   return {
     props: {
       report,
       token,
+      isAdmin: isAdminRole(token),
     },
   };
 });

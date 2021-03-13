@@ -57,48 +57,30 @@ export const updateReport = async (report: Report, token: string) => {
   });
 };
 
-interface VerifyReportReq {
-  reportId: string;
-  status: number;
-}
-
-export const verifyReport = (req: VerifyReportReq, token: string) => {
-  axios
-    .put<{ reportID: string }>(
-      '/reports/verify',
-      {
-        body: req,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    )
-    .then(({ data }) => {
-      console.log(data.reportID);
-    })
-    .catch((e) => {
-      console.log(e);
-    });
-};
-
-export const deleteReport = async (reportID: string, token: string) => {
-  axios
-    .delete<{ reportId: string; status: string }>('/reports', {
+export const updateReportStatus = async (reportId: string, status: number, token: string) => {
+  await axios.put<{ reportID: string }>(
+    '/reports/verify',
+    {
+      reportId,
+      status,
+    },
+    {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      data: {
-        reportID,
-      },
-    })
-    .then(({ data }) => {
-      console.log(data);
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+    },
+  );
+};
+
+export const deleteReport = async (reportId: string, token: string) => {
+  await axios.delete<{ reportId: string; status: string }>('/reports', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: {
+      reportId,
+    },
+  });
 };
 
 export type PaginatedReports = {

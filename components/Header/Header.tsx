@@ -36,7 +36,10 @@ const Header: React.FunctionComponent = () => {
   const handleProfileBtnClick = () => {
     router.push('/user/profile');
   };
-
+  const handleLogout = async () => {
+    await auth.signOut();
+    router.push('/');
+  };
   useEffect(() => {
     auth.getIdToken().then((token) => {
       if (!token) return;
@@ -71,13 +74,7 @@ const Header: React.FunctionComponent = () => {
               <Button type="link" size="large" onClick={handleProfileBtnClick}>
                 ประวัติของคุณ
               </Button>
-              <Button
-                type="link"
-                size="large"
-                onClick={() => {
-                  auth.signOut().then(() => window.location.reload());
-                }}
-              >
+              <Button type="link" size="large" onClick={handleLogout}>
                 ออกจากระบบ
               </Button>
             </>

@@ -1,6 +1,7 @@
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import Report, { UploadedFile } from '@models/Report';
-import { Modal } from 'antd';
+import ReportStatus from '@models/ReportStatus';
+import { Modal, ModalFuncProps } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { useCallback } from 'react';
 import { deleteFile } from 'services/reportingService';
@@ -11,14 +12,18 @@ type Props = {
   token: string;
   submitBtnText: string;
   viewOnly?: boolean;
+  isReviewing?: boolean;
   onConfirm: (report: Report) => Promise<any>;
+  onStatusChange?: (reportId: string, status: ReportStatus) => Promise<void>;
 };
 const ReportFormContainer: React.FunctionComponent<Props> = ({
   initialReport,
   token,
   onConfirm,
+  onStatusChange,
   submitBtnText,
   viewOnly,
+  isReviewing,
 }) => {
   const handleFormFinish = useCallback(
     async (formValues: ReportFormValues) => {
@@ -60,13 +65,48 @@ const ReportFormContainer: React.FunctionComponent<Props> = ({
     },
     [token],
   );
+  const handleStatusChange = useCallback(
+    async (status: ReportStatus) => {
+      if (!initialReport || !onStatusChange) {
+        return;
+      }
+      const { confirm } = Modal;
+      const confirmModalProps: ModalFuncProps = {
+        async onOk() {
+          await onStatusChange(initialReport.id, status);
+        },
+        onCancel() {},
+        okText: 'ยืนยัน',
+        cancelText: 'ยกเลิก',
+        icon: <ExclamationCircleOutlined />,
+      };
+      switch (status) {
+        case ReportStatus.Rejected: {
+          confirm({ title: 'ยืนยันที่จะปฏิเสธรายงานนี้', ...confirmModalProps });
+          break;
+        }
+        case ReportStatus.Approved: {
+          confirm({ title: 'ยืนยันที่จะอนุมัติรายงานนี้', ...confirmModalProps });
+          break;
+        }
+        case ReportStatus.RequestMoreDocument: {
+          confirm({ title: 'ยืนยันที่จะขอเอกสารเพิ่มเติมสำหรับรายงานนี้', ...confirmModalProps });
+          break;
+        }
+        default:
+      }
+    },
+    [initialReport, onStatusChange],
+  );
   return (
     <ReportForm
       viewOnly={viewOnly}
       submitBtnText={submitBtnText}
       initialReport={initialReport}
+      isReviewing={isReviewing}
       onFinish={handleFormFinish}
       onRemoveUploadedFile={handleRemoveUploadFile}
+      onUpdateStatus={handleStatusChange}
     />
   );
 };

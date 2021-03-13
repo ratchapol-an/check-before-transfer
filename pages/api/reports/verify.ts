@@ -26,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const { reportID, status } = req.body;
+    const { reportId, status } = req.body;
     const ReportModel = Reports(db, Sequelize);
 
     const [i] = await ReportModel.update(
@@ -35,12 +35,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
       {
         where: {
-          id: reportID,
+          id: reportId,
         },
       },
     );
     return res.status(200).json({
-      reportID,
+      reportId,
     });
   } catch (e) {
     return res.status(500).send('Internal Error');

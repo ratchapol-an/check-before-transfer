@@ -4,8 +4,7 @@ import { FunctionComponent } from 'react';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import Hero from '@components/Hero';
-import { withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
-import { parseToken } from '../utils';
+import { withAuthUser } from 'next-firebase-auth';
 import './index.less';
 
 export const Home: FunctionComponent = () => {
@@ -28,28 +27,5 @@ export const Home: FunctionComponent = () => {
     </>
   );
 };
-
-export const getServerSideProps = withAuthUserTokenSSR()(async ({ AuthUser }) => {
-  // const token = await AuthUser.getIdToken();
-  const role = {
-    admin: false,
-    user: false,
-  };
-  AuthUser.getIdToken().then((token) => {
-    console.log(token);
-    if (token) {
-      const decodedJWT = parseToken(token);
-      console.log(decodedJWT);
-      console.log(decodedJWT.superUser);
-      console.log(decodedJWT.admin);
-
-      if (decodedJWT.superUser === true || decodedJWT.admin === true) role.admin = true;
-      if (decodedJWT.superUser === undefined && decodedJWT.admin === undefined) role.user = true;
-    }
-  });
-  return {
-    props: {},
-  };
-});
 
 export default withAuthUser()(Home);

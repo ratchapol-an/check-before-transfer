@@ -1,12 +1,13 @@
-import { Form, Select, Input, InputNumber, Button, DatePicker } from 'antd';
+import { Form, Select, Input, InputNumber, Button, DatePicker, Space } from 'antd';
 import PaymentMethod, { paymentMethodCaptions } from 'models/PaymentMethod';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import moment, { Moment } from 'moment';
 import PicturesWall from '@components/PicturesWall';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { BasedReport, UploadedFile } from '@models/Report';
 import productTypeCaptions from '@models/productTypeCaptions';
 import banks from '@models/banks';
+import ReportStatus from '@models/ReportStatus';
 
 const { Option } = Select;
 
@@ -40,11 +41,13 @@ type ReportFormProps = {
   isReviewing?: boolean;
   onFinish: (values: ReportFormValues) => void;
   onRemoveUploadedFile: (file: UploadFile<any>, reportSession: string) => Promise<boolean>;
+  onUpdateStatus: (status: ReportStatus) => void;
 };
 
 const ReportForm: React.FunctionComponent<ReportFormProps> = ({
   onFinish,
   onRemoveUploadedFile,
+  onUpdateStatus,
   isReviewing,
   initialReport,
   submitBtnText,
@@ -54,7 +57,9 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
   const handlePaymentMethodSelect = (value: PaymentMethod) => {
     setPaymentMethod(value);
   };
-
+  const handleApprove = () => onUpdateStatus(ReportStatus.Approved);
+  const handleReject = () => onUpdateStatus(ReportStatus.Rejected);
+  const handleRequestMoreDoc = () => onUpdateStatus(ReportStatus.RequestMoreDocument);
   return (
     <Form name="report" initialValues={initialReport} {...formItemLayout} onFinish={onFinish}>
       <Form.Item
@@ -224,7 +229,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
         rules={[{ required: true, message: 'กรุณากรอกรายละเอียดของเหตุการณ์' }]}
         hasFeedback
       >
-        <Input.TextArea disabled={viewOnly} />
+        <Input.TextArea disabled={viewOnly} placeholder="เล่ารายละเอียดว่าโดนโกงอย่างไร" />
       </Form.Item>
       <Form.Item label="หลักฐานประกอบ" required>
         <Form.Item
@@ -251,21 +256,22 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
         </Form.Item>
       </Form.Item>
       <Form.Item wrapperCol={{ md: { span: 12, offset: 8 } }}>
-        <Button type="primary" htmlType="submit" size="large" disabled={viewOnly}>
-          {submitBtnText}
-        </Button>
-        {isReviewing && (
-          <>
-            <Button type="primary" htmlType="button" size="large">
+        {isReviewing ? (
+          <Space direction="horizontal">
+            <Button type="primary" htmlType="button" size="large" onClick={handleApprove}>
               อนุมัติ
             </Button>
-            <Button type="primary" danger htmlType="button" size="large">
+            <Button type="primary" danger htmlType="button" size="large" onClick={handleReject}>
               ปฏิเสธ
             </Button>
-            <Button danger htmlType="button" size="large">
+            <Button danger htmlType="button" size="large" onClick={handleRequestMoreDoc}>
               ขอเอกสารเพิ่มเติม
             </Button>
-          </>
+          </Space>
+        ) : (
+          <Button type="primary" htmlType="submit" size="large" disabled={viewOnly}>
+            {submitBtnText}
+          </Button>
         )}
       </Form.Item>
     </Form>

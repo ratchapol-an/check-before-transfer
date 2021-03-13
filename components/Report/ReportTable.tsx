@@ -14,10 +14,11 @@ import { formatAmount, formatDate } from 'utils';
 type ReportTableProps = {
   onDeleteReport: (reportId: string) => Promise<void>;
   onLoadReports: (pagination: PaginationConfig) => Promise<PaginatedReports>;
+  isAdmin?: boolean;
 };
 type ReportItem = Report;
 const pageSize = 10;
-const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport, onLoadReports }) => {
+const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport, onLoadReports, isAdmin }) => {
   const [reports, setReports] = useState<ReportItem[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -107,7 +108,7 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
           return (
             <Space size="middle" key="action">
               <Link href={`/report/${report.id}`}>
-                <a>ดูรายละเอียด</a>
+                <a>{isAdmin ? 'ตรวจสอบ' : 'ดูรายละเอียด'}</a>
               </Link>
               <Button type="link" onClick={() => handleDelete(report.id)}>
                 ลบ

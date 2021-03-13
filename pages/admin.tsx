@@ -10,6 +10,7 @@ import React, { useCallback, useState } from 'react';
 import Link from 'next/link';
 import ReportStatus, { reportStatusCaptions } from '@models/ReportStatus';
 import './admin.less';
+import { isAdminRole } from 'utils';
 
 type AdminPageProps = { token: string; email: string };
 
@@ -63,7 +64,7 @@ export const AdminPage: React.FunctionComponent<AdminPageProps> = ({ token, emai
                 <Select.Option value={0}>ทั้งหมด</Select.Option>
               </Select>
             </div>
-            <ReportTable onLoadReports={handleLoadReport} onDeleteReport={handleDeleteReport} />
+            <ReportTable isAdmin onLoadReports={handleLoadReport} onDeleteReport={handleDeleteReport} />
           </Container>
         </Content>
       </Layout>
@@ -75,6 +76,15 @@ export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
 })(async ({ AuthUser }) => {
   const token = await AuthUser.getIdToken();
+
+  if (!isAdminRole(token)) {
+    return {
+      redirect: {
+        destination: `/`,
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {

@@ -31,7 +31,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     switch (req.method) {
       case 'DELETE': {
-        const { reportID } = req.body;
+        const { reportId } = req.body;
 
         await ReportModel.update(
           {
@@ -39,7 +39,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           },
           {
             where: {
-              id: reportID,
+              id: reportId,
             },
           },
         );
