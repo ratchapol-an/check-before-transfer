@@ -21,11 +21,13 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report })
   const { Title } = Typography;
 
   const { attachedFiles, eventDate, ...restReport } = report;
+  console.log(attachedFiles);
+
   const initialReport: ReportFormValues = {
     ...restReport,
     eventDate: moment(eventDate),
     attachedFiles: attachedFiles
-      ? attachedFiles.map(
+      ? attachedFiles.files.map(
           (o, i) =>
             ({
               url: `https://firebasestorage.googleapis.com/v0/b/check-before-transfer.appspot.com/o/files${encodeURIComponent(

@@ -8,11 +8,16 @@ import ReportStatus from '@models/ReportStatus';
 // - cd function
 // - nvm use 12
 // - yarn build & yarn serve
+
 const API_HOST =
+  process.env.NEXT_PUBLIC_APP_STAGE === 'production' ? 'https://check-before-transfer.com' : 'http://localhost:3000';
+
+const API_FIREBASE_HOST =
   process.env.NEXT_PUBLIC_APP_STAGE === 'production'
-    ? 'https://asia-southeast2-check-before-transfer.cloudfunctions.net'
+    ? 'https://asia-southeast2-check-before-transfer.cloudfunctions.net/api'
     : 'http://localhost:5001';
-axios.defaults.baseURL = `${API_HOST}/check-before-transfer/asia-southeast2/api`;
+// axios.defaults.baseURL = `${API_HOST}/check-before-transfer/asia-southeast2/api`;\
+axios.defaults.baseURL = `${API_HOST}/api`;
 
 // PROD URL
 // https://asia-southeast2-check-before-transfer.cloudfunctions.net
@@ -24,7 +29,7 @@ export interface SearchResult {
   lastedReport: Report;
 }
 export const search = async (value: string, by: SearchBy): Promise<SearchResult> => {
-  const { data } = await axios.get<SearchResult>('/report/get', {
+  const { data } = await axios.get<SearchResult>('/reports/get', {
     params: {
       q: value,
       by,
@@ -35,7 +40,7 @@ export const search = async (value: string, by: SearchBy): Promise<SearchResult>
 };
 
 export const addReport = async (report: Report, token: string) => {
-  const { data } = await axios.post<{ reportId: string }>('/report/add', report, {
+  const { data } = await axios.post<{ reportId: string }>('/reports/add', report, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -45,7 +50,7 @@ export const addReport = async (report: Report, token: string) => {
 };
 
 export const updateReport = async (report: Report, token: string) => {
-  return axios.put('/report/update', report, {
+  return axios.put('/reports/update', report, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -60,7 +65,7 @@ interface VerifyReportReq {
 export const verifyReport = (req: VerifyReportReq, token: string) => {
   axios
     .put<{ reportID: string }>(
-      '/report/verify',
+      '/reports/verify',
       {
         body: req,
       },
@@ -78,14 +83,14 @@ export const verifyReport = (req: VerifyReportReq, token: string) => {
     });
 };
 
-export const deleteReport = async (reportId: string, token: string) => {
+export const deleteReport = async (reportID: string, token: string) => {
   axios
-    .delete<{ reportId: string; status: string }>('/report', {
+    .delete<{ reportId: string; status: string }>('/reports', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        reportId,
+        reportID,
       },
     })
     .then(({ data }) => {
@@ -104,10 +109,16 @@ export const getReportsByUserId = async (
   paginationConfig: PaginationConfig,
   token: string,
 ): Promise<PaginatedReports> => {
+  const { pageSize = 10, current = 1 } = paginationConfig;
+  const offset = pageSize * current - pageSize;
   const resp = await axios
     .get<PaginatedReports>('/reports', {
       headers: {
         Authorization: `Bearer ${token}`,
+      },
+      params: {
+        offset,
+        limit: pageSize,
       },
     })
     .catch((e) => {
@@ -126,23 +137,23 @@ export const getReportsByStatus = async (
   paginationConfig: PaginationConfig,
   token: string,
 ): Promise<PaginatedReports> => {
-  // const { pageSize, current } = paginationConfig;
-  // const offset = current === 1 ? 0 : (current || 1) * (pageSize || 10);
-  // const resp = await axios
-  //   .get<PaginatedReports>('/admins/reports', {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //     params: {
-  //       status,
-  //       offset,
-  //       limit: pageSize || 10,
-  //     },
-  //   })
-  //   .catch((e) => {
-  //     console.log(e);
-  //   });
-  // if (resp) return resp.data;
+  const { pageSize = 10, current = 1 } = paginationConfig;
+  const offset = pageSize * current - pageSize;
+  const resp = await axios
+    .get<PaginatedReports>('/admins/reports', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        status,
+        offset,
+        limit: pageSize,
+      },
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  if (resp) return resp.data;
   const emptyResp: PaginatedReports = {
     total: 0,
     data: [],
@@ -151,7 +162,7 @@ export const getReportsByStatus = async (
 };
 
 export const getReportById = async (id: string, token: string): Promise<Report | null> => {
-  const resp = await axios.get<Report>(`/report/${id}`, {
+  const resp = await axios.get<Report>(`/reports/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -160,11 +171,11 @@ export const getReportById = async (id: string, token: string): Promise<Report |
   return resp ? resp.data : null;
 };
 
-export const apiUploadFile = `${API_HOST}/check-before-transfer/asia-southeast2/api/file/upload`;
+export const apiUploadFile = `${API_FIREBASE_HOST}/check-before-transfer/asia-southeast2/api/file/upload`;
 
 export const deleteFile = async (dirName: string, fileName: string, token: string) => {
   axios
-    .delete('/file', {
+    .delete(`/api/file`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -172,6 +183,7 @@ export const deleteFile = async (dirName: string, fileName: string, token: strin
         dirName,
         fileName,
       },
+      baseURL: `${API_FIREBASE_HOST}/check-before-transfer/asia-southeast2`,
     })
     .then(({ data }) => {
       console.log(data);

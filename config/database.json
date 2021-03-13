@@ -1,23 +1,33 @@
 {
   "development": {
-    "username": "rtp_atw",
-    "password": "ratchapols",
-    "database": "check_before_transfer_local",
-    "host": "127.0.0.1",
-    "dialect": "postgresql"
+    "username": "TINgkorpHROrpeABle",
+    "password": "fenb642pqfzo1xxl",
+    "database": "check_before_transfer",
+    "host": "sgp-cbtf-do-user-8849046-0.b.db.ondigitalocean.com",
+    "port": "25060",
+    "ssl": true,
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": { "require": true, "rejectUnauthorized": false }
+    }
   },
   "test": {
     "username": "rtp_atw",
     "password": "ratchapols",
     "database": "check_before_transfer_local",
     "host": "127.0.0.1",
-    "dialect": "postgresql"
+    "dialect": "postgres"
   },
   "production": {
     "username": "TINgkorpHROrpeABle",
-    "password": "4PmpMePq82kJvquU5ZXg3rJpvjqER9j6eM6EnUhmAj9ybFv7j6juGbvUJWqtRb4S",
+    "password": "fenb642pqfzo1xxl",
     "database": "check_before_transfer",
-    "host": "127.0.0.1",
-    "dialect": "postgresql"
+    "host": "sgp-cbtf-do-user-8849046-0.b.db.ondigitalocean.com",
+    "port": "25060",
+    "ssl": true,
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": { "require": true, "rejectUnauthorized": false }
+    }
   }
 }

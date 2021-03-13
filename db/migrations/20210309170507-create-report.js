@@ -37,7 +37,7 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      bankAccountNumber: {
+      bankAccountNo: {
         type: DataTypes.STRING,
         allowNull: true,
       },
@@ -45,7 +45,7 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      nationalIdNumber: {
+      idNumber: {
         type: DataTypes.STRING,
         allowNull: true,
       },
