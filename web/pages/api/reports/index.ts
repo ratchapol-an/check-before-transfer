@@ -39,6 +39,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.send('Unauthorized');
     return;
   }
+  let resp: any = {};
+  let respCode = 200;
 
   try {
     const dbReport = db as ReportModel;
@@ -59,12 +61,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             },
           },
         );
-        res.status(200);
-        res.json({
+        respCode = 200;
+        resp = {
           reporterID,
           status: 'deleted',
-        });
-        return;
+        };
+        break;
       }
       case 'GET': {
         const { offset, limit } = req.query;
@@ -77,21 +79,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           limit: parseInt(limit as string, 10) || 10,
           order: [['createdAt', 'DESC']],
         });
-        console.log('result', {
+
+        respCode = 200;
+        resp = {
           total: result.count,
           data: result.rows,
-        });
-        res.status(200);
-        res.json({
-          total: result.count,
-          data: result.rows,
-        });
-        return;
+        };
+        break;
       }
       default: {
-        res.status(403);
-        res.send('Forbidden!');
-        return;
+        respCode = 403;
+        resp = {
+          message: 'Forbidden',
+        };
+        break;
       }
     }
   } catch (e) {
@@ -100,4 +101,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.send('Internal error');
     return;
   }
+  res.status(respCode);
+  res.json(resp);
 };
