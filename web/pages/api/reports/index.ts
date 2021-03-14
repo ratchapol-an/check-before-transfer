@@ -5,21 +5,29 @@ import { verifyIdToken } from 'next-firebase-auth';
 import initAuth, { getAuthorizationToken } from '../../../services/firebaseService';
 
 type ReportModel = typeof db & { Report: any };
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  initAuth();
+
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  await initAuth();
   switch (req.method) {
-    case 'DELETE':
+    case 'PUT': {
+      res.status(200);
+      res.json('PUT TEST');
+      return;
+    }
     case 'GET':
+    case 'DELETE':
       break;
     default: {
-      res.status(403).send('Forbidden!');
+      res.status(403);
+      res.send('Forbidden!');
       return;
     }
   }
 
   const idToken = getAuthorizationToken(req);
   if (idToken === '') {
-    res.status(401).send('Unauthorized');
+    res.status(401);
+    res.send('Unauthorized');
     return;
   }
   let reporterID = '';
@@ -27,7 +35,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const user = await verifyIdToken(idToken);
     reporterID = user.id as string;
   } catch (e) {
-    res.status(401).send('Unauthorized');
+    res.status(401);
+    res.send('Unauthorized');
     return;
   }
 
@@ -50,7 +59,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
           },
         );
-        res.status(200).json({
+        res.status(200);
+        res.json({
           reporterID,
           status: 'deleted',
         });
@@ -71,23 +81,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           total: result.count,
           data: result.rows,
         });
-
-        res.status(200).json({
+        res.status(200);
+        res.json({
           total: result.count,
           data: result.rows,
         });
         return;
       }
       default: {
-        res.status(403).send('Forbidden!');
+        res.status(403);
+        res.send('Forbidden!');
         return;
       }
     }
   } catch (e) {
     console.log(e);
-    res.status(401).send('Unauthorized');
+    res.status(500);
+    res.send('Internal error');
     return;
   }
 };
-
-export default handler;
