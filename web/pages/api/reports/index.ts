@@ -67,6 +67,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           limit: parseInt(limit as string, 10) || 10,
           order: [['createdAt', 'DESC']],
         });
+        console.log('result', {
+          total: result.count,
+          data: result.rows,
+        });
+
         res.status(200).json({
           total: result.count,
           data: result.rows,
