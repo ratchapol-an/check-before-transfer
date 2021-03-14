@@ -10,11 +10,11 @@ import ReportStatus from '@models/ReportStatus';
 // - yarn build & yarn serve
 
 const API_HOST =
-  process.env.NEXT_PUBLIC_APP_STAGE === 'production' ? 'https://check-before-transfer.com' : 'http://localhost:3000';
+  process.env.NEXT_PUBLIC_APP_STAGE === 'production' ? process.env.NEXT_PUBLIC_HOST_URL : 'http://localhost:3000';
 
 const API_FIREBASE_HOST =
   process.env.NEXT_PUBLIC_APP_STAGE === 'production'
-    ? 'https://asia-southeast2-check-before-transfer.cloudfunctions.net/api'
+    ? process.env.NEXT_PUBLIC_HOST_CLOUDFUNCTION_URL
     : 'http://localhost:5001';
 // axios.defaults.baseURL = `${API_HOST}/check-before-transfer/asia-southeast2/api`;\
 axios.defaults.baseURL = `${API_HOST}/api`;
