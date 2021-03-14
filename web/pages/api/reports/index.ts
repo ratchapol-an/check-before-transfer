@@ -5,7 +5,7 @@ import { verifyIdToken } from 'next-firebase-auth';
 import initAuth, { getAuthorizationToken } from '../../../services/firebaseService';
 
 initAuth();
-type ReportModel = typeof db & { report: any };
+type ReportModel = typeof db & { Report: any };
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case 'DELETE':
@@ -27,7 +27,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const dbReport = db as ReportModel;
-    const ReportModel = dbReport.report;
+    console.log('dbReport'), dbReport;
+    const ReportModel = dbReport.Report;
 
     switch (req.method) {
       case 'DELETE': {

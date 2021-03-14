@@ -8,11 +8,12 @@ const env = process.env.NEXT_PUBLIC_APP_STAGE || 'development';
 const config = require(__dirname + '/../../config/database.json')[env];
 const pg = require('pg');
 let db = {};
-
+const models = process.cwd() + '/db/models/' || __dirname;
 let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
+  console.log('in');
   sequelize = new Sequelize({
     username: 'TINgkorpHROrpeABle',
     password: 'fenb642pqfzo1xxl',
@@ -28,12 +29,13 @@ if (config.use_env_variable) {
   });
 }
 
-fs.readdirSync(__dirname)
+fs.readdirSync(models)
   .filter((file) => {
     return file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js';
   })
   .forEach((file) => {
     const model = require(`./${file}`)(sequelize, Sequelize.DataTypes);
+    console.log('model', model);
     db[model.name] = model;
     console.log('in', db);
   });
