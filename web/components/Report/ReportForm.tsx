@@ -190,7 +190,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
           min={0}
           style={{ width: '100%' }}
           formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          parser={(value) => (value ? value.replace(/(,*)/g, '') : '')}
+          // parser={(value) => (value ? value.replace(/(,*)/g, '') : '')}
           disabled={viewOnly}
         />
       </Form.Item>
