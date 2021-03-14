@@ -6,8 +6,9 @@ import initAuth, { getAuthorizationToken } from '../../../services/firebaseServi
 
 type ReportModel = typeof db & { Report: any };
 
+initAuth();
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  await initAuth();
   switch (req.method) {
     case 'PUT': {
       res.status(200);
@@ -44,7 +45,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const dbReport = db as ReportModel;
-    console.log('dbReport'), dbReport;
+    console.log('dbReport');
     const ReportModel = dbReport.Report;
 
     switch (req.method) {
