@@ -35,7 +35,7 @@ const initAuth = () => {
       sameSite: 'strict',
       secure: process.env.NEXT_PUBLIC_APP_STAGE === 'production' || false, // set this to false in local (non-HTTPS) development
       signed: true,
-      domain: process.env.NEXT_PUBLIC_APP_STAGE === 'production' ? '.netlify.app' : 'localhost',
+      // domain: process.env.NEXT_PUBLIC_APP_STAGE === 'production' ? '.netlify.app' : 'localhost',
     },
   });
 };
