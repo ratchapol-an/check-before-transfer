@@ -39,7 +39,11 @@ const LoginPage: FunctionComponent = () => {
           authResult.user.sendEmailVerification();
         }
         setTimeout(() => {
-          window.location.href = `http://localhost:3000${redirectUrl || '/'}`;
+          window.location.href = `${
+            process.env.NEXT_PUBLIC_APP_STAGE === 'production'
+              ? process.env.NEXT_PUBLIC_HOST_URL
+              : 'http://localhost:3000'
+          }${redirectUrl || '/'}`;
           return false;
         }, 1500);
         return false;
