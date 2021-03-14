@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 // import Sequelize from 'sequelize';
-import { sequelize as db } from '@db/index';
+// import { sequelize as db } from '@db/index';
+import db from '@db/index';
 // import Reports from '@db/report';
 import initAuth from '../../../services/firebaseService';
 
