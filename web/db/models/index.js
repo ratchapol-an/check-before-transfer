@@ -3,10 +3,11 @@
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
-const pg = require('pg');
 const basename = path.basename(__filename);
 const env = process.env.NEXT_PUBLIC_APP_STAGE || 'development';
 const config = require(__dirname + '/../../config/database.json')[env];
+const pg = require('pg');
+
 const db = {};
 
 console.log('env', env);
@@ -24,8 +25,8 @@ if (config.use_env_variable) {
     host: config.host,
     port: config.port,
     ssl: config.ssl,
-    dialect: config.dialect,
     dialectModule: pg,
+    dialect: config.dialect,
     dialectOptions: config.dialectOptions,
   });
 }

@@ -1,26 +1,15 @@
 /* eslint-disable */
 const withLess = require('@zeit/next-less');
-const nodeExternals = require('webpack-node-externals');
-// const withSass = require('@zeit/next-sass');
-// const lessToJS = require('less-vars-to-js');
-
-// const fs = require('fs');
-// const path = require('path');
-
-// // Where your antd-custom.less file lives
-// const themeVariables = lessToJS(fs.readFileSync(path.resolve(__dirname, './styles/custom.less'), 'utf8'));
 
 module.exports = withLess({
   target: 'serverless',
   lessLoaderOptions: {
     javascriptEnabled: true,
-    // modifyVars: themeVariables, // make your antd custom effective
   },
   webpack: (config, { isServer }) => {
-    config.externals.concat([nodeExternals()]);
+    config.externals.concat([{ pg: { commonjs2: 'pg' } }]);
     if (isServer) {
       const antStyles = /(antd\/.*?\/style).*(?<![.]js)$/;
-      // const antStyles = /antd\/.*?\/style.*?/;
       const origExternals = [...config.externals];
       config.externals = [
         (context, request, callback) => {

@@ -7,7 +7,6 @@
     "port": "25060",
     "ssl": true,
     "dialect": "postgres",
-    "dialectModule": "pg",
     "dialectOptions": {
       "ssl": { "require": true, "rejectUnauthorized": false }
     }
@@ -27,7 +26,6 @@
     "port": "25060",
     "ssl": true,
     "dialect": "postgres",
-    "dialectModule": "pg",
     "dialectOptions": {
       "ssl": { "require": true, "rejectUnauthorized": false }
     }
