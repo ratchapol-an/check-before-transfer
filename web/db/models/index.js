@@ -6,29 +6,13 @@ const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NEXT_PUBLIC_APP_STAGE || 'development';
 const config = require(__dirname + '/../../config/database.json')[env];
-const pg = require('pg');
+let db = {};
 
-const db = {};
-
-console.log('env', env);
-console.log('config', config);
-console.log('config.use_env_variable', config.use_env_variable);
 let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-  // sequelize = new Sequelize(config.database, config.username, config.password, config);
-  sequelize = new Sequelize({
-    username: config.username,
-    password: config.password,
-    database: config.database,
-    host: config.host,
-    port: config.port,
-    ssl: config.ssl,
-    dialectModule: pg,
-    dialect: config.dialect,
-    dialectOptions: config.dialectOptions,
-  });
+  sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
 fs.readdirSync(__dirname)
@@ -36,8 +20,9 @@ fs.readdirSync(__dirname)
     return file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js';
   })
   .forEach((file) => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    const model = require(`./${file}`)(sequelize, Sequelize.DataTypes);
     db[model.name] = model;
+    console.log('in', db);
   });
 
 Object.keys(db).forEach((modelName) => {
@@ -45,7 +30,7 @@ Object.keys(db).forEach((modelName) => {
     db[modelName].associate(db);
   }
 });
-
+console.log('db', db);
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

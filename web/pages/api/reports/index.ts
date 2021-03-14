@@ -1,12 +1,11 @@
+/* eslint-disable */
 import { NextApiRequest, NextApiResponse } from 'next';
-import Sequelize from 'sequelize';
-import { sequelize as db } from '@db/index';
-import Reports from '@db/report';
+import db from '@db/index';
 import { verifyIdToken } from 'next-firebase-auth';
 import initAuth, { getAuthorizationToken } from '../../../services/firebaseService';
 
 initAuth();
-
+type ReportModel = typeof db & { report: any };
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case 'DELETE':
@@ -27,7 +26,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const ReportModel = Reports(db, Sequelize);
+    const dbReport = db as ReportModel;
+    const ReportModel = dbReport.report;
 
     switch (req.method) {
       case 'DELETE': {
