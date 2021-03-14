@@ -2,7 +2,6 @@
 const withLess = require('@zeit/next-less');
 
 module.exports = withLess({
-  target: 'serverless',
   lessLoaderOptions: {
     javascriptEnabled: true,
   },

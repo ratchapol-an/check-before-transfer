@@ -1,52 +1,33 @@
-/* eslint-disable */
 import { NextApiRequest, NextApiResponse } from 'next';
-import db from '@db/index';
+import Sequelize from 'sequelize';
+import { sequelize as db } from '@db/index';
+import Reports from '@db/report';
 import { verifyIdToken } from 'next-firebase-auth';
 import initAuth, { getAuthorizationToken } from '../../../services/firebaseService';
 
-type ReportModel = typeof db & { Report: any };
-
 initAuth();
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
-    case 'PUT': {
-      res.status(200);
-      res.json('PUT TEST');
-      return;
-    }
-    case 'GET':
     case 'DELETE':
+    case 'GET':
       break;
-    default: {
-      res.status(403);
-      res.send('Forbidden!');
-      return;
-    }
+    default:
+      return res.status(403).send('Forbidden!');
   }
 
   const idToken = getAuthorizationToken(req);
-  if (idToken === '') {
-    res.status(401);
-    res.send('Unauthorized');
-    return;
-  }
+  if (idToken === '') return res.status(401).send('Unauthorized');
   let reporterID = '';
   try {
     const user = await verifyIdToken(idToken);
     reporterID = user.id as string;
   } catch (e) {
-    res.status(401);
-    res.send('Unauthorized');
-    return;
+    return res.status(401).send('Unauthorized');
   }
-  let resp: any = {};
-  let respCode = 200;
 
   try {
-    const dbReport = db as ReportModel;
-    console.log('dbReport');
-    const ReportModel = dbReport.Report;
+    const ReportModel = Reports(db, Sequelize);
 
     switch (req.method) {
       case 'DELETE': {
@@ -62,12 +43,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             },
           },
         );
-        respCode = 200;
-        resp = {
+        return res.status(200).json({
           reporterID,
           status: 'deleted',
-        };
-        break;
+        });
       }
       case 'GET': {
         const { offset, limit } = req.query;
@@ -80,28 +59,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           limit: parseInt(limit as string, 10) || 10,
           order: [['createdAt', 'DESC']],
         });
-
-        respCode = 200;
-        resp = {
+        return res.status(200).json({
           total: result.count,
           data: result.rows,
-        };
-        break;
+        });
       }
-      default: {
-        respCode = 403;
-        resp = {
-          message: 'Forbidden',
-        };
-        break;
-      }
+      default:
+        return res.status(403).send('Forbidden!');
     }
   } catch (e) {
     console.log(e);
-    res.status(500);
-    res.send('Internal error');
-    return;
+    return res.status(401).send('Unauthorized');
   }
-  res.status(respCode);
-  res.json(resp);
 };
+
+export default handler;
