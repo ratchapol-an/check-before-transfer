@@ -10,11 +10,11 @@ const withLess = require('@zeit/next-less');
 // const themeVariables = lessToJS(fs.readFileSync(path.resolve(__dirname, './styles/custom.less'), 'utf8'));
 
 module.exports = withLess({
+  target: 'serverless',
   lessLoaderOptions: {
     javascriptEnabled: true,
     // modifyVars: themeVariables, // make your antd custom effective
   },
-  target: 'serverless',
   webpack: (config, { isServer }) => {
     if (isServer) {
       const antStyles = /antd\/.*?\/style.*?/;
