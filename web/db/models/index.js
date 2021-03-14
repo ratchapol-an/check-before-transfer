@@ -12,7 +12,19 @@ let db = {};
 // const models = process.cwd() + '/db/models/' || __dirname;
 let sequelize;
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  sequelize = new Sequelize({
+    username: 'TINgkorpHROrpeABle',
+    password: 'fenb642pqfzo1xxl',
+    database: 'check_before_transfer',
+    host: 'sgp-cbtf-do-user-8849046-0.b.db.ondigitalocean.com',
+    port: '25060',
+    ssl: true,
+    dialect: 'postgres',
+    dialectModule: pg,
+    dialectOptions: {
+      ssl: { require: true, rejectUnauthorized: false },
+    },
+  });
 } else {
   console.log('in');
   sequelize = new Sequelize({
@@ -41,13 +53,23 @@ db.Report = require('./report')(sequelize, Sequelize.DataTypes);
 //     db[model.name] = model;
 //     console.log('in', db);
 //   });
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.');
+  })
+  .catch((err) => {
+    console.error('Unable to connect to the database:', err);
+  });
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
 });
+
 console.log('db', db);
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
