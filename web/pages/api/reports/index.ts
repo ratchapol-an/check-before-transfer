@@ -4,25 +4,31 @@ import db from '@db/index';
 import { verifyIdToken } from 'next-firebase-auth';
 import initAuth, { getAuthorizationToken } from '../../../services/firebaseService';
 
-initAuth();
 type ReportModel = typeof db & { Report: any };
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  initAuth();
   switch (req.method) {
     case 'DELETE':
     case 'GET':
       break;
-    default:
-      return res.status(403).send('Forbidden!');
+    default: {
+      res.status(403).send('Forbidden!');
+      return;
+    }
   }
 
   const idToken = getAuthorizationToken(req);
-  if (idToken === '') return res.status(401).send('Unauthorized');
+  if (idToken === '') {
+    res.status(401).send('Unauthorized');
+    return;
+  }
   let reporterID = '';
   try {
     const user = await verifyIdToken(idToken);
     reporterID = user.id as string;
   } catch (e) {
-    return res.status(401).send('Unauthorized');
+    res.status(401).send('Unauthorized');
+    return;
   }
 
   try {
@@ -44,10 +50,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
           },
         );
-        return res.status(200).json({
+        res.status(200).json({
           reporterID,
           status: 'deleted',
         });
+        return;
       }
       case 'GET': {
         const { offset, limit } = req.query;
@@ -60,17 +67,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           limit: parseInt(limit as string, 10) || 10,
           order: [['createdAt', 'DESC']],
         });
-        return res.status(200).json({
+        res.status(200).json({
           total: result.count,
           data: result.rows,
         });
+        return;
       }
-      default:
-        return res.status(403).send('Forbidden!');
+      default: {
+        res.status(403).send('Forbidden!');
+        return;
+      }
     }
   } catch (e) {
     console.log(e);
-    return res.status(401).send('Unauthorized');
+    res.status(401).send('Unauthorized');
+    return;
   }
 };
 
