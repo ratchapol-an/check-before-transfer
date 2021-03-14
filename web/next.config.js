@@ -6,8 +6,15 @@ module.exports = withLess({
   lessLoaderOptions: {
     javascriptEnabled: true,
   },
-  webpack: (config, { isServer }) => {
-    config.externals.concat([{ pg: { commonjs2: 'pg' } }]);
+  webpack: (config, { isServer, webpack }) => {
+    config.plugins.push(new webpack.IgnorePlugin(/^pg-native$/));
+    config.node = {
+      ...(config.node || {}),
+      net: 'empty',
+      tls: 'empty',
+      dns: 'empty',
+      fs: 'empty',
+    };
     if (isServer) {
       const antStyles = /(antd\/.*?\/style).*(?<![.]js)$/;
       const origExternals = [...config.externals];
