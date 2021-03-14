@@ -26,13 +26,16 @@
     "null-loader": "^4.0.1",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
+    "pg-native": "^3.0.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-firebaseui": "^4.1.0",
     "react-responsive": "^8.2.0",
     "request": "^2.88.2",
     "sequelize": "^6.5.0",
-    "uuid": "^8.3.2"
+    "sequelize-cli": "^6.2.0",
+    "uuid": "^8.3.2",
+    "webpack-node-externals": "^2.5.2"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^3.0.3",
