@@ -11,7 +11,7 @@ const withLess = require('@zeit/next-less');
 // const themeVariables = lessToJS(fs.readFileSync(path.resolve(__dirname, './styles/custom.less'), 'utf8'));
 
 module.exports = withLess({
-  target: 'experimental-serverless-trace',
+  target: 'serverless',
   lessLoaderOptions: {
     javascriptEnabled: true,
     // modifyVars: themeVariables, // make your antd custom effective

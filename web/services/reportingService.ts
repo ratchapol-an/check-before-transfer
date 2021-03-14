@@ -1,4 +1,4 @@
-import Report, { mockReport } from 'models/Report';
+import Report from 'models/Report';
 import SearchBy from 'models/searchBy';
 import axios from 'axios';
 import { PaginationConfig } from 'antd/lib/pagination';
