@@ -47,6 +47,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       order: [['createdAt', 'DESC']],
     });
     const totalReport = result.count;
+    if (result.count === 0) return res.status(200).send(null);
+
     let totalDamagedPrice = 0;
     result.rows.forEach((r) => {
       totalDamagedPrice += r.getDataValue('amount');
