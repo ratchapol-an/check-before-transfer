@@ -15,8 +15,8 @@ const API_HOST =
 const API_FIREBASE_HOST =
   process.env.NEXT_PUBLIC_APP_STAGE === 'production'
     ? process.env.NEXT_PUBLIC_HOST_CLOUDFUNCTION_URL
-    : 'http://localhost:5001';
-// axios.defaults.baseURL = `${API_HOST}/check-before-transfer/asia-southeast2/api`;\
+    : 'http://localhost:5001/check-before-transfer/asia-southeast2';
+
 axios.defaults.baseURL = `${API_HOST}/api`;
 
 // PROD URL
@@ -153,7 +153,7 @@ export const getReportById = async (id: string, token: string): Promise<Report |
   return resp ? resp.data : null;
 };
 
-export const apiUploadFile = `${API_FIREBASE_HOST}/check-before-transfer/asia-southeast2/api/file/upload`;
+export const apiUploadFile = `${API_FIREBASE_HOST}/api/file/upload`;
 
 export const deleteFile = async (dirName: string, fileName: string, token: string) => {
   axios
@@ -165,7 +165,7 @@ export const deleteFile = async (dirName: string, fileName: string, token: strin
         dirName,
         fileName,
       },
-      baseURL: `${API_FIREBASE_HOST}/check-before-transfer/asia-southeast2`,
+      baseURL: `${API_FIREBASE_HOST}`,
     })
     .then(({ data }) => {
       console.log(data);
