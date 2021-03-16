@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { Button, Layout, Menu, Space } from 'antd';
 import Container from '@components/Container';
 import Image from 'next/image';
@@ -37,8 +36,7 @@ const Header: React.FunctionComponent = () => {
     router.push('/user/profile');
   };
   const handleLogout = async () => {
-    await auth.signOut();
-    router.push('/');
+    router.push('/user/logout');
   };
   useEffect(() => {
     auth.getIdToken().then((token) => {

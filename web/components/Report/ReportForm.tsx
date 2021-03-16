@@ -185,12 +185,12 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
           xs: { span: 6 },
         }}
       >
-        <InputNumber
+        <InputNumber<number>
           precision={2}
           min={0}
           style={{ width: '100%' }}
           formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          // parser={(value) => (value ? value.replace(/(,*)/g, '') : '')}
+          parser={(value) => (value ? Number.parseInt(value.replace(/(,*)/g, ''), 10) : 0)}
           disabled={viewOnly}
         />
       </Form.Item>
