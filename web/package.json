@@ -37,7 +37,6 @@
     "webpack-node-externals": "^2.5.2"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "^3.0.3",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/node": "^14.14.22",
     "@types/react-responsive": "^8.0.2",

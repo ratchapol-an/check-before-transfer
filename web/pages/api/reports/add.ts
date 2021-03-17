@@ -3,6 +3,7 @@ import Sequelize from 'sequelize';
 import { sequelize as db } from '@db/index';
 import Reports from '@db/report';
 import { verifyIdToken } from 'next-firebase-auth';
+import Report from '@models/Report';
 import initAuth, { getAuthorizationToken } from '../../../services/firebaseService';
 
 initAuth();
@@ -23,9 +24,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const ReportModel = Reports(db, Sequelize);
 
-    const report = req.body;
+    const report = req.body as Report;
     const resp = await ReportModel.create({
-      name: report.name,
+      name: report.name?.trim(),
       amount: report.amount,
       eventDetail: report.eventDetail,
       reporterID,
@@ -33,9 +34,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       productType: report.productType,
       productLink: report.productLink,
       bankCode: report.bankCode,
-      bankAccountNo: report.bankAccountNo,
-      phoneNumber: report.phoneNumber,
-      idNumber: report.idNumber,
+      bankAccountNo: report.bankAccountNo?.trim().replaceAll('-', ''),
+      phoneNumber: report.phoneNumber?.trim().replaceAll('-', ''),
+      idNumber: report.idNumber?.trim().replaceAll('-', ''),
       eventDate: report.eventDate,
       status: 1,
       attachedFiles: report.attachedFiles,

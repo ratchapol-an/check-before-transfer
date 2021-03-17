@@ -8,7 +8,7 @@ initAuth();
 enum SearchField {
   Payment = 'paymentMethod',
   PhoneNumber = 'phoneNumber',
-  nationalID = 'idNumber',
+  NationalID = 'idNumber',
   Name = 'name',
 }
 
@@ -19,7 +19,7 @@ const getSearchBy = (searchBy: string): string => {
     case 'phone':
       return SearchField.PhoneNumber;
     case 'id-number':
-      return SearchField.nationalID;
+      return SearchField.NationalID;
     case 'name':
       return SearchField.Name;
     default:
@@ -34,8 +34,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   console.log(q, by);
 
   const searchBy = getSearchBy(by as string);
-
+  let searchQuery = typeof q === 'string' ? q : q[0];
   if (searchBy === '') return res.status(404).send('Missing search by');
+  if (searchBy !== SearchField.Name) {
+    searchQuery = searchQuery.replace(/\s|-/g, '');
+  }
 
   try {
     const ReportModel = Reports(db, Sequelize);
