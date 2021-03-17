@@ -63,19 +63,18 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchValue, searc
 export const getServerSideProps = withAuthUserTokenSSR()(
   async ({ query, AuthUser }: SSRPropsContext<ParsedUrlQuery>): Promise<GetServerSidePropsResult<ResultsProps>> => {
     const token = await AuthUser.getIdToken();
-    console.log('token', token);
+
     const { q, by } = query;
-    const searchValue = typeof q === 'string' ? q : '';
+    const searchValue = typeof q === 'string' ? q.trim() : '';
     const searchBy = typeof by === 'string' ? (by as SearchBy) : 'bank-account';
     let searchResult: SearchResult | null = null;
     if (searchValue) {
       try {
         searchResult = await search(searchValue, searchBy);
       } catch (e) {
-        console.log(e);
+        searchResult = null;
       }
     }
-    console.log('searchResult', searchResult);
 
     return {
       props: {

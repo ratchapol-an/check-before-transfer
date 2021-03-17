@@ -31,7 +31,7 @@ export interface SearchResult {
 export const search = async (value: string, by: SearchBy): Promise<SearchResult> => {
   const { data } = await axios.get<SearchResult>('/reports/get', {
     params: {
-      q: value,
+      q: value.trim(),
       by,
     },
     // timeout: 1000,

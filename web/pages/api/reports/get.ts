@@ -12,7 +12,7 @@ enum SearchField {
   Name = 'name',
 }
 
-const getSearchQuery = (searchBy: string): string => {
+const getSearchBy = (searchBy: string): string => {
   switch (searchBy) {
     case 'bank-account':
       return SearchField.Payment;
@@ -33,15 +33,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { q, by } = req.query;
   console.log(q, by);
 
-  const searchQuery = getSearchQuery(by as string);
+  const searchBy = getSearchBy(by as string);
 
-  if (searchQuery === '') return res.status(404).send('Missing search by');
+  if (searchBy === '') return res.status(404).send('Missing search by');
 
   try {
     const ReportModel = Reports(db, Sequelize);
     const result = await ReportModel.findAndCountAll({
       where: {
-        [searchQuery]: q,
+        [searchBy]: q,
         isDeleted: false,
       },
       order: [['createdAt', 'DESC']],
