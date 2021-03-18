@@ -22,6 +22,7 @@
     "moment": "^2.29.1",
     "next": "10.0.5",
     "next-firebase-auth": "^0.13.0-alpha.0",
+    "nextjs-progressbar": "^0.0.8",
     "node-sass": "^5.0.0",
     "null-loader": "^4.0.1",
     "pg": "^8.5.1",
