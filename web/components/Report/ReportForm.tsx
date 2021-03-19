@@ -8,6 +8,7 @@ import { BasedReport, UploadedFile } from '@models/Report';
 import productTypeCaptions from '@models/productTypeCaptions';
 import banks from '@models/banks';
 import ReportStatus from '@models/ReportStatus';
+import InputMask from '@components/InputMask';
 
 const { Option } = Select;
 
@@ -123,7 +124,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
               { pattern: /^[\d-]*\d[\d-]*$/, message: 'เลขบัญชีธนาคารไม่ถูกต้อง' },
             ]}
           >
-            <Input type="tel" maxLength={20} disabled={viewOnly} />
+            <Input type="tel" maxLength={20} readOnly={viewOnly} />
           </Form.Item>
         </>
       )}
@@ -134,7 +135,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
         required={paymentMethod === PaymentMethod.BankAccountTransfer}
         rules={[{ required: paymentMethod === PaymentMethod.BankAccountTransfer, message: 'กรุุณากรอกชื่อบัญชี' }]}
       >
-        <Input type="text" maxLength={255} disabled={viewOnly} />
+        <Input type="text" maxLength={255} readOnly={viewOnly} placeholder="โดยไม่มีคำนำหน้า เช่น สมชาย ใจดี" />
       </Form.Item>
       <Form.Item
         name="phoneNumber"
@@ -151,10 +152,9 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
               return Promise.resolve();
             },
           }),
-          { pattern: /^[\d-]*\d[\d-]*$/, message: 'เบอร์โทรศัพท์มือถือไม่ถูกต้อง' },
         ]}
       >
-        <Input type="tel" maxLength={13} disabled={viewOnly} />
+        <InputMask type="tel" readOnly={viewOnly} mask="999-999-9999" placeholder="___-___-_____" />
       </Form.Item>
       <Form.Item
         name="idNumber"
@@ -171,10 +171,10 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
               return Promise.resolve();
             },
           }),
-          { pattern: /^[\d-]*\d[\d-]*$/, message: 'เลขประจำตัวประชาชนไม่ถูกต้อง' },
         ]}
       >
-        <Input type="tel" maxLength={17} disabled={viewOnly} />
+        <InputMask type="tel" readOnly={viewOnly} mask="9 9999 99999 99 9" placeholder="_ ____ _____ __ _" />
+        {/* <Input type="tel" maxLength={17} readOnly={viewOnly} /> */}
       </Form.Item>
       <Form.Item
         name="amount"
@@ -191,7 +191,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
           style={{ width: '100%' }}
           formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           parser={(value) => (value ? Number.parseInt(value.replace(/(,*)/g, ''), 10) : 0)}
-          disabled={viewOnly}
+          readOnly={viewOnly}
         />
       </Form.Item>
       <Form.Item
@@ -220,7 +220,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
         <Input
           type="url"
           placeholder="ลิงค์ไปยังสินค้าหรือบริการ เช่น http://www.cheatshop.com/example/1234"
-          disabled={viewOnly}
+          readOnly={viewOnly}
         />
       </Form.Item>
       <Form.Item
@@ -229,7 +229,7 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
         rules={[{ required: true, message: 'กรุณากรอกรายละเอียดของเหตุการณ์' }]}
         hasFeedback
       >
-        <Input.TextArea disabled={viewOnly} placeholder="เล่ารายละเอียดว่าโดนโกงอย่างไร" />
+        <Input.TextArea readOnly={viewOnly} placeholder="เล่ารายละเอียดว่าโดนโกงอย่างไร" />
       </Form.Item>
       <Form.Item label="หลักฐานประกอบ" required>
         <Form.Item

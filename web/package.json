@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.4.0",
+    "@types/react-input-mask": "^3.0.0",
     "@types/sequelize": "^4.28.9",
     "@zeit/next-less": "^1.0.1",
     "antd": "^4.11.1",
@@ -30,6 +31,7 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-firebaseui": "^4.1.0",
+    "react-input-mask": "^2.0.4",
     "react-responsive": "^8.2.0",
     "request": "^2.88.2",
     "sequelize": "^6.5.0",
