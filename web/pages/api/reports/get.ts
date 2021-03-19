@@ -47,7 +47,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         [searchBy]: q,
         isDeleted: false,
       },
-      order: [['createdAt', 'DESC']],
+      order: [['eventDate', 'DESC']],
     });
     const totalReport = result.count;
     if (result.count === 0) return res.status(200).send(null);
