@@ -19,9 +19,9 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "TINgkorpHROrpeABle",
-    "password": "fenb642pqfzo1xxl",
-    "database": "check_before_transfer",
+    "username": "cVpnJCyHaVfQZDpgGiwFRexlIC",
+    "password": "aynarg9jbz2l3db9",
+    "database": "check_before_transfer_prod",
     "host": "sgp-cbtf-do-user-8849046-0.b.db.ondigitalocean.com",
     "port": "25060",
     "ssl": true,
