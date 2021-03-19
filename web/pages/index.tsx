@@ -9,7 +9,6 @@ import './index.less';
 
 export const Home: FunctionComponent = () => {
   const { Content, Footer } = Layout;
-  console.log('render home');
   return (
     <>
       <Head>
