@@ -44,6 +44,7 @@ const insert = async () => {
 
   for (i = 0; i < rawData.length; i++) {
     const row = rawData[i];
+
     const bankRef = await mapBankName(row["ธนาคาร"]);
     const productTypeRef = row["สินค้า/บริการ"];
     let bankAccountNo = row["เลขบัญชี"];
@@ -75,6 +76,7 @@ const insert = async () => {
               }
               paymentMethod = paymentMethodCaptions["True Wallet"];
             }
+            break;
           case "พร้อมเพย์ (PromptPay)": {
             if (row["เลขบัญชี"].length > 10) {
               idNumber = row["เลขบัญชี"];
@@ -82,12 +84,14 @@ const insert = async () => {
               phoneNumber = `0${row["เลขบัญชี"]}`;
             }
             paymentMethod = paymentMethodCaptions["พร้อมเพย์"];
+            break;
           }
           default:
         }
       }
       bankAccountNo = "";
     }
+
     const report = {
       name: row["ชื่อคนขาย"]
         ? row["ชื่อคนขาย"].replace(/(?:\r\n|\r|\n)/g, "")
@@ -116,7 +120,7 @@ const insert = async () => {
     } catch (e) {
       console.log(e);
     }
-    await sleep(300);
+    // await sleep(100);
   }
 };
 
