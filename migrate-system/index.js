@@ -1,11 +1,14 @@
 const XLSX = require("xlsx");
-const _ = require("lodash");
-const axios = require("axios");
 const dayjs = require("dayjs");
 const { mapBankName } = require("./service");
 const customParseFormat = require("dayjs/plugin/customParseFormat");
+const Sequelize = require("sequelize");
+const db = require("./db/models/index").sequelize;
+const Reports = require("./db/models/report");
+
 dayjs.extend(customParseFormat);
 require("dayjs/locale/th");
+
 const workbook = XLSX.readFile("FIRST2000.xlsx");
 const sheetName = workbook.SheetNames[0];
 
@@ -31,13 +34,15 @@ const productTypeCaptions = {
   "ลงทุน/ออมเงิน": 6,
   หลอกลวงเชิงบุคคล: 7,
 };
-const arr = new Array(20).fill(1);
+
 const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 const insert = async () => {
-  for (i = 0; i <= rawData.length; i++) {
+  const ReportModel = Reports(db, Sequelize);
+
+  for (i = 0; i < rawData.length; i++) {
     const row = rawData[i];
     const bankRef = await mapBankName(row["ธนาคาร"]);
     const productTypeRef = row["สินค้า/บริการ"];
@@ -59,26 +64,27 @@ const insert = async () => {
       paymentMethod = paymentMethodCaptions["โอนเงินผ่านบัญชีธนาคาร"];
     }
     if (bankRef.bankCode === undefined || bankRef.bankCode == "") {
-      if (bankRef.ref === "") return;
-      switch (bankRef.ref) {
-        case "True Wallet":
-          if (row["เลขบัญชี"].length > 13) return;
-          if (row["เลขบัญชี"].length > 10) {
-            idNumber = row["เลขบัญชี"];
-          } else {
-            phoneNumber = `0${row["เลขบัญชี"]}`;
+      if (bankRef.ref !== "") {
+        switch (bankRef.ref) {
+          case "True Wallet":
+            if (row["เลขบัญชี"].length <= 13) {
+              if (row["เลขบัญชี"].length > 10) {
+                idNumber = row["เลขบัญชี"];
+              } else {
+                phoneNumber = `0${row["เลขบัญชี"]}`;
+              }
+              paymentMethod = paymentMethodCaptions["True Wallet"];
+            }
+          case "พร้อมเพย์ (PromptPay)": {
+            if (row["เลขบัญชี"].length > 10) {
+              idNumber = row["เลขบัญชี"];
+            } else {
+              phoneNumber = `0${row["เลขบัญชี"]}`;
+            }
+            paymentMethod = paymentMethodCaptions["พร้อมเพย์"];
           }
-          paymentMethod = paymentMethodCaptions["True Wallet"];
-        case "พร้อมเพย์ (PromptPay)": {
-          if (row["เลขบัญชี"].length > 10) {
-            idNumber = row["เลขบัญชี"];
-          } else {
-            phoneNumber = `0${row["เลขบัญชี"]}`;
-          }
-          paymentMethod = paymentMethodCaptions["พร้อมเพย์"];
+          default:
         }
-        default:
-          break;
       }
       bankAccountNo = "";
     }
@@ -90,110 +96,28 @@ const insert = async () => {
       eventDetail: row["รายละเอียดเพิ่มเติม"]
         ? row["รายละเอียดเพิ่มเติม"].replace(/(?:\r\n|\r|\n)/g, "")
         : "",
+      reporterID: "oNTiaV3zUhfeP4veXvsbJ2aCXf52",
       paymentMethod: paymentMethod,
       productType: productType,
       productLink: "",
-      status: 1,
       bankCode: bankCode,
       bankAccountNo: bankAccountNo,
       phoneNumber: phoneNumber,
       idNumber: idNumber,
       eventDate: eventDate,
+      status: 1,
       attachedFiles: {},
+      isDeleted: false,
     };
+
     try {
-      const { data } = await axios.post(
-        "http://localhost:3000/api/reports/add",
-        report,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(data);
-    } catch (error) {
-      console.log({ ...error });
+      const resp = await ReportModel.create(report);
+      console.log(resp.toJSON());
+    } catch (e) {
+      console.log(e);
     }
-    await sleep(1000);
+    await sleep(300);
   }
 };
+
 insert();
-// rawData.forEach(async (row) => {
-//   const bankRef = mapBankName(row["ธนาคาร"]);
-//   const productTypeRef = row["สินค้า/บริการ"];
-//   let bankAccountNo = row["เลขบัญชี"];
-//   let phoneNumber = "";
-//   let bankCode = "";
-//   let idNumber = "";
-//   let paymentMethod = paymentMethodCaptions["อื่นๆ"];
-//   const eventDate = row["วันที่รายงาน"]
-//     ? dayjs(`${row["วันที่รายงาน"].replace(/\s/g, "")}`, "DD-MM-YYYY").format(
-//         "YYYY-MM-DDTHH:mm:ss[Z]"
-//       )
-//     : "";
-//   const productType = productTypeCaptions[productTypeRef]
-//     ? productTypeCaptions[productTypeRef]
-//     : productTypeCaptions["อื่นๆ"];
-//   if (bankRef.bankCode !== undefined && bankRef.bankCode !== "") {
-//     bankCode = bankRef.bankCode;
-//     paymentMethod = paymentMethodCaptions["โอนเงินผ่านบัญชีธนาคาร"];
-//   }
-//   if (bankRef.bankCode === undefined || bankRef.bankCode == "") {
-//     if (bankRef.ref === "") return;
-//     switch (bankRef.ref) {
-//       case "True Wallet":
-//         if (row["เลขบัญชี"].length > 13) return;
-//         if (row["เลขบัญชี"].length > 10) {
-//           idNumber = row["เลขบัญชี"];
-//         } else {
-//           phoneNumber = `0${row["เลขบัญชี"]}`;
-//         }
-//         paymentMethod = paymentMethodCaptions["True Wallet"];
-//       case "พร้อมเพย์ (PromptPay)": {
-//         if (row["เลขบัญชี"].length > 10) {
-//           idNumber = row["เลขบัญชี"];
-//         } else {
-//           phoneNumber = `0${row["เลขบัญชี"]}`;
-//         }
-//         paymentMethod = paymentMethodCaptions["พร้อมเพย์"];
-//       }
-//       default:
-//         break;
-//     }
-//     bankAccountNo = "";
-//   }
-//   const report = {
-//     name: row["ชื่อคนขาย"]
-//       ? row["ชื่อคนขาย"].replace(/(?:\r\n|\r|\n)/g, "")
-//       : "",
-//     amount: parseFloat(row["ยอดเงิน"].replaceAll(",", "")),
-//     eventDetail: row["รายละเอียดเพิ่มเติม"]
-//       ? row["รายละเอียดเพิ่มเติม"].replace(/(?:\r\n|\r|\n)/g, "")
-//       : "",
-//     paymentMethod: paymentMethod,
-//     productType: productType,
-//     productLink: "",
-//     status: 1,
-//     bankCode: bankCode,
-//     bankAccountNo: bankAccountNo,
-//     phoneNumber: phoneNumber,
-//     idNumber: idNumber,
-//     eventDate: eventDate,
-//     attachedFiles: {},
-//   };
-//   try {
-//     const { data } = await axios.post(
-//       "http://localhost:3000/api/reports/add",
-//       report,
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-//     // console.log(data);
-//   } catch (error) {
-//     console.log({ ...error });
-//   }
-// });
