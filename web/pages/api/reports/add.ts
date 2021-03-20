@@ -3,7 +3,9 @@ import Sequelize from 'sequelize';
 import { sequelize as db } from '@db/index';
 import Reports from '@db/report';
 import { verifyIdToken } from 'next-firebase-auth';
+
 import Report from '@models/Report';
+
 import initAuth, { getAuthorizationToken } from '../../../services/firebaseService';
 
 initAuth();
@@ -20,7 +22,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   } catch (e) {
     return res.status(401).send('Unauthorized');
   }
-
   try {
     const ReportModel = Reports(db, Sequelize);
 

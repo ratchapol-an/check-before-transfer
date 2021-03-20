@@ -67,6 +67,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
   authPageURL: `/user/login?signInSuccessUrl=${encodeURIComponent('/report')}`,
 })(async ({ AuthUser }) => {
   const token = await AuthUser.getIdToken();
+  console.log(token);
 
   if (!AuthUser.emailVerified) {
     return {
