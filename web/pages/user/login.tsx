@@ -14,6 +14,7 @@ const LoginPage: FunctionComponent = () => {
   // https://github.com/firebase/firebaseui-web/issues/213
   const [renderAuth, setRenderAuth] = useState(false);
   const { Content } = Layout;
+  console.log(firebase.auth);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -22,12 +23,12 @@ const LoginPage: FunctionComponent = () => {
   }, []);
 
   const uiConfig: firebaseui.auth.Config = {
-    signInFlow: 'popup',
+    signInFlow: firebase.auth().isSignInWithEmailLink(window.location.href) ? 'redirect' : 'popup',
     // signInSuccessUrl: '/',
     signInOptions: [
       {
         provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        // signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
+        signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
         requireDisplayName: false,
       },
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -35,6 +36,9 @@ const LoginPage: FunctionComponent = () => {
     ],
     callbacks: {
       signInSuccessWithAuthResult(authResult, redirectUrl) {
+        console.log('authResult', authResult);
+        console.log('redirectUrl', redirectUrl);
+
         if (authResult.additionalUserInfo.isNewUser) {
           authResult.user.sendEmailVerification();
         }
@@ -76,7 +80,7 @@ const LoginPage: FunctionComponent = () => {
 };
 
 export const getServerSideProps = withAuthUserTokenSSR({
-  // whenAuthed: AuthAction.REDIRECT_TO_APP,
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
 })(async () => {
   return {
     props: {},
