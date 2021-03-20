@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Layout, Typography, Breadcrumb, Select } from 'antd';
+import { Layout, Typography, Breadcrumb, Select, TablePaginationConfig } from 'antd';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import { AuthAction, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
@@ -13,11 +13,17 @@ import './admin.less';
 import { isAdminRole } from 'utils';
 
 type AdminPageProps = { token: string; email: string };
-
+type ReportPageConfig = {
+  reportStatus: ReportStatus;
+  currentPage: number;
+};
 export const AdminPage: React.FunctionComponent<AdminPageProps> = ({ token, email }) => {
   const { Content, Footer } = Layout;
   const { Title } = Typography;
-  const [reportStatus, setReportStatus] = useState<ReportStatus | 0>(ReportStatus.WaitingForReview);
+  const [reportPageConfig, setReportPageConfig] = useState<ReportPageConfig>({
+    reportStatus: ReportStatus.WaitingForReview,
+    currentPage: 1,
+  });
   const handleDeleteReport = useCallback(
     async (reportId: string) => {
       await deleteReport(reportId, token);
@@ -27,13 +33,17 @@ export const AdminPage: React.FunctionComponent<AdminPageProps> = ({ token, emai
 
   const handleLoadReport = useCallback(
     async (pagination: PaginationConfig): Promise<PaginatedReports> => {
-      return getReportsByStatus(reportStatus, pagination, token);
+      return getReportsByStatus(reportPageConfig.reportStatus, pagination, token);
     },
-    [reportStatus, token],
+    [reportPageConfig, token],
   );
 
   const handleReportStatusChange = (value: ReportStatus) => {
-    setReportStatus(value);
+    setReportPageConfig({ reportStatus: value, currentPage: 1 });
+  };
+
+  const handleTableChange = ({ current = 1 }: TablePaginationConfig) => {
+    setReportPageConfig({ reportStatus: reportPageConfig.reportStatus, currentPage: current });
   };
 
   return (
@@ -56,7 +66,7 @@ export const AdminPage: React.FunctionComponent<AdminPageProps> = ({ token, emai
               <Title level={3} className="page-title">
                 รายงานทั้งหมด
               </Title>
-              <Select value={reportStatus} onChange={handleReportStatusChange} style={{ width: 160 }}>
+              <Select value={reportPageConfig.reportStatus} onChange={handleReportStatusChange} style={{ width: 160 }}>
                 <Select.Option value={ReportStatus.WaitingForReview}>{reportStatusCaptions[1]}</Select.Option>
                 <Select.Option value={ReportStatus.RequestMoreDocument}>{reportStatusCaptions[4]}</Select.Option>
                 <Select.Option value={ReportStatus.Approved}>{reportStatusCaptions[2]}</Select.Option>
@@ -64,7 +74,13 @@ export const AdminPage: React.FunctionComponent<AdminPageProps> = ({ token, emai
                 <Select.Option value={0}>ทั้งหมด</Select.Option>
               </Select>
             </div>
-            <ReportTable isAdmin onLoadReports={handleLoadReport} onDeleteReport={handleDeleteReport} />
+            <ReportTable
+              isAdmin
+              currentPage={reportPageConfig.currentPage}
+              onLoadReports={handleLoadReport}
+              onDeleteReport={handleDeleteReport}
+              onTableChange={handleTableChange}
+            />
           </Container>
         </Content>
       </Layout>

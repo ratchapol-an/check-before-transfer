@@ -1,12 +1,12 @@
 import Head from 'next/head';
-import { Card, Layout, Space, Typography, Breadcrumb } from 'antd';
+import { Card, Layout, Space, Typography, Breadcrumb, TablePaginationConfig } from 'antd';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import { AuthAction, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
 import ReportTable from '@components/Report/ReportTable';
 import { deleteReport, getReportsByUserId, PaginatedReports } from 'services/reportingService';
 import { PaginationConfig } from 'antd/lib/pagination';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import Link from 'next/link';
 
 type ProfilePageProps = { token: string; email: string };
@@ -14,7 +14,7 @@ type ProfilePageProps = { token: string; email: string };
 export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ token, email }) => {
   const { Content, Footer } = Layout;
   const { Title } = Typography;
-
+  const [currentPage, setCurrentPage] = useState(1);
   const handleDeleteReport = useCallback(
     async (reportId: string) => {
       await deleteReport(reportId, token);
@@ -29,6 +29,9 @@ export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ token, 
     [token],
   );
 
+  const handleTableChange = ({ current = 1 }: TablePaginationConfig) => {
+    setCurrentPage(currentPage);
+  };
   return (
     <>
       <Head>
@@ -51,7 +54,12 @@ export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ token, 
             <Card>
               <Space direction="vertical" style={{ width: '100%' }}>
                 <Title level={5}>รายงานของคุณ</Title>
-                <ReportTable onLoadReports={handleLoadReport} onDeleteReport={handleDeleteReport} />
+                <ReportTable
+                  currentPage={currentPage}
+                  onTableChange={handleTableChange}
+                  onLoadReports={handleLoadReport}
+                  onDeleteReport={handleDeleteReport}
+                />
               </Space>
             </Card>
           </Container>

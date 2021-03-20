@@ -12,21 +12,27 @@ import { PaginatedReports } from 'services/reportingService';
 import { formatAmount, formatDate } from 'utils';
 
 type ReportTableProps = {
+  currentPage: number;
   onDeleteReport: (reportId: string) => Promise<void>;
   onLoadReports: (pagination: PaginationConfig) => Promise<PaginatedReports>;
+  onTableChange: (tablePagination: TablePaginationConfig) => void;
   isAdmin?: boolean;
 };
 type ReportItem = Report;
 const pageSize = 7;
-const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport, onLoadReports, isAdmin }) => {
+const ReportTable: React.FunctionComponent<ReportTableProps> = ({
+  currentPage,
+  onDeleteReport,
+  onLoadReports,
+  isAdmin,
+  onTableChange,
+}) => {
   const [reports, setReports] = useState<ReportItem[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const loadReportsCallback = useCallback(async () => {
     setIsLoading(true);
     const response = await onLoadReports({ current: currentPage, pageSize });
-    console.log(response.data);
     setReports(response.data as ReportItem[]);
     setTotal(response.total);
     setIsLoading(false);
@@ -50,10 +56,6 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
     });
   };
 
-  const handleTableChange = ({ current = 1 }: TablePaginationConfig) => {
-    setCurrentPage(current);
-  };
-
   const pagination: TablePaginationConfig = {
     current: currentPage,
     showSizeChanger: false,
@@ -66,7 +68,7 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({ onDeleteReport
       rowKey={(report) => report.id}
       pagination={pagination}
       loading={isLoading}
-      onChange={handleTableChange}
+      onChange={onTableChange}
     >
       <Table.Column<ReportItem> title="รหัสรายงาน" dataIndex="id" key="id" />
       <Table.Column<ReportItem>

@@ -28,7 +28,7 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report, i
   const initialReport: ReportFormValues = {
     ...restReport,
     eventDate: moment(eventDate),
-    attachedFiles: attachedFiles
+    attachedFiles: attachedFiles?.files
       ? attachedFiles.files.map(
           (o, i) =>
             ({
@@ -45,9 +45,7 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report, i
         )
       : [],
   };
-  // https://firebasestorage.googleapis.com/v0/b/${imgMeta.bucket}/o/${encodeURIComponent(
-  //   //   imgMeta.name,
-  //   // )}?alt=media&token=${token}`,
+
   const handleConfirm = useCallback(
     async (updatingReport: Report) => {
       try {
@@ -90,7 +88,7 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report, i
                 <Link href="/">หน้าแรก</Link>
               </Breadcrumb.Item>
               <Breadcrumb.Item>
-                <Link href="/user/profile">ประวัติของคุณ</Link>
+                {isAdmin ? <Link href="/admin">จัดการรายงาน</Link> : <Link href="/user/profile">ประวัติของคุณ</Link>}
               </Breadcrumb.Item>
               <Breadcrumb.Item>รายงาน</Breadcrumb.Item>
             </Breadcrumb>
