@@ -5,12 +5,19 @@ import Reports from '@db/report';
 import { verifyIdToken } from 'next-firebase-auth';
 import firebaseAdmin from 'firebase-admin';
 import jwt from 'jsonwebtoken';
-import { TransactionalEmailsApi, TransactionalEmailsApiApiKeys } from 'sib-api-v3-typescript';
+import SibApiV3Sdk from 'sib-api-v3-sdk';
+// import SibApiV3Sdk from 'sib-api-v3-typescript';
+
 import initAuth, { getAuthorizationToken } from '../../../services/firebaseService';
 
-const transactionalEmailApi = new TransactionalEmailsApi();
-console.log(process.env.EMAIL_API_KEY);
-transactionalEmailApi.setApiKey(TransactionalEmailsApiApiKeys.apiKey, process.env.EMAIL_API_KEY || '');
+const defaultClient = SibApiV3Sdk.ApiClient.instance;
+
+const apiKey = defaultClient.authentications['api-key'];
+apiKey.apiKey = process.env.EMAIL_API_KEY || '';
+
+const transactionalEmailApi = new SibApiV3Sdk.TransactionalEmailsApi();
+
+// transactionalEmailApi.setApiKey(SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey, process.env.EMAIL_API_KEY || '');
 
 initAuth();
 
@@ -48,6 +55,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       },
     );
+
     if (reporter.email && status === 4) {
       const emailResp = await transactionalEmailApi.sendTransacEmail({
         to: [{ email: reporter.email }],
