@@ -4,8 +4,14 @@ import { sequelize as db } from '@db/index';
 import Reports from '@db/report';
 import { verifyIdToken } from 'next-firebase-auth';
 import jwt from 'jsonwebtoken';
+import { TransactionalEmailsApi, TransactionalEmailsApiApiKeys } from 'sib-api-v3-typescript';
 import initAuth, { getAuthorizationToken } from '../../../services/firebaseService';
 
+const transactionalEmailApi = new TransactionalEmailsApi();
+transactionalEmailApi.setApiKey(
+  TransactionalEmailsApiApiKeys.apiKey,
+  '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',
+);
 initAuth();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -39,6 +45,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       },
     );
+    // transactionalEmailApi.sendTransacEmail({to: [{ email: ''}], params: {reportLink: `https://check-before-transfer.vercel.app/report/${reportId}`}})
     return res.status(200).json({
       reportId,
     });
