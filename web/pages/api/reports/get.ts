@@ -6,7 +6,7 @@ import initAuth from '../../../services/firebaseService';
 
 initAuth();
 enum SearchField {
-  Payment = 'paymentMethod',
+  BankAccountNo = 'bankAccountNo',
   PhoneNumber = 'phoneNumber',
   NationalID = 'idNumber',
   Name = 'name',
@@ -15,7 +15,7 @@ enum SearchField {
 const getSearchBy = (searchBy: string): string => {
   switch (searchBy) {
     case 'bank-account':
-      return SearchField.Payment;
+      return SearchField.BankAccountNo;
     case 'phone':
       return SearchField.PhoneNumber;
     case 'id-number':
