@@ -36,12 +36,6 @@ const LoginPage: FunctionComponent = () => {
     ],
     callbacks: {
       signInSuccessWithAuthResult(authResult, redirectUrl) {
-        console.log('authResult', authResult);
-        console.log('redirectUrl', redirectUrl);
-
-        if (authResult.additionalUserInfo.isNewUser) {
-          authResult.user.sendEmailVerification();
-        }
         setTimeout(() => {
           window.location.href = `${
             process.env.NEXT_PUBLIC_APP_STAGE === 'production'
