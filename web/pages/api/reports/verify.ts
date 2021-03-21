@@ -6,7 +6,6 @@ import { verifyIdToken } from 'next-firebase-auth';
 import firebaseAdmin from 'firebase-admin';
 import jwt from 'jsonwebtoken';
 import SibApiV3Sdk from 'sib-api-v3-sdk';
-// import SibApiV3Sdk from 'sib-api-v3-typescript';
 
 import initAuth, { getAuthorizationToken } from '../../../services/firebaseService';
 
@@ -56,13 +55,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     );
 
-    if (reporter.email && status === 4) {
-      const emailResp = await transactionalEmailApi.sendTransacEmail({
-        to: [{ email: reporter.email }],
-        params: { reportLink: `https://check-before-transfer.vercel.app/report/${reportId}` },
-      });
-      console.log('emailResp', emailResp);
-    }
+    // if (reporter.email && status === 4) {
+    //   const emailResp = await transactionalEmailApi.sendTransacEmail({
+    //     to: [{ email: reporter.email }],
+    //     params: { reportLink: `https://check-before-transfer.vercel.app/report/${reportId}` },
+    //   });
+    //   console.log('emailResp', emailResp);
+    // }
     return res.status(200).json({
       reportId,
     });
