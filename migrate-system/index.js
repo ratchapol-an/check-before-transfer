@@ -94,7 +94,7 @@ const insert = async () => {
 
     const report = {
       name: row["ชื่อคนขาย"]
-        ? row["ชื่อคนขาย"].replace(/(?:\r\n|\r|\n)/g, "")
+        ? row["ชื่อคนขาย"].replace(/(?:\r\n|\r|\n)/g, "").replace("  ", " ")
         : "",
       amount: parseFloat(row["ยอดเงิน"].replaceAll(",", "")),
       eventDetail: row["รายละเอียดเพิ่มเติม"]

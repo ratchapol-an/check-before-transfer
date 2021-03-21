@@ -42,9 +42,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const ReportModel = Reports(db, Sequelize);
+    const { Op } = Sequelize;
+
     const result = await ReportModel.findAndCountAll({
       where: {
-        [searchBy]: q,
+        [searchBy]: {
+          [Op.like]: `%${searchQuery}%`,
+        },
         isDeleted: false,
       },
       order: [['eventDate', 'DESC']],
