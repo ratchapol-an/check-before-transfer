@@ -1,8 +1,11 @@
 import { Result, Button, Typography } from 'antd';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 const NoResults = () => {
   const { Paragraph, Text } = Typography;
+  const router = useRouter();
+  const onClickReportBtn = () => router.push('/report');
   return (
     <Result
       status="success"
@@ -12,7 +15,9 @@ const NoResults = () => {
         // <Button type="primary" key="console">
         //   รายงานกางโกง
         // </Button>,
-        <Button key="report">รายงานการโกง</Button>,
+        <Button key="report" onClick={onClickReportBtn}>
+          รายงานการโกง
+        </Button>,
       ]}
     >
       <div className="desc">
