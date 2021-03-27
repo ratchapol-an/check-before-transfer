@@ -1,10 +1,12 @@
 import Head from 'next/head';
-import { Button, Layout, Result } from 'antd';
+import { Button, Layout, Result, Space } from 'antd';
 import { FunctionComponent } from 'react';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import { withAuthUserTokenSSR, withAuthUser } from 'next-firebase-auth';
 import { useRouter } from 'next/router';
+
+import './thankyou.less';
 
 export const ThankYouPage: FunctionComponent = () => {
   const { Content, Footer } = Layout;
@@ -25,19 +27,22 @@ export const ThankYouPage: FunctionComponent = () => {
         <Header />
         <Content>
           <Container>
-            <Result
-              status="success"
-              title="ขอบคุณ! ท่านได้มีส่วนสำคัญในการทำให้มิจชาชีพ ไม่มีที่ยืนในสังคมไทย"
-              subTitle="หากท่านต้องการแก้ไข หรือต้องการส่งหลักฐานเพิ่มเติม สามารถทำได้ที่หน้าสมาชิก ระบบจะตรวจสอบ และแสดงผลทันทีที่รายงานของท่านได้รับการอนุมัติ"
-              extra={[
-                <Button type="primary" key="member" onClick={handleGoToProfileBtnClick}>
-                  ไปยังหน้าสมาชิก
-                </Button>,
-                <Button key="home" onClick={handleBackToHomeBtnClick}>
-                  กลับไปยังหน้าแรก
-                </Button>,
-              ]}
-            />
+            <Space direction="vertical" size="large">
+              <Result
+                status="success"
+                title="ขอบคุณ! ท่านได้มีส่วนสำคัญในการทำให้มิจชาชีพ ไม่มีที่ยืนในสังคมไทย"
+                subTitle="หากท่านต้องการแก้ไข หรือต้องการส่งหลักฐานเพิ่มเติม สามารถทำได้ที่หน้าสมาชิก ระบบจะตรวจสอบ และแสดงผลทันทีที่รายงานของท่านได้รับการอนุมัติ"
+                extra={[
+                  <Button type="primary" key="member" onClick={handleGoToProfileBtnClick}>
+                    ไปยังหน้าสมาชิก
+                  </Button>,
+                  <Button key="home" onClick={handleBackToHomeBtnClick}>
+                    กลับไปยังหน้าแรก
+                  </Button>,
+                ]}
+              />
+              <div className="ads ads-lb" />
+            </Space>
           </Container>
         </Content>
       </Layout>

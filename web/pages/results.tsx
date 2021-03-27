@@ -53,6 +53,9 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchValue, searc
             ) : (
               <NoResults />
             )}
+            <div className="ads ads-sky" />
+            <div className="ads ads-lb" />
+            <div className="ads ads-rec" />
           </Container>
         </Content>
       </Layout>
