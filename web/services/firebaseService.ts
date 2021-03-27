@@ -9,7 +9,7 @@ const initAuth = () => {
     logoutAPIEndpoint: '/api/logout',
     firebaseAdminInitConfig: {
       credential: {
-        projectId: 'whoscheat',
+        projectId: 'whoscheat-e2261',
         clientEmail: 'firebase-adminsdk-d9ngl@whoscheat-e2261.iam.gserviceaccount.com',
         privateKey: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') : '',
       },
@@ -18,7 +18,7 @@ const initAuth = () => {
     firebaseClientInitConfig: {
       apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '',
       authDomain: 'whoscheat-e2261.firebaseapp.com',
-      projectId: 'whoscheat',
+      projectId: 'whoscheat-e2261',
     },
     cookies: {
       name: 'whoscheat',
