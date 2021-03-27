@@ -10,7 +10,7 @@ const API_HOST =
 const API_FIREBASE_HOST =
   process.env.NEXT_PUBLIC_APP_STAGE === 'production'
     ? process.env.NEXT_PUBLIC_HOST_CLOUDFUNCTION_URL
-    : 'http://localhost:5001/whoscheat/asia-southeast2';
+    : 'http://localhost:5001/whoscheat-e2261/asia-southeast2';
 
 axios.defaults.baseURL = `${API_HOST}/api`;
 
