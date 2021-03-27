@@ -4,11 +4,12 @@ import axios from 'axios';
 import { PaginationConfig } from 'antd/lib/pagination';
 import ReportStatus from '@models/ReportStatus';
 
-const API_HOST = process.env.NEXT_PUBLIC_APP_STAGE === 'production' ? process.env.HOST_URL : 'http://localhost:3000';
+const API_HOST =
+  process.env.NEXT_PUBLIC_APP_STAGE === 'production' ? process.env.NEXT_PUBLIC_HOST_URL : 'http://localhost:3000';
 
 const API_FIREBASE_HOST =
   process.env.NEXT_PUBLIC_APP_STAGE === 'production'
-    ? process.env.HOST_CLOUDFUNCTION_URL
+    ? process.env.NEXT_PUBLIC_HOST_CLOUDFUNCTION_URL
     : 'http://localhost:5001/whoscheat/asia-southeast2';
 
 axios.defaults.baseURL = `${API_HOST}/api`;

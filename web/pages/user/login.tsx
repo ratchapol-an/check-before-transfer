@@ -37,7 +37,9 @@ const LoginPage: FunctionComponent = () => {
       signInSuccessWithAuthResult(authResult, redirectUrl) {
         setTimeout(() => {
           window.location.href = `${
-            process.env.NEXT_PUBLIC_APP_STAGE === 'production' ? process.env.HOST_URL : 'http://localhost:3000'
+            process.env.NEXT_PUBLIC_APP_STAGE === 'production'
+              ? process.env.NEXT_PUBLIC_HOST_URL
+              : 'http://localhost:3000'
           }${redirectUrl || '/'}`;
           return false;
         }, 1500);
