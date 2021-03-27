@@ -14,7 +14,6 @@ const LoginPage: FunctionComponent = () => {
   // https://github.com/firebase/firebaseui-web/issues/213
   const [renderAuth, setRenderAuth] = useState(false);
   const { Content } = Layout;
-  console.log(firebase.auth);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -38,9 +37,7 @@ const LoginPage: FunctionComponent = () => {
       signInSuccessWithAuthResult(authResult, redirectUrl) {
         setTimeout(() => {
           window.location.href = `${
-            process.env.NEXT_PUBLIC_APP_STAGE === 'production'
-              ? process.env.NEXT_PUBLIC_HOST_URL
-              : 'http://localhost:3000'
+            process.env.NEXT_PUBLIC_APP_STAGE === 'production' ? process.env.HOST_URL : 'http://localhost:3000'
           }${redirectUrl || '/'}`;
           return false;
         }, 1500);
