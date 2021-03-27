@@ -16,7 +16,7 @@ const initAuth = () => {
       databaseURL: 'https://whoscheat-e2261.firebaseio.com',
     },
     firebaseClientInitConfig: {
-      apiKey: process.env.FIREBASE_API_KEY || '',
+      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '',
       authDomain: 'whoscheat-e2261.firebaseapp.com',
       projectId: 'whoscheat',
     },
