@@ -5,7 +5,8 @@ const path = require("path");
 const Sequelize = require("sequelize");
 const basename = path.basename(__filename);
 const env = process.env.NEXT_PUBLIC_APP_STAGE || "production";
-const config = require("../../config/database.json")[env];
+const config = require("../../config/database.js")[env];
+console.log(config);
 const db = {};
 
 let sequelize;

@@ -119,4 +119,8 @@ export const deleteFile = async (req: Request, res: Response): Promise<Response<
   }
 };
 
+export const ping = async (req: Request, res: Response): Promise<Response<any>> => {
+  return res.status(200).send('pong');
+};
+
 export default {};
