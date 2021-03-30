@@ -9,7 +9,7 @@ const Hero: React.FunctionComponent<React.HTMLAttributes<HTMLDivElement>> = ({ c
     <section className={clsx('hero', className)} {...rest}>
       <Space direction="vertical">
         <Title className="hero-title">
-          เช็ครายการโกง
+          เช็คคนโกง
           <br />
           ก่อนโอนเงิน
         </Title>
