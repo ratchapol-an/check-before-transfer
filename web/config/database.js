@@ -19,11 +19,11 @@ module.exports = {
     dialect: 'postgres',
   },
   production: {
-    username: 'Z14pKtrjGE',
-    password: 'ori6xlw9lc3ixsqz',
-    database: 'whoscheat',
-    host: 'whoscheat-do-user-8968763-0.b.db.ondigitalocean.com',
-    port: '25060',
+    username: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
+    host: process.env.DATABASE_HOST,
+    port: process.env.DATABASE_PORT,
     ssl: true,
     dialect: 'postgres',
     dialectOptions: {
