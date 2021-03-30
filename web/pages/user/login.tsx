@@ -14,7 +14,6 @@ const LoginPage: FunctionComponent = () => {
   // https://github.com/firebase/firebaseui-web/issues/213
   const [renderAuth, setRenderAuth] = useState(false);
   const { Content } = Layout;
-  console.log(firebase.auth);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

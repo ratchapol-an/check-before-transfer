@@ -4,7 +4,7 @@ import cors from 'cors';
 import dayjs from 'dayjs';
 import { firebaseFunction } from './services/firebase';
 import { createAdmin, getAdminInfo } from './services/admin';
-import { filesUpload, deleteFile } from './services/upload';
+import { filesUpload, deleteFile, ping } from './services/upload';
 import 'dayjs/locale/th';
 
 dayjs.locale('th');
@@ -29,6 +29,7 @@ app.post('/admin/create', createAdmin);
 app.get('/admin/:id', getAdminInfo);
 app.post('/file/upload', filesUpload);
 app.delete('/file', deleteFile);
+app.get('/ping', ping);
 
 // Expose Express API as a single Cloud Function:
 exports.api = firebaseFunction.https.onRequest(app);

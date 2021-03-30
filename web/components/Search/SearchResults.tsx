@@ -26,7 +26,7 @@ const SearchResults: React.FunctionComponent<SearchResultsProps> = ({
       <Card className="search-result-item">
         {lastReport.name && <Title level={4}>{lastReport.name}</Title>}
         <Row gutter={16}>
-          <Col sm={12} xs={12}>
+          <Col xs={12} sm={12}>
             <Statistic title="จำนวนครั้งที่ถูกรายงาน" value={totalNumberOfReports} />
           </Col>
           <Col sm={12} xs={12}>

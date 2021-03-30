@@ -4,23 +4,15 @@ import axios from 'axios';
 import { PaginationConfig } from 'antd/lib/pagination';
 import ReportStatus from '@models/ReportStatus';
 
-// HOW TO RUN LOCAL (Node 12 Only)
-// - cd function
-// - nvm use 12
-// - yarn build & yarn serve
-
 const API_HOST =
   process.env.NEXT_PUBLIC_APP_STAGE === 'production' ? process.env.NEXT_PUBLIC_HOST_URL : 'http://localhost:3000';
 
 const API_FIREBASE_HOST =
   process.env.NEXT_PUBLIC_APP_STAGE === 'production'
     ? process.env.NEXT_PUBLIC_HOST_CLOUDFUNCTION_URL
-    : 'http://localhost:5001/check-before-transfer/asia-southeast2';
+    : 'http://localhost:5001/whoscheat-e2261/asia-southeast2';
 
 axios.defaults.baseURL = `${API_HOST}/api`;
-
-// PROD URL
-// https://asia-southeast2-check-before-transfer.cloudfunctions.net
 
 export interface SearchResult {
   name: string;

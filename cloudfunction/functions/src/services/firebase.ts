@@ -4,7 +4,7 @@ import serviceAccount from './serviceAccountKey.json';
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as ServiceAccount),
-  storageBucket: 'check-before-transfer.appspot.com',
+  storageBucket: 'whoscheat-e2261.appspot.com',
 });
 
 export const firebaseFunction = functions.region('asia-southeast2');
