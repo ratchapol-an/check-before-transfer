@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useAuthUser } from 'next-firebase-auth';
 import { parseToken } from '../../utils';
+import DropdownMenu from './DropdownMenu';
 
 interface Role {
   admin: boolean;
@@ -66,7 +67,14 @@ const Header: React.FunctionComponent = () => {
             <Image width={197.15} height={45} alt="whoscheat" src="/logo3.png" />
           </a>
         </Link>
-        <Space direction="horizontal">
+        <DropdownMenu
+          isAuthenticated={!!auth.email}
+          onLoginBtnClick={handleLoginBtnClick}
+          onLogoutBtnClick={handleLoginBtnClick}
+          onProfileBtnClick={handleProfileBtnClick}
+          onReportBtnClick={handleReportBtnClick}
+        />
+        <Space direction="horizontal" className="large-screen-menu">
           {auth.email ? (
             <>
               <Button type="link" size="large" onClick={handleProfileBtnClick}>

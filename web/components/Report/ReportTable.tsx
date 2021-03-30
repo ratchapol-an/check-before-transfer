@@ -68,6 +68,7 @@ const ReportTable: React.FunctionComponent<ReportTableProps> = ({
       rowKey={(report) => report.id}
       pagination={pagination}
       loading={isLoading}
+      scroll={{ x: true }}
       onChange={onTableChange}
     >
       <Table.Column<ReportItem> title="รหัสรายงาน" dataIndex="id" key="id" />

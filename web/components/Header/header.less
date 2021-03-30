@@ -1,3 +1,4 @@
+@import '~antd/lib/style/themes/default.less';
 .header {
     padding: 0;
     box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
@@ -8,5 +9,18 @@
     }
     .header-logo-link {
         display: inline-flex;
+    }
+
+    .large-screen-menu {
+        display: none;
+    }
+
+    @media only screen and (min-width: @screen-md-min) {
+        .mobile-dropdown-menu {
+            display: none;
+        }
+        .large-screen-menu {
+            display: inline-flex;
+        }
     }
 }

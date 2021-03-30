@@ -92,7 +92,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
 })(async ({ AuthUser }) => {
   const token = await AuthUser.getIdToken();
-
+  console.log(token);
   if (!isAdminRole(token)) {
     return {
       redirect: {
