@@ -49,7 +49,7 @@ export const AdminPage: React.FunctionComponent<AdminPageProps> = ({ token, emai
   return (
     <>
       <Head>
-        <title>เช็คก่อนโอน</title>
+        <title>เช็คคนโกง</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="admin-page-layout layout-with-bg">
@@ -92,7 +92,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
 })(async ({ AuthUser }) => {
   const token = await AuthUser.getIdToken();
-  console.log(token);
+
   if (!isAdminRole(token)) {
     return {
       redirect: {

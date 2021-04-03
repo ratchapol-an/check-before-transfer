@@ -9,6 +9,7 @@ import { addReport } from 'services/reportingService';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import Link from 'next/link';
+import { KeywordsAndDescription } from '@components/Seo';
 
 interface ReportPageProps {
   token: string;
@@ -34,7 +35,8 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token }) => {
   return (
     <>
       <Head>
-        <title>เช็คก่อนโอน</title>
+        <title>เช็คคนโกง</title>
+        <KeywordsAndDescription />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="report-page-layout layout-with-bg">

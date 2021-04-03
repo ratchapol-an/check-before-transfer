@@ -15,6 +15,7 @@ import { search, SearchResult } from 'services/reportingService';
 import './results.less';
 import { ParsedUrlQuery } from 'querystring';
 import Link from 'next/link';
+import { KeywordsAndDescription } from '@components/Seo';
 
 // type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -27,7 +28,8 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchValue, searc
   return (
     <div>
       <Head>
-        <title>เช็คก่อนโอน</title>
+        <title>ผลการค้นหาคนโกง {searchValue}</title>
+        <KeywordsAndDescription />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="results-page-layout layout-with-bg">
@@ -64,9 +66,7 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchValue, searc
 };
 
 export const getServerSideProps = withAuthUserTokenSSR()(
-  async ({ query, AuthUser }: SSRPropsContext<ParsedUrlQuery>): Promise<GetServerSidePropsResult<ResultsProps>> => {
-    const token = await AuthUser.getIdToken();
-
+  async ({ query }: SSRPropsContext<ParsedUrlQuery>): Promise<GetServerSidePropsResult<ResultsProps>> => {
     const { q, by } = query;
     const searchValue = typeof q === 'string' ? q.trim() : '';
     const searchBy = typeof by === 'string' ? (by as SearchBy) : 'bank-account';
@@ -90,30 +90,3 @@ export const getServerSideProps = withAuthUserTokenSSR()(
 ) as Promise<GetServerSidePropsResult<ResultsProps>>;
 
 export default withAuthUser<ResultsProps>()(Results);
-
-// export const getServerSideProps: GetServerSideProps<{
-//   searchValue: string;
-//   searchBy?: SearchBy;
-//   searchResult: SearchResult | null;
-// }> = async (context) => {
-//   const { q, by } = context.query;
-//   const searchValue = typeof q === 'string' ? q : '';
-//   const searchBy = typeof by === 'string' ? (by as SearchBy) : 'bank-account';
-//   let searchResult: SearchResult | null = null;
-//   if (searchValue) {
-//     try {
-//       searchResult = await search(searchValue, searchBy);
-//     } catch (e) {
-//       console.log(e);
-//     }
-//   }
-//   console.log('searchResult', searchResult);
-
-//   return {
-//     props: {
-//       searchValue,
-//       searchBy,
-//       searchResult,
-//     },
-//   };
-// };

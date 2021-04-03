@@ -1,18 +1,20 @@
 import Head from 'next/head';
 import { Layout } from 'antd';
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import Hero from '@components/Hero';
 import { withAuthUser } from 'next-firebase-auth';
 import './index.less';
+import { KeywordsAndDescription } from '@components/Seo';
 
 export const Home: FunctionComponent = () => {
   const { Content, Footer } = Layout;
   return (
     <>
       <Head>
-        <title>เช็คก่อนโอน</title>
+        <title>เช็คคนโกง</title>
+        <KeywordsAndDescription />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="home-page-layout layout-with-bg bg-main">

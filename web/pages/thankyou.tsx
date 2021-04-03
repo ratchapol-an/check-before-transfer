@@ -1,12 +1,13 @@
 import Head from 'next/head';
 import { Button, Layout, Result, Space } from 'antd';
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import { withAuthUserTokenSSR, withAuthUser } from 'next-firebase-auth';
 import { useRouter } from 'next/router';
 
 import './thankyou.less';
+import { KeywordsAndDescription } from '@components/Seo';
 
 export const ThankYouPage: FunctionComponent = () => {
   const { Content, Footer } = Layout;
@@ -20,7 +21,8 @@ export const ThankYouPage: FunctionComponent = () => {
   return (
     <>
       <Head>
-        <title>เช็คก่อนโอน</title>
+        <title>เช็คคนโกง</title>
+        <KeywordsAndDescription />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="thank-you-page-layout layout-with-bg">

@@ -4,6 +4,7 @@ import { paymentMethodCaptions } from 'models/PaymentMethod';
 import productTypeCaptions from 'models/productTypeCaptions';
 import { formatAmount, formatDate } from 'utils';
 import './SearchResults.less';
+import banks from '@models/banks';
 
 type SearchResultsProps = {
   lastReport: Report;
@@ -16,15 +17,24 @@ const SearchResults: React.FunctionComponent<SearchResultsProps> = ({
   totalNumberOfReports,
   totalAmount,
 }) => {
-  const { Title } = Typography;
-
+  const { Title, Text } = Typography;
+  const bankAccountNo = lastReport.bankAccountNo ? `เลขบัญชี ${lastReport.bankAccountNo}` : null;
   return (
     <section className="search-results">
       <Title level={3} className="page-title">
         พบรายงานการโกง
       </Title>
       <Card className="search-result-item">
-        {lastReport.name && <Title level={4}>{lastReport.name}</Title>}
+        {lastReport.name && (
+          <Title level={4} className="name">
+            {lastReport.name}
+          </Title>
+        )}
+        {(lastReport.bankAccountNo || lastReport.bankCode) && (
+          <Text className="bank-info" type="secondary" strong>
+            {`${bankAccountNo} ${banks.find((b) => b.bankCode === lastReport.bankCode)?.name}`.trim()}
+          </Text>
+        )}
         <Row gutter={16}>
           <Col xs={12} sm={12}>
             <Statistic title="จำนวนครั้งที่ถูกรายงาน" value={totalNumberOfReports} />

@@ -8,6 +8,7 @@ import { Layout } from 'antd';
 import 'firebase/auth';
 import './login.less';
 import Link from 'next/link';
+import { KeywordsAndDescription } from '@components/Seo';
 
 const LoginPage: FunctionComponent = () => {
   // Do not SSR FirebaseUI, because it is not supported.
@@ -51,7 +52,9 @@ const LoginPage: FunctionComponent = () => {
   return (
     <>
       <Head>
-        <title>เช็คก่อนโอน</title>
+        <title>เช็คคนโกง</title>
+        <KeywordsAndDescription />
+        <meta name="robots" content="noindex, nofollow" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="layout-with-bg bg-main">

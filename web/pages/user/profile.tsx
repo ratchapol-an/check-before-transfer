@@ -35,8 +35,9 @@ export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ token, 
   return (
     <>
       <Head>
-        <title>เช็คก่อนโอน</title>
+        <title>เช็คคนโกง</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta name="robots" content="noindex, nofollow" />
       </Head>
       <Layout className="profile-page-layout layout-with-bg">
         <Header />
