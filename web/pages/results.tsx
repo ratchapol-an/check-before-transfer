@@ -55,9 +55,18 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchValue, searc
             ) : (
               <NoResults />
             )}
-            <div className="ads ads-sky" />
-            <div className="ads ads-lb" />
-            <div className="ads ads-rec" />
+            <a href="/" target="blank">
+              <div className="ads ads-sky" />
+            </a>
+            <a href="/" target="blank">
+              <div className="ads ads-lb" />
+            </a>
+            <a href="/" target="blank">
+              <div className="ads ads-rec" />
+            </a>
+            <a href="/" target="blank">
+              <div className="ads ads-mobile" />
+            </a>
           </Container>
         </Content>
       </Layout>

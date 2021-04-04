@@ -29,6 +29,15 @@ export const isAdminRole = (token: string | null) => {
   return decodedToken.admin === true || decodedToken.superUser === true;
 };
 
+export const isSuperUser = (token: string | null) => {
+  if (!token) {
+    return false;
+  }
+  const decodedToken = parseToken(token);
+
+  return decodedToken.superUser === true;
+};
+
 export const notifyError = () => {
   notification.error({
     message: 'บันทึกข้อมูลไม่สำเร็จ',

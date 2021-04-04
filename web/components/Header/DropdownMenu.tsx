@@ -1,9 +1,10 @@
 import DownOutlined from '@ant-design/icons/lib/icons/DownOutlined';
+import { Role } from '@models/Role';
 import { Button, Dropdown, Menu } from 'antd';
 import React from 'react';
 
 type DropdownMenuProps = {
-  isAuthenticated: boolean;
+  role: Role;
   onLoginBtnClick: () => void;
   onProfileBtnClick: () => void;
   onReportBtnClick: () => void;
@@ -11,7 +12,7 @@ type DropdownMenuProps = {
 };
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
-  isAuthenticated,
+  role,
   onLoginBtnClick,
   onLogoutBtnClick,
   onProfileBtnClick,
@@ -19,17 +20,26 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
 }) => {
   const menu = (
     <Menu>
-      {isAuthenticated ? (
+      {role.user ? (
         <>
+          {role.admin && (
+            <Menu.Item key="4">
+              <a href="/admin">จัดการรายงาน</a>
+            </Menu.Item>
+          )}
+          {role.superUser && (
+            <Menu.Item key="5">
+              <a href="/admin/manage">จัดการแอดมิน</a>
+            </Menu.Item>
+          )}
+          {(role.admin || role.superUser) && <Menu.Divider />}
           <Menu.Item key="3">
             <Button type="link" onClick={onProfileBtnClick}>
               ประวัติของคุณ
             </Button>
           </Menu.Item>
           <Menu.Item key="1">
-            <Button type="link" onClick={onLogoutBtnClick}>
-              ออกจากระบบ
-            </Button>
+            <a href="/user/logout">ออกจากระบบ</a>
           </Menu.Item>
         </>
       ) : (

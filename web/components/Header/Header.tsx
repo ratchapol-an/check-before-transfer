@@ -1,23 +1,24 @@
-import { Button, Layout, Menu, Space } from 'antd';
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import { Button, Dropdown, Layout, Menu, Space } from 'antd';
 import Container from '@components/Container';
 import Image from 'next/image';
 import Link from 'next/link';
 import './header.less';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuthUser } from 'next-firebase-auth';
-import { parseToken } from '../../utils';
+import DownOutlined from '@ant-design/icons/lib/icons/DownOutlined';
+import { parseToken } from 'utils';
+import { Role } from 'models/Role';
 import DropdownMenu from './DropdownMenu';
 
-interface Role {
-  admin: boolean;
-  user: boolean;
-}
 const Header: React.FunctionComponent = () => {
   const { Header: AntdHeader } = Layout;
   const auth = useAuthUser();
   const router = useRouter();
   const [role, setRole] = useState<Role>({
+    superUser: false,
     admin: false,
     user: false,
   });
@@ -43,32 +44,39 @@ const Header: React.FunctionComponent = () => {
     auth.getIdToken().then((token) => {
       if (!token) return;
       const decodedJWT = parseToken(token);
-      if (decodedJWT.superUser || decodedJWT.admin)
-        setRole({
-          admin: true,
-          user: false,
-        });
-      if (!decodedJWT.superUser && !decodedJWT.admin)
-        setRole({
-          admin: false,
-          user: true,
-        });
+      setRole({
+        superUser: decodedJWT.superUser,
+        admin: decodedJWT.admin,
+        user: !decodedJWT.admin && !decodedJWT.superUser,
+      });
     });
   }, [auth]);
+
+  const adminMenu = (
+    <Menu>
+      {(role.admin || role.superUser) && (
+        <Menu.Item key="0">
+          <Link href="/admin">จัดการรายงาน</Link>
+        </Menu.Item>
+      )}
+      {role.superUser && (
+        <Menu.Item key="1">
+          <Link href="/admin/manage">จัดการแอดมิน</Link>
+        </Menu.Item>
+      )}
+    </Menu>
+  );
 
   return (
     <AntdHeader className="header">
       <Container className="header-container">
-        {/* <Menu className="header-menu" theme="light" mode="horizontal">
-          <Menu.Item key="1">เข้าสู่ระบบ</Menu.Item>
-        </Menu> */}
         <Link href="/">
           <a className="header-logo-link">
             <Image width={197.15} height={45} alt="whoscheat" src="/logo3.png" />
           </a>
         </Link>
         <DropdownMenu
-          isAuthenticated={!!auth.email}
+          role={role}
           onLoginBtnClick={handleLoginBtnClick}
           onLogoutBtnClick={handleLoginBtnClick}
           onProfileBtnClick={handleProfileBtnClick}
@@ -92,6 +100,13 @@ const Header: React.FunctionComponent = () => {
           <Button type="primary" ghost size="large" onClick={handleReportBtnClick}>
             รายงานการโกง
           </Button>
+          {(role.admin || role.superUser) && (
+            <Dropdown className="admin-menu" overlay={adminMenu} trigger={['click']}>
+              <a className="ant-dropdown-link" role="link" onClick={(e) => e.preventDefault()}>
+                แอดมิน <DownOutlined />
+              </a>
+            </Dropdown>
+          )}
         </Space>
       </Container>
     </AntdHeader>

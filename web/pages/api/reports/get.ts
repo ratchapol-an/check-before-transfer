@@ -38,6 +38,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (searchBy === '') return res.status(404).send('Missing search by');
   if (searchBy !== SearchField.Name) {
     searchQuery = searchQuery.replace(/\s|-/g, '');
+  } else {
+    searchQuery = searchQuery.replace(/  +/g, ' ');
   }
 
   try {

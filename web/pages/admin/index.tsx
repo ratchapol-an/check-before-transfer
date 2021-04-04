@@ -9,7 +9,7 @@ import { PaginationConfig } from 'antd/lib/pagination';
 import React, { useCallback, useState } from 'react';
 import Link from 'next/link';
 import ReportStatus, { reportStatusCaptions } from '@models/ReportStatus';
-import './admin.less';
+import './index.less';
 import { isAdminRole } from 'utils';
 
 type AdminPageProps = { token: string; email: string };
@@ -51,6 +51,7 @@ export const AdminPage: React.FunctionComponent<AdminPageProps> = ({ token, emai
       <Head>
         <title>เช็คคนโกง</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta name="robots" content="noindex, nofollow" />
       </Head>
       <Layout className="admin-page-layout layout-with-bg">
         <Header />
