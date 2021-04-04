@@ -1,6 +1,14 @@
-# https://www.robotstxt.org/robotstxt.html
+# *
 User-agent: *
-Allow: /*
+Allow: /
 
-Disallow: /api/*
+# *
+User-agent: *
 Disallow: /admin/*
+Disallow: /api
+
+# Host
+Host: https://www.whoscheat.com
+
+# Sitemaps
+Sitemap: https://www.whoscheat.com/sitemap.xml
