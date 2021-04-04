@@ -66,7 +66,7 @@ const Header: React.FunctionComponent = () => {
       )}
     </Menu>
   );
-  console.log(auth.email);
+
   return (
     <AntdHeader className="header">
       <Container className="header-container">
@@ -75,13 +75,7 @@ const Header: React.FunctionComponent = () => {
             <Image width={197.15} height={45} alt="whoscheat" src="/logo3.png" />
           </a>
         </Link>
-        <DropdownMenu
-          role={role}
-          onLoginBtnClick={handleLoginBtnClick}
-          onLogoutBtnClick={handleLoginBtnClick}
-          onProfileBtnClick={handleProfileBtnClick}
-          onReportBtnClick={handleReportBtnClick}
-        />
+        <DropdownMenu role={role} />
         <Space direction="horizontal" className="large-screen-menu">
           {auth.email ? (
             <>

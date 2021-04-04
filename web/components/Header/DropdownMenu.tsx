@@ -1,59 +1,44 @@
 import DownOutlined from '@ant-design/icons/lib/icons/DownOutlined';
 import { Role } from '@models/Role';
-import { Button, Dropdown, Menu } from 'antd';
+import { Dropdown, Menu } from 'antd';
+import Link from 'next/link';
 import React from 'react';
 
 type DropdownMenuProps = {
   role: Role;
-  onLoginBtnClick: () => void;
-  onProfileBtnClick: () => void;
-  onReportBtnClick: () => void;
-  onLogoutBtnClick: () => void;
 };
 
-const DropdownMenu: React.FC<DropdownMenuProps> = ({
-  role,
-  onLoginBtnClick,
-  onLogoutBtnClick,
-  onProfileBtnClick,
-  onReportBtnClick,
-}) => {
+const DropdownMenu: React.FC<DropdownMenuProps> = ({ role }) => {
   const menu = (
     <Menu>
       {role.user || role.admin || role.superUser ? (
         <>
           {role.admin && (
             <Menu.Item key="4">
-              <a href="/admin">จัดการรายงาน</a>
+              <Link href="/admin">จัดการรายงาน</Link>
             </Menu.Item>
           )}
           {role.superUser && (
             <Menu.Item key="5">
-              <a href="/admin/manage">จัดการแอดมิน</a>
+              <Link href="/admin/manage">จัดการแอดมิน</Link>
             </Menu.Item>
           )}
           {(role.admin || role.superUser) && <Menu.Divider />}
           <Menu.Item key="3">
-            <Button type="link" onClick={onProfileBtnClick}>
-              ประวัติของคุณ
-            </Button>
+            <Link href="/user/profile">ประวัติของคุณ</Link>
           </Menu.Item>
           <Menu.Item key="1">
-            <a href="/user/logout">ออกจากระบบ</a>
+            <Link href="/user/logout">ออกจากระบบ</Link>
           </Menu.Item>
         </>
       ) : (
         <Menu.Item key="0">
-          <Button type="link" onClick={onLoginBtnClick}>
-            เข้าสู่ระบบ
-          </Button>
+          <Link href="/user/login">เข้าสู่ระบบ</Link>
         </Menu.Item>
       )}
       <Menu.Divider />
       <Menu.Item key="2">
-        <Button type="link" onClick={onReportBtnClick}>
-          รายงานการโกง
-        </Button>
+        <Link href="/report">รายงานการโกง</Link>
       </Menu.Item>
     </Menu>
   );
