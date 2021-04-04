@@ -66,7 +66,7 @@ const Header: React.FunctionComponent = () => {
       )}
     </Menu>
   );
-
+  console.log(auth.email);
   return (
     <AntdHeader className="header">
       <Container className="header-container">

@@ -20,7 +20,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
 }) => {
   const menu = (
     <Menu>
-      {role.user ? (
+      {role.user || role.admin || role.superUser ? (
         <>
           {role.admin && (
             <Menu.Item key="4">
