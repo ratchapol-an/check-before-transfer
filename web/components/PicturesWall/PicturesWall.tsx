@@ -110,6 +110,7 @@ class PicturesWall extends React.Component<Props, State> {
     return (
       <>
         <Upload
+          accept="image/*, application/pdf"
           name="files"
           action={apiUploadFile}
           listType="picture-card"
