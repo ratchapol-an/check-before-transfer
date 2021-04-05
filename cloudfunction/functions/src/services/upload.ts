@@ -22,9 +22,9 @@ export const filesUpload = async (req: FileRequest, res: Response): Promise<void
 
   const busboy = new Busboy({
     headers: req.headers,
-    // limits: {
-    //   fileSize: 10 * 1024 * 1024,
-    // },
+    limits: {
+      fileSize: 10 * 1024 * 1024,
+    },
   });
 
   const fields: any = {};
