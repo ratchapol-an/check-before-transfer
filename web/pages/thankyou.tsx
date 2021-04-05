@@ -43,7 +43,12 @@ export const ThankYouPage: FunctionComponent = () => {
                   </Button>,
                 ]}
               />
-              <div className="ads ads-lb" />
+              {/* <a href="/" target="blank">
+                <div className="ads ads-lb" />
+              </a>
+              <a href="/" target="blank">
+                <div className="ads ads-mobile" />
+              </a> */}
             </Space>
           </Container>
         </Content>
