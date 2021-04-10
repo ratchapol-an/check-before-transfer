@@ -8,14 +8,17 @@ const API_FIREBASE_HOST =
     : 'http://localhost:5001/whoscheat-e2261/asia-southeast2';
 
 export const addRole = async (uid: string, role: Role, token: string) => {
-  await axios.post(`/api/admin/create`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    data: {
+  await axios.post(
+    `/api/admin/create`,
+    {
       uid,
       role,
     },
-    baseURL: `${API_FIREBASE_HOST}`,
-  });
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      baseURL: `${API_FIREBASE_HOST}`,
+    },
+  );
 };

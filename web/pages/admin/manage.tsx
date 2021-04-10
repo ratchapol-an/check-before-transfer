@@ -54,6 +54,7 @@ export const AdminPage: React.FunctionComponent<AdminPageProps> = ({ token, emai
               </Form.Item>
               <Form.Item
                 label="UID"
+                name="uid"
                 required
                 tooltip="จาก https://console.firebase.google.com/u/3/project/whoscheat-e2261/authentication/users"
               >

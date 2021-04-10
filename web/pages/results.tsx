@@ -55,7 +55,7 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchValue, searc
             ) : (
               <NoResults />
             )}
-            <a href="/" target="blank">
+            {/* <a href="/" target="blank">
               <div className="ads ads-sky" />
             </a>
             <a href="/" target="blank">
@@ -66,7 +66,7 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchValue, searc
             </a>
             <a href="/" target="blank">
               <div className="ads ads-mobile" />
-            </a>
+            </a> */}
           </Container>
         </Content>
       </Layout>
