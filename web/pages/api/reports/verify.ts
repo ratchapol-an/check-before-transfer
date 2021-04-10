@@ -16,7 +16,7 @@ apiKey.apiKey = process.env.EMAIL_API_KEY || '';
 
 const transactionalEmailApi = new SibApiV3Sdk.TransactionalEmailsApi();
 
-// transactionalEmailApi.setApiKey(SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey, process.env.EMAIL_API_KEY || '');
+transactionalEmailApi.setApiKey(SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey, process.env.EMAIL_API_KEY || '');
 
 initAuth();
 
@@ -55,13 +55,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     );
 
-    // if (reporter.email && status === 4) {
-    //   const emailResp = await transactionalEmailApi.sendTransacEmail({
-    //     to: [{ email: reporter.email }],
-    //     params: { reportLink: `https://check-before-transfer.vercel.app/report/${reportId}` },
-    //   });
-    //   console.log('emailResp', emailResp);
-    // }
+    if (reporter.email && status === 4) {
+      const emailResp = await transactionalEmailApi.sendTransacEmail({
+        to: [{ email: reporter.email }],
+        params: { reportLink: `https://www.whoscheat.com/report/${reportId}` },
+        templateId: 1,
+      });
+    }
     return res.status(200).json({
       reportId,
     });
