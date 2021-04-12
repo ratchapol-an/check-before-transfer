@@ -40,6 +40,10 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ role }) => {
       <Menu.Item key="2">
         <Link href="/report">รายงานการโกง</Link>
       </Menu.Item>
+      <Menu.Divider />
+      <Menu.Item key="6">
+        <Link href="/report">ติดต่อเรา</Link>
+      </Menu.Item>
     </Menu>
   );
 
