@@ -25,6 +25,9 @@ const Header: React.FunctionComponent = () => {
   const handleReportBtnClick = () => {
     router.push('/report');
   };
+  const handleContactBtnClick = () => {
+    router.push('https://google.com');
+  };
   const handleLoginBtnClick = () => {
     const currentQuery = router.query;
     let signInSuccessUrl = '/';
@@ -94,7 +97,7 @@ const Header: React.FunctionComponent = () => {
           <Button type="primary" ghost size="large" onClick={handleReportBtnClick}>
             รายงานการโกง
           </Button>
-          <Button type="primary" ghost size="large" onClick={handleReportBtnClick}>
+          <Button type="primary" ghost size="large" onClick={handleContactBtnClick}>
             ติดต่อเรา
           </Button>
           {(role.admin || role.superUser) && (
