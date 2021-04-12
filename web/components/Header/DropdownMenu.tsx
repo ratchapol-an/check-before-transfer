@@ -42,7 +42,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ role }) => {
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="6">
-        <Link href="/report">ติดต่อเรา</Link>
+        <Link href="https://lin.ee/ktLQLwv">ติดต่อเรา</Link>
       </Menu.Item>
     </Menu>
   );
