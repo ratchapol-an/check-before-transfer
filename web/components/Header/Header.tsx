@@ -98,7 +98,7 @@ const Header: React.FunctionComponent = () => {
             รายงานการโกง
           </Button>
           <Button type="link" ghost size="large" onClick={handleContactBtnClick}>
-          <Image width={45} height={45} alt="contact" src="/line.png" />
+          <Image width={60} height={60} alt="contact" src="/line.png" />
           </Button>
           {(role.admin || role.superUser) && (
             <Dropdown className="admin-menu" overlay={adminMenu} trigger={['click']}>
