@@ -94,6 +94,9 @@ const Header: React.FunctionComponent = () => {
           <Button type="primary" ghost size="large" onClick={handleReportBtnClick}>
             รายงานการโกง
           </Button>
+          <Button type="primary" ghost size="large" onClick={handleReportBtnClick}>
+            ติดต่อเรา
+          </Button>
           {(role.admin || role.superUser) && (
             <Dropdown className="admin-menu" overlay={adminMenu} trigger={['click']}>
               <a className="ant-dropdown-link" role="link" onClick={(e) => e.preventDefault()}>
