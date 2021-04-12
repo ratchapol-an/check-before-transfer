@@ -97,7 +97,8 @@ const Header: React.FunctionComponent = () => {
           <Button type="primary" ghost size="large" onClick={handleReportBtnClick}>
             รายงานการโกง
           </Button>
-          <Button type="link" ghost size="large" onClick={handleContactBtnClick}><img src="../public/line.png" />
+          <Button type="link" ghost size="large" onClick={handleContactBtnClick}>
+          <Image width={45} height={45} alt="contact" src="/line.png" />
             ติดต่อเรา
           </Button>
           {(role.admin || role.superUser) && (
