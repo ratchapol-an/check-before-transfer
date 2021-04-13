@@ -52,7 +52,7 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report, i
       try {
         await updateReport(updatingReport, token);
         notification.success({
-          message: 'บันทึกข้อมูลเรียยร้อย',
+          message: 'บันทึกข้อมูลเรียบร้อย',
         });
       } catch {
         notifyError();

@@ -25,9 +25,6 @@ const Header: React.FunctionComponent = () => {
   const handleReportBtnClick = () => {
     router.push('/report');
   };
-  const handleContactBtnClick = () => {
-    router.push('https://lin.ee/ktLQLwv');
-  };
   const handleLoginBtnClick = () => {
     const currentQuery = router.query;
     let signInSuccessUrl = '/';
@@ -97,9 +94,11 @@ const Header: React.FunctionComponent = () => {
           <Button type="primary" ghost size="large" onClick={handleReportBtnClick}>
             รายงานการโกง
           </Button>
-          <Button type="link" ghost size="large" onClick={handleContactBtnClick}>
-          <Image width={35} height={35} alt="contact" src="/line.png" />
-          </Button>
+          <Link href="https://lin.ee/ktLQLwv">
+          <a className="line-link">
+            <Image width={45} height={45} alt="contact" src="/line.png" />
+          </a>
+        </Link>
           {(role.admin || role.superUser) && (
             <Dropdown className="admin-menu" overlay={adminMenu} trigger={['click']}>
               <a className="ant-dropdown-link" role="link" onClick={(e) => e.preventDefault()}>
