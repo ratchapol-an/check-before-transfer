@@ -3,7 +3,6 @@
   "include": [
     "next-env.d.ts",
     ".eslintrc.js",
-    "**/*.js",
     "**/*.ts",
     "**/*.tsx",
     "next.config.js",

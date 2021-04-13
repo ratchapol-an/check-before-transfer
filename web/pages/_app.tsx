@@ -12,29 +12,24 @@ import { useAuthUser } from 'next-firebase-auth';
 import { parseToken } from 'utils';
 
 const tagManagerArgs = {
-  gtmId: 'GTM-WR83PLJ'
-}
-TagManager.initialize(tagManagerArgs)
+  gtmId: 'GTM-WR83PLJ',
+};
+TagManager.initialize(tagManagerArgs);
 
 initAuth();
 moment.locale('th');
-const auth = useAuthUser();
-
-useEffect(() => {
-  auth.getIdToken().then((token) => {
-    if (!token) return;
-    const decodedJWT = parseToken(token);
-  });
-}, [auth]);
 
 function MyApp({ Component, pageProps }: AppProps) {
-  <ScriptTag type="text/javascript">
-window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({
-  'event': 'login',
-  'userId': {auth.firebaseUser?.uid}
-  })
-  </ScriptTag>
+  const auth = useAuthUser();
+
+  useEffect(() => {
+    auth.getIdToken().then((token) => {
+      if (!token) return;
+      const decodedJWT = parseToken(token);
+    });
+  }, [auth]);
+
+  <ScriptTag type="text/javascript" src="gtag.js" />;
 
   return (
     <ConfigProvider locale={thTH}>
