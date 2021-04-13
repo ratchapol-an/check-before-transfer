@@ -5,13 +5,6 @@ import initAuth from 'services/firebaseService';
 import '../styles/antd.less';
 import moment from 'moment';
 import NextJsProgressBar from 'nextjs-progressbar';
-import TagManager from '../node_modules/react-gtm-module';
-
-const tagManagerArgs = {
-    gtmId: 'GTM-WR83PLJ'
-};
-
-TagManager.initialize(tagManagerArgs)
 
 initAuth();
 moment.locale('th');
