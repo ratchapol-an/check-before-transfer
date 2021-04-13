@@ -11,13 +11,15 @@ import ScriptTag from 'react-script-tag';
 import { useAuthUser } from 'next-firebase-auth';
 import { parseToken } from 'utils';
 
+initAuth();
+moment.locale('th');
+
 const tagManagerArgs = {
   gtmId: 'GTM-WR83PLJ',
 };
-TagManager.initialize(tagManagerArgs);
-
-initAuth();
-moment.locale('th');
+if (process.browser) {
+  TagManager.initialize(tagManagerArgs);
+}
 
 function MyApp({ Component, pageProps }: AppProps) {
   const auth = useAuthUser();

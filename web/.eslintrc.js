@@ -7,7 +7,8 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: ['./tsconfig.eslint.json'],
+    project: ['tsconfig.eslint.json'],
+    tsconfigRootDir: __dirname,
     ecmaFeatures: {
       jsx: true,
     },
@@ -17,17 +18,8 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint', 'import'],
   extends: [
-    'airbnb-typescript',
-    'airbnb/hooks',
     'plugin:@typescript-eslint/recommended',
-    'plugin:react/recommended',
-    'prettier',
-    'prettier/react',
-    'prettier/@typescript-eslint',
-    'plugin:prettier/recommended',
-    'plugin:import/errors',
-    'plugin:import/warnings',
-    'plugin:import/typescript',
+    'plugin:react/recommended'
   ],
   rules: {
     'prefer-promise-reject-errors': 'off',
@@ -53,12 +45,6 @@ module.exports = {
       },
     ],
     'no-console': ['off'],
-    'prettier/prettier': [
-      'error',
-      {
-        endOfLine: 'auto',
-      },
-    ],
     'jsx-a11y/anchor-is-valid': 'off',
     'import/prefer-default-export': 'off',
   },
