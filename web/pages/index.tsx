@@ -7,6 +7,7 @@ import Hero from '@components/Hero';
 import { withAuthUser } from 'next-firebase-auth';
 import './index.less';
 import { KeywordsAndDescription } from '@components/Seo';
+import GoogleTag from '@components/GoogleTag';
 
 export const Home: FunctionComponent = () => {
   const { Content, Footer } = Layout;
@@ -18,7 +19,7 @@ export const Home: FunctionComponent = () => {
         <link rel="icon" href="/favicon.ico" />
         <script type="text/javascript" src="/gtaghead.js" />
       </Head>
-      <script type="text/javascript" src="/gtagbody.js" />
+      <GoogleTag />
       <Layout className="home-page-layout layout-with-bg bg-main">
         <Header />
         <Content>
