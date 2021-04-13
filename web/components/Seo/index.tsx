@@ -1,5 +1,3 @@
-import ScriptTag from '../../node_modules/react-script-tag';
-
 const KeywordsAndDescription = () => {
   return (
     <>
@@ -12,8 +10,7 @@ const KeywordsAndDescription = () => {
         name="keywords"
         content="โอนเงิน,ทรูมันนี่,พร้อมเพย์,truemoney,truemoney wallet,เช็คแม่ค้า,โกงเงิน,เช็คประวัติ,ประวัติคนขาย,เช็คพ่อค้า"
       />
-
-      <ScriptTag type="text/javascript" src="../../config/gtag.js" />
+      
     </>
   );
 };
