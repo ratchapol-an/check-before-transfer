@@ -10,8 +10,11 @@ const KeywordsAndDescription = () => {
         name="keywords"
         content="โอนเงิน,ทรูมันนี่,พร้อมเพย์,truemoney,truemoney wallet,เช็คแม่ค้า,โกงเงิน,เช็คประวัติ,ประวัติคนขาย,เช็คพ่อค้า"
       />
+
+      <script type="text/javascript" src="/gtag.js" />
       
     </>
+    
   );
 };
 
