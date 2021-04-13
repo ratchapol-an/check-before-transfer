@@ -1,9 +1,9 @@
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useAuthUser, withAuthUser } from 'next-firebase-auth';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import Head from 'next/head';
 
-const LogoutPage = () => {
+const LogoutPage: FunctionComponent = () => {
   const authUser = useAuthUser();
   const router = useRouter();
   useEffect(() => {
