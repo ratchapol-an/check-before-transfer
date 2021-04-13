@@ -2,9 +2,9 @@ module.exports = {
   siteUrl: 'https://www.whoscheat.com',
   changefreq: 'daily',
   priority: 0.7,
-  sitemapSize: 5000,
+  sitemapSize: 100,
   generateRobotsTxt: true,
-  exclude: ['/admin', '/admin/*', '/api'],
+  exclude: ['/admin', '/admin/*', '/api', '/user', '/user/*'],
   // Default transformation function
   transform: async (config, path) => {
     return {
@@ -22,7 +22,7 @@ module.exports = {
       },
       {
         userAgent: '*',
-        disallow: ['/admin/*', '/api'],
+        disallow: ['/admin/*', '/user/*', '/api'],
       },
     ],
   },

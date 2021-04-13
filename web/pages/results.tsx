@@ -45,7 +45,9 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchValue, searc
               <Breadcrumb.Item>
                 <Link href="/">หน้าแรก</Link>
               </Breadcrumb.Item>
-              <Breadcrumb.Item>ผลการค้นหา</Breadcrumb.Item>
+              <Breadcrumb.Item>
+                ผลการค้นหา {searchBy} &apos;{searchValue}&apos;
+              </Breadcrumb.Item>
             </Breadcrumb>
             {searchResult ? (
               <SearchResults
