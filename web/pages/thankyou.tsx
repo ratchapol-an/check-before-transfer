@@ -30,7 +30,7 @@ export const ThankYouPage: FunctionComponent = () => {
           name="keywords"
           content="โอนเงิน,ทรูมันนี่,พร้อมเพย์,truemoney,truemoney wallet,เช็คแม่ค้า,โกงเงิน,เช็คประวัติ,ประวัติคนขาย,เช็คพ่อค้า,คนโกง,เว็บโกง,ร้านโกง,เช็คโกง,กู้เงิน"
         />
-        <script type="text/javascript" src="/gtag.js" />
+
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="thank-you-page-layout layout-with-bg">

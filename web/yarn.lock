@@ -7193,6 +7193,11 @@ react-firebaseui@^4.1.0:
   dependencies:
     firebaseui "^4.1.0"
 
+react-gtm-module@^2.0.11:
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/react-gtm-module/-/react-gtm-module-2.0.11.tgz#14484dac8257acd93614e347c32da9c5ac524206"
+  integrity sha512-8gyj4TTxeP7eEyc2QKawEuQoAZdjKvMY4pgWfycGmqGByhs17fR+zEBs0JUDq4US/l+vbTl+6zvUIx27iDo/Vw==
+
 react-input-mask@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-input-mask/-/react-input-mask-2.0.4.tgz#9ade5cf8196f4a856dbf010820fe75a795f3eb14"
@@ -7220,6 +7225,11 @@ react-responsive@^8.2.0:
     matchmediaquery "^0.3.0"
     prop-types "^15.6.1"
     shallow-equal "^1.1.0"
+
+react-script-tag@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-script-tag/-/react-script-tag-1.1.2.tgz#be0fa3a22dfae8165d083f6bc1ff6f9799b20d44"
+  integrity sha512-4oR9ntvGfX4igiP77vK310ru5Oa77xO7CeYB3Xi9lu0qsikpGpK1Kq1WMFocvy8U4fQFq8ovtrZS/8adfCziFw==
 
 react@17.0.1:
   version "17.0.1"
