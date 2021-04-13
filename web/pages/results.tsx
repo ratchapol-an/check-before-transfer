@@ -10,6 +10,7 @@ import Container from '@components/Container';
 import Header from '@components/Header';
 import { NoResults, SearchForm, SearchResults } from '@components/Search';
 import SearchBy from 'models/searchBy';
+import SearchByTH from 'models/searchByTH';
 import { search, SearchResult } from 'services/reportingService';
 
 import './results.less';
@@ -22,9 +23,10 @@ import { KeywordsAndDescription } from '@components/Seo';
 type ResultsProps = {
   searchValue: string;
   searchBy: SearchBy;
+  searchByTH: string;
   searchResult: SearchResult | null;
 };
-const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchValue, searchResult }) => {
+const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchByTH, searchValue, searchResult }) => {
   return (
     <div>
       <Head>
@@ -46,7 +48,7 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchValue, searc
                 <Link href="/">หน้าแรก</Link>
               </Breadcrumb.Item>
               <Breadcrumb.Item>
-                ผลการค้นหา {searchBy} &apos;{searchValue}&apos;
+                ผลการค้นหาด้วย {searchByTH} &apos;{searchValue}&apos;
               </Breadcrumb.Item>
             </Breadcrumb>
             {searchResult ? (
@@ -82,6 +84,7 @@ export const getServerSideProps = withAuthUserTokenSSR()(
     const { q, by } = query;
     const searchValue = typeof q === 'string' ? q.trim() : '';
     const searchBy = typeof by === 'string' ? (by as SearchBy) : 'bank-account';
+    const searchByTH = SearchByTH[searchBy];
     let searchResult: SearchResult | null = null;
     if (searchValue) {
       try {
@@ -95,6 +98,7 @@ export const getServerSideProps = withAuthUserTokenSSR()(
       props: {
         searchValue,
         searchBy,
+        searchByTH,
         searchResult,
       },
     } as GetServerSidePropsResult<ResultsProps>;
