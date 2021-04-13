@@ -16,11 +16,11 @@ export const Home: FunctionComponent = () => {
         
         <title>เช็คคนโกง</title>
         <KeywordsAndDescription />
-
         <link rel="icon" href="/favicon.ico" />
-        <script type="text/javascript" src="../config/gtag.js" />
+        <script type="text/javascript" src="/gtaghead.js" />
       </Head>
       <Layout className="home-page-layout layout-with-bg bg-main">
+      <script type="text/javascript" src="/gtagbody.js" />
         <Header />
         <Content>
           <Container>
