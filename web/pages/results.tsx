@@ -31,7 +31,14 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchByTH, search
     <div>
       <Head>
         <title>ผลการค้นหาคนโกง {searchValue}</title>
-        <KeywordsAndDescription />
+        <meta
+          name="description"
+          content="เช็คคนโกง ก่อนการโอนเงิน จากเลขบัญชีธนาคาร หรือ เบอร์โทรศัพท์มือถือ หรือ เลขประจำตัวประชาชน หรือ ชื่อ-นามสกุล"
+        />
+        <meta
+          name="keywords"
+          content="โอนเงิน,ทรูมันนี่,พร้อมเพย์,truemoney,truemoney wallet,เช็คแม่ค้า,โกงเงิน,เช็คประวัติ,ประวัติคนขาย,เช็คพ่อค้า,คนโกง,เว็บโกง,ร้านโกง,เช็คโกง,กู้เงิน"
+        />
         <script type="text/javascript" src="/gtag.js" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

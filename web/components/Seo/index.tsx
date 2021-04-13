@@ -1,4 +1,4 @@
-const KeywordsAndDescription: React.FunctionComponent = () => {
+const KeywordsAndDescription = () => {
   return (
     <>
       <meta
