@@ -36,6 +36,7 @@ export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ token, 
     <>
       <Head>
         <title>เช็คคนโกง</title>
+        <script type="text/javascript" src="/gtag.js" />
         <link rel="icon" href="/favicon.ico" />
         <meta name="robots" content="noindex, nofollow" />
       </Head>

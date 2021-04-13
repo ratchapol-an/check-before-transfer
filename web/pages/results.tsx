@@ -30,6 +30,7 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchValue, searc
       <Head>
         <title>ผลการค้นหาคนโกง {searchValue}</title>
         <KeywordsAndDescription />
+        <script type="text/javascript" src="/gtag.js" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="results-page-layout layout-with-bg">

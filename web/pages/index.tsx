@@ -15,6 +15,7 @@ export const Home: FunctionComponent = () => {
       <Head>
         <title>เช็คคนโกง</title>
         <KeywordsAndDescription />
+        <script type="text/javascript" src="/gtag.js" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="home-page-layout layout-with-bg bg-main">

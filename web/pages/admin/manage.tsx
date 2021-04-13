@@ -29,6 +29,7 @@ export const AdminPage: React.FunctionComponent<AdminPageProps> = ({ token, emai
     <>
       <Head>
         <title>เช็คคนโกง</title>
+        <script type="text/javascript" src="/gtag.js" />
         <meta name="robots" content="noindex, nofollow" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

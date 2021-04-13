@@ -79,6 +79,7 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report, i
       <Head>
         <title>เช็คคนโกง - รายงานการโกง {report.name}</title>
         <KeywordsAndDescription />
+        <script type="text/javascript" src="/gtag.js" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="report-page-layout layout-with-bg">

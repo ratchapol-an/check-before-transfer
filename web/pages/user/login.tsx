@@ -54,6 +54,7 @@ const LoginPage: FunctionComponent = () => {
       <Head>
         <title>เช็คคนโกง</title>
         <KeywordsAndDescription />
+        <script type="text/javascript" src="/gtag.js" />
         <meta name="robots" content="noindex, nofollow" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

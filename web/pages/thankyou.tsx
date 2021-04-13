@@ -23,6 +23,7 @@ export const ThankYouPage: FunctionComponent = () => {
       <Head>
         <title>เช็คคนโกง</title>
         <KeywordsAndDescription />
+        <script type="text/javascript" src="/gtag.js" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="thank-you-page-layout layout-with-bg">
