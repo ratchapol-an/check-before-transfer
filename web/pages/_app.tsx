@@ -6,39 +6,50 @@ import initAuth from 'services/firebaseService';
 import '../styles/antd.less';
 import moment from 'moment';
 import NextJsProgressBar from 'nextjs-progressbar';
-import ScriptTag from 'react-script-tag';
 import { useAuthUser } from 'next-firebase-auth';
 import { parseToken } from 'utils';
-import useGTM from '@elgorditosalsero/react-gtm-hook'
+import useGTM from '@elgorditosalsero/react-gtm-hook';
+import MetaTags from 'react-meta-tags';
 
 initAuth();
 moment.locale('th');
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const auth = useAuthUser();
+  const authUser = useAuthUser();
 
   useEffect(() => {
-    auth.getIdToken().then((token) => {
+    authUser.getIdToken().then((token) => {
       if (!token) return;
       const decodedJWT = parseToken(token);
+      const uemail = authUser.email;
+      const uclientInitialized = authUser.clientInitialized;
+      const ufirebaseuid = authUser.firebaseUser.uid;
+      const uid = authUser.id;
     });
-  }, [auth]);
+  }, [authUser]);
+  
 
   const { init, UseGTMHookProvider } = useGTM()
   const gtmParams = {
     id: 'GTM-WR83PLJ',
     dataLayer: {
-      'event': 'login',
-      'userId': auth.id   
+      'event': 'loggedin',
+      'userId': authUser.email
     }
   }
-
 
   useEffect(() => init(gtmParams), [])
 
   return (
     <ConfigProvider locale={thTH}>
-      <UseGTMHookProvider><p>uid={auth.id}</p>
+      <MetaTags>
+        <meta name="description"
+          content="เช็คคนโกง ก่อนการโอนเงิน จากเลขบัญชีธนาคาร หรือ เบอร์โทรศัพท์มือถือ หรือ เลขประจำตัวประชาชน หรือ ชื่อ-นามสกุล" />
+        <meta
+          name="keywords"
+          content="โอนเงิน,ทรูมันนี่,พร้อมเพย์,truemoney,truemoney wallet,เช็คแม่ค้า,โกงเงิน,เช็คประวัติ,ประวัติคนขาย,เช็คพ่อค้า,คนโกง,เว็บโกง,ร้านโกง,เช็คโกง,กู้เงิน" />
+      </MetaTags>
+      <UseGTMHookProvider><p>{authUser.email}</p>
       <NextJsProgressBar color="#00589b" startPosition={0.3} stopDelayMs={200} height={1} />
       </UseGTMHookProvider>
       <Component {...pageProps} />

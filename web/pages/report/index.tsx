@@ -9,7 +9,6 @@ import { addReport } from 'services/reportingService';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import Link from 'next/link';
-import { KeywordsAndDescription } from '@components/Seo';
 
 interface ReportPageProps {
   token: string;

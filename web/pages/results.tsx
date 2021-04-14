@@ -16,7 +16,6 @@ import { search, SearchResult } from 'services/reportingService';
 import './results.less';
 import { ParsedUrlQuery } from 'querystring';
 import Link from 'next/link';
-import { KeywordsAndDescription } from '@components/Seo';
 
 // type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -31,15 +30,6 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchByTH, search
     <div>
       <Head>
         <title>ผลการค้นหาคนโกง {searchValue}</title>
-        <meta
-          name="description"
-          content="เช็คคนโกง ก่อนการโอนเงิน จากเลขบัญชีธนาคาร หรือ เบอร์โทรศัพท์มือถือ หรือ เลขประจำตัวประชาชน หรือ ชื่อ-นามสกุล"
-        />
-        <meta
-          name="keywords"
-          content="โอนเงิน,ทรูมันนี่,พร้อมเพย์,truemoney,truemoney wallet,เช็คแม่ค้า,โกงเงิน,เช็คประวัติ,ประวัติคนขาย,เช็คพ่อค้า,คนโกง,เว็บโกง,ร้านโกง,เช็คโกง,กู้เงิน"
-        />
-
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="results-page-layout layout-with-bg">

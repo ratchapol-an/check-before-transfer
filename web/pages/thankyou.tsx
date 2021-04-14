@@ -5,9 +5,7 @@ import Header from '@components/Header';
 import Container from '@components/Container';
 import { withAuthUserTokenSSR, withAuthUser } from 'next-firebase-auth';
 import { useRouter } from 'next/router';
-
 import './thankyou.less';
-import { KeywordsAndDescription } from '@components/Seo';
 
 export const ThankYouPage: FunctionComponent = () => {
   const { Content, Footer } = Layout;

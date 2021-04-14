@@ -8,7 +8,6 @@ import { Layout } from 'antd';
 import 'firebase/auth';
 import './login.less';
 import Link from 'next/link';
-import { KeywordsAndDescription } from '@components/Seo';
 
 const LoginPage: FunctionComponent = () => {
   // Do not SSR FirebaseUI, because it is not supported.
