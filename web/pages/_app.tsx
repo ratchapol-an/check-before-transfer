@@ -11,9 +11,7 @@ import ScriptTag from 'react-script-tag';
 import { useAuthUser } from 'next-firebase-auth';
 import { parseToken } from 'utils';
 
-declare global {
-  interface Window { dataLayer: any; }
-}
+
 
 initAuth();
 moment.locale('th');
@@ -35,12 +33,14 @@ function MyApp({ Component, pageProps }: AppProps) {
     });
   }, [auth]);
 
-
-      window.dataLayer = window.dataLayer || [];
+<script type="text/javascript">
+window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
-      'event': "login",
-      'userId' : auth.firebaseUser?.uid
-    });
+      'event' : 'login',  
+      'userId' : auth.firebaseUser?.uid   
+    });                 
+</script>
+
 
   return (
     <ConfigProvider locale={thTH}>
