@@ -13,6 +13,10 @@ import useGTM from '@elgorditosalsero/react-gtm-hook';
 type LoginPageProps = { token: string; email: string };
 
 const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
+
+  const { sendDataToGTM } = useGTM();
+  useEffect(() => sendDataToGTM({ 'event': 'loggedin', 'userId': email as string}), []);
+
   // Do not SSR FirebaseUI, because it is not supported.
   // https://github.com/firebase/firebaseui-web/issues/213
   const [renderAuth, setRenderAuth] = useState(false);
@@ -23,14 +27,6 @@ const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
       setRenderAuth(true);
     }
   }, []);
-
-  const { init, UseGTMHookProvider } = useGTM();
-  const gtmParams = {
-    id: 'GTM-WR83PLJ',
-    dataLayer: { 'event': 'loggedin', 'userId': email }
-  };
-
-  useEffect(() => init(gtmParams), []);
 
   const uiConfig: firebaseui.auth.Config = {
     signInFlow: firebase.auth().isSignInWithEmailLink(window.location.href) ? 'redirect' : 'popup',
@@ -59,13 +55,18 @@ const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
     },
   };
 
+  // const { init, UseGTMHookProvider } = useGTM();
+  // const gtmParams = {
+  //   id: 'GTM-WR83PLJ',
+  //   dataLayer: { 'event': 'loggedin', 'userId': '' }
+  // };
+  // useEffect(() => init(gtmParams), []);
+
   return (
     <>
       <Head>
         <title>เช็คคนโกง</title>
-        <UseGTMHookProvider>
         <meta name="robots" content="noindex, nofollow" />
-        </UseGTMHookProvider>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="layout-with-bg bg-main">
