@@ -4,11 +4,8 @@ import React, { FunctionComponent } from 'react';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import Hero from '@components/Hero';
-import { withAuthUser, useAuthUser } from 'next-firebase-auth';
+import { withAuthUser } from 'next-firebase-auth';
 import './index.less';
-
-const authUser = useAuthUser();
-authUser.getIdToken
 
 export const Home: FunctionComponent = () => {
   const { Content, Footer } = Layout;
