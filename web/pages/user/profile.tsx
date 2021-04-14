@@ -8,12 +8,11 @@ import { deleteReport, getReportsByUserId, PaginatedReports } from 'services/rep
 import { PaginationConfig } from 'antd/lib/pagination';
 import React, { useCallback, useState, useEffect } from 'react';
 import Link from 'next/link';
-import useGTM from '@elgorditosalsero/react-gtm-hook';
 
 type ProfilePageProps = { token: string; email: string };
 
 export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ token, email }) => {
-  const { Content, Footer } = Layout;
+  const { Content } = Layout;
   const { Title } = Typography;
   const [currentPage, setCurrentPage] = useState(1);
   const handleDeleteReport = useCallback(

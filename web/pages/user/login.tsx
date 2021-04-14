@@ -41,7 +41,7 @@ const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
     ],
     callbacks: {
       signInSuccessWithAuthResult(authResult, redirectUrl) {
-       sendDataToGTM({ 'event': 'loggedin2', 'userId': token});
+        sendDataToGTM({ 'event': 'logged_in' });
         setTimeout(() => {
           window.location.href = `${
             process.env.NEXT_PUBLIC_APP_STAGE === 'production'
