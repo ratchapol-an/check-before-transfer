@@ -10,35 +10,25 @@ import { useAuthUser } from 'next-firebase-auth';
 import { parseToken } from 'utils';
 import useGTM from '@elgorditosalsero/react-gtm-hook';
 import MetaTags from 'react-meta-tags';
+import { AuthAction, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth';
 
 initAuth();
 moment.locale('th');
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const authUser = useAuthUser();
 
-  useEffect(() => {
-    authUser.getIdToken().then((token) => {
-      if (!token) return;
-      const decodedJWT = parseToken(token);
-    });
-  }, [authUser]);
-  
-
-  const { init, UseGTMHookProvider } = useGTM()
+  const { init, UseGTMHookProvider } = useGTM();
   const gtmParams = {
     id: 'GTM-WR83PLJ',
-    dataLayer: {
-      'event': 'loggedin',
-      'userId': authUser.email
-    }
-  }
+    dataLayer: {'event':'','userId':''}
+  };
 
-  useEffect(() => init(gtmParams), [])
+  useEffect(() => init(gtmParams), []);
 
   return (
     <ConfigProvider locale={thTH}>
-      <MetaTags>
+      <UseGTMHookProvider>
+        <MetaTags>
         <meta name="description"
           content="เช็คคนโกง ก่อนการโอนเงิน จากเลขบัญชีธนาคาร หรือ เบอร์โทรศัพท์มือถือ หรือ เลขประจำตัวประชาชน หรือ ชื่อ-นามสกุล"
         />
@@ -47,9 +37,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           content="โอนเงิน,ทรูมันนี่,พร้อมเพย์,truemoney,truemoney wallet,เช็คแม่ค้า,โกงเงิน,เช็คประวัติ,ประวัติคนขาย,เช็คพ่อค้า,คนโกง,เว็บโกง,ร้านโกง,เช็คโกง,กู้เงิน"
         />
       </MetaTags>
-      <UseGTMHookProvider><p>{authUser.email}</p>
-      <NextJsProgressBar color="#00589b" startPosition={0.3} stopDelayMs={200} height={1} />
       </UseGTMHookProvider>
+      <NextJsProgressBar color="#00589b" startPosition={0.3} stopDelayMs={200} height={1} />
       <Component {...pageProps} />
     </ConfigProvider>
   );

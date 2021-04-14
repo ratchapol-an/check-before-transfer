@@ -8,6 +8,7 @@ import { Layout } from 'antd';
 import 'firebase/auth';
 import './login.less';
 import Link from 'next/link';
+import useGTM from '@elgorditosalsero/react-gtm-hook';
 
 const LoginPage: FunctionComponent = () => {
   // Do not SSR FirebaseUI, because it is not supported.
@@ -20,6 +21,10 @@ const LoginPage: FunctionComponent = () => {
       setRenderAuth(true);
     }
   }, []);
+
+  const { sendDataToGTM } = useGTM();
+
+  useEffect(() => sendDataToGTM({ 'event': 'awesomeButtonClicked', 'userId': 'imAwesome' }));
 
   const uiConfig: firebaseui.auth.Config = {
     signInFlow: firebase.auth().isSignInWithEmailLink(window.location.href) ? 'redirect' : 'popup',
@@ -75,9 +80,13 @@ const LoginPage: FunctionComponent = () => {
 
 export const getServerSideProps = withAuthUserTokenSSR({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
-})(async () => {
+})(async ({ AuthUser }) => {
+  const token = await AuthUser.getIdToken();
   return {
-    props: {},
+    props: {
+      token,
+      email: AuthUser.email,
+    },
   };
 });
 
