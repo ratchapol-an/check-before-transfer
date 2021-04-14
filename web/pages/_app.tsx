@@ -28,8 +28,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   const gtmParams = {
     id: 'GTM-WR83PLJ',
     dataLayer: {
-      'event' : 'login',
-      'userId' : auth.id   
+      'event': 'login',
+      'userId': auth.id   
     }
   }
 
