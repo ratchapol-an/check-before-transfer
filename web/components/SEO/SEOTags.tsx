@@ -14,4 +14,4 @@ const SEOTags = () => {
     );
   };
 
-export default SEOTags;
+  export default SEOTags;

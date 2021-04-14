@@ -14,6 +14,7 @@ export const Home: FunctionComponent = () => {
     <>
       <Head>
         <title>เช็คคนโกง</title>
+        <SEOTags />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="home-page-layout layout-with-bg bg-main">
