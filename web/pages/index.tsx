@@ -16,6 +16,7 @@ export const Home: FunctionComponent = () => {
   const authUser = useAuthUser();
 
   useEffect(() => sendDataToGTM({
+    'userId': authUser.id,
     'userEmail': authUser.email,
   }), []);
 
