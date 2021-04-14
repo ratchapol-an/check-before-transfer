@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { Layout } from 'antd';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import Hero from '@components/Hero';
@@ -14,10 +14,15 @@ export const Home: FunctionComponent = () => {
 
   const { sendDataToGTM } = useGTM();
   const authUser = useAuthUser();
-  sendDataToGTM({ 
-    'userId': authUser.id, 
-    'userEmail': authUser.email,
-  });
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      sendDataToGTM({ 
+        'userId': authUser.id, 
+        'userEmail': authUser.email,
+      });
+    }
+  }, []);
+
   return (
     <>
       <Head>
