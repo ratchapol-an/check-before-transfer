@@ -9,6 +9,7 @@ import 'firebase/auth';
 import './login.less';
 import Link from 'next/link';
 import useGTM from '@elgorditosalsero/react-gtm-hook';
+import { any } from 'sequelize/types/lib/operators';
 
 type LoginPageProps = { token: string; email: string };
 
@@ -41,7 +42,9 @@ const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
     ],
     callbacks: {
       signInSuccessWithAuthResult(authResult, redirectUrl) {
-        sendDataToGTM({ 'event': 'logged_in' });
+        const currentAuth = firebase.auth();
+
+        sendDataToGTM({ 'event': 'logged_in', 'userId': currentAuth.currentUser.email});
         setTimeout(() => {
           window.location.href = `${
             process.env.NEXT_PUBLIC_APP_STAGE === 'production'
@@ -54,6 +57,7 @@ const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
       },
     },
   };
+
 
   // const { init, UseGTMHookProvider } = useGTM();
   // const gtmParams = {
