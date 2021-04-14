@@ -11,7 +11,7 @@ import Link from 'next/link';
 import useGTM from '@elgorditosalsero/react-gtm-hook';
 import SEOTags from '@components/SEO';
 
-const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
+const LoginPage: FunctionComponent = () => {
 
   // Do not SSR FirebaseUI, because it is not supported.
   // https://github.com/firebase/firebaseui-web/issues/213
