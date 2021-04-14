@@ -6,23 +6,14 @@ import initAuth from 'services/firebaseService';
 import '../styles/antd.less';
 import moment from 'moment';
 import NextJsProgressBar from 'nextjs-progressbar';
-import TagManager from 'react-gtm-module';
 import ScriptTag from 'react-script-tag';
 import { useAuthUser } from 'next-firebase-auth';
 import { parseToken } from 'utils';
 import useGTM from '@elgorditosalsero/react-gtm-hook'
 
-
 initAuth();
 moment.locale('th');
 
-/* const tagManagerArgs = {
-  gtmId: 'GTM-WR83PLJ',
-};
-if (process.browser) {
-  TagManager.initialize(tagManagerArgs);
-}
- */
 function MyApp({ Component, pageProps }: AppProps) {
   const auth = useAuthUser();
 
@@ -37,17 +28,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   const gtmParams = {
     id: 'GTM-WR83PLJ',
     dataLayer: {
-      'event': 'login',
       'userId': auth.firebaseUser?.uid   
-    },
-    dataLayerName: 'dataLayer'
+    }
   }
 
   useEffect(() => init(gtmParams), [])
 
   return (
     <ConfigProvider locale={thTH}>
-      <UseGTMHookProvider>
+      <UseGTMHookProvider><p>uid={auth.firebaseUser?.uid}</p>
       <NextJsProgressBar color="#00589b" startPosition={0.3} stopDelayMs={200} height={1} />
       </UseGTMHookProvider>
       <Component {...pageProps} />
