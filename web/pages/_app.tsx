@@ -30,8 +30,18 @@ function MyApp({ Component, pageProps }: AppProps) {
       const decodedJWT = parseToken(token);
     });
   }, [auth]);
-
-  <ScriptTag type="text/javascript" src="gtag.js" />;
+  
+  <script
+  dangerouslySetInnerHTML={{
+    __html: `
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      'event' : 'login',
+      'userId' : {auth.firebaseUser?.uid}
+    });
+`,
+  }}
+/>
 
   return (
     <ConfigProvider locale={thTH}>
