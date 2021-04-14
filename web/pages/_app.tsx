@@ -10,19 +10,19 @@ import TagManager from 'react-gtm-module';
 import ScriptTag from 'react-script-tag';
 import { useAuthUser } from 'next-firebase-auth';
 import { parseToken } from 'utils';
-
+import useGTM from '@elgorditosalsero/react-gtm-hook'
 
 
 initAuth();
 moment.locale('th');
 
-const tagManagerArgs = {
+/* const tagManagerArgs = {
   gtmId: 'GTM-WR83PLJ',
 };
 if (process.browser) {
   TagManager.initialize(tagManagerArgs);
 }
-
+ */
 function MyApp({ Component, pageProps }: AppProps) {
   const auth = useAuthUser();
 
@@ -33,18 +33,23 @@ function MyApp({ Component, pageProps }: AppProps) {
     });
   }, [auth]);
 
-<script type="text/javascript">
-window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      'event' : 'login',  
-      'userId' : auth.firebaseUser?.uid   
-    });                 
-</script>
+  const { init, UseGTMHookProvider } = useGTM()
+  const gtmParams = {
+    id: 'GTM-WR83PLJ',
+    dataLayer: {
+      'event': 'login',
+      'userId': auth.firebaseUser?.uid   
+    },
+    dataLayerName: 'dataLayer'
+  }
 
+  useEffect(() => init(gtmParams), [])
 
   return (
     <ConfigProvider locale={thTH}>
+      <UseGTMHookProvider>
       <NextJsProgressBar color="#00589b" startPosition={0.3} stopDelayMs={200} height={1} />
+      </UseGTMHookProvider>
       <Component {...pageProps} />
     </ConfigProvider>
   );
