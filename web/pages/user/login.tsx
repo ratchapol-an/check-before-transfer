@@ -11,8 +11,6 @@ import Link from 'next/link';
 import useGTM from '@elgorditosalsero/react-gtm-hook';
 import SEOTags from '@components/SEO';
 
-type LoginPageProps = { token: string; email: string };
-
 const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
 
   // Do not SSR FirebaseUI, because it is not supported.
@@ -43,12 +41,13 @@ const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
     callbacks: {
       signInSuccessWithAuthResult(authResult, redirectUrl) {
         const currentAuth = firebase.auth();
+        const authUser = currentAuth.currentUser;
         sendDataToGTM({ 
           'event': 'logged_in', 
-          'userId': currentAuth.currentUser.uid, 
-          'userEmail': currentAuth.currentUser.email,
-          'userDisplayName': currentAuth.currentUser.displayName,
-          'userPhotoURL': currentAuth.currentUser.photoURL,
+          'userId': authUser.uid, 
+          'userEmail': authUser.email,
+          'userDisplayName': authUser.displayName,
+          'userPhotoURL': authUser.photoURL,
         });
         setTimeout(() => {
           window.location.href = `${
@@ -107,7 +106,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
   };
 });
 
-export default withAuthUser<LoginPageProps>({
+export default withAuthUser({
   whenUnauthedBeforeInit: AuthAction.RETURN_NULL,
   whenUnauthedAfterInit: AuthAction.RENDER,
 })(LoginPage);

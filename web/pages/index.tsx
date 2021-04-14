@@ -4,12 +4,20 @@ import React, { FunctionComponent } from 'react';
 import Header from '@components/Header';
 import Container from '@components/Container';
 import Hero from '@components/Hero';
-import { withAuthUser } from 'next-firebase-auth';
+import { useAuthUser, withAuthUser } from 'next-firebase-auth';
 import './index.less';
+import useGTM from '@elgorditosalsero/react-gtm-hook';
 import SEOTags from '@components/SEO';
 
 export const Home: FunctionComponent = () => {
   const { Content, Footer } = Layout;
+
+  const { sendDataToGTM } = useGTM();
+  const authUser = useAuthUser();
+  sendDataToGTM({ 
+    'userId': authUser.id, 
+    'userEmail': authUser.email,
+  });
   return (
     <>
       <Head>
