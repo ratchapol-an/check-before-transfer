@@ -2,20 +2,18 @@ import React, { FunctionComponent } from 'react';
 import { GetServerSidePropsResult } from 'next';
 import Head from 'next/head';
 import { withAuthUser, withAuthUserTokenSSR, SSRPropsContext } from 'next-firebase-auth';
-
 import { Breadcrumb, Divider } from 'antd';
 import Layout, { Content } from 'antd/lib/layout/layout';
-
 import Container from '@components/Container';
 import Header from '@components/Header';
 import { NoResults, SearchForm, SearchResults } from '@components/Search';
 import SearchBy from 'models/searchBy';
 import SearchByTH from 'models/searchByTH';
 import { search, SearchResult } from 'services/reportingService';
-
 import './results.less';
 import { ParsedUrlQuery } from 'querystring';
 import Link from 'next/link';
+import SEOTags from '@components/SEO';
 
 // type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -30,6 +28,7 @@ const Results: FunctionComponent<ResultsProps> = ({ searchBy, searchByTH, search
     <div>
       <Head>
         <title>ผลการค้นหาคนโกง {searchValue}</title>
+        <SEOTags />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="results-page-layout layout-with-bg">

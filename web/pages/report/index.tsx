@@ -9,6 +9,7 @@ import { addReport } from 'services/reportingService';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import Link from 'next/link';
+import SEOTags from '@components/SEO';
 
 interface ReportPageProps {
   token: string;
@@ -35,6 +36,7 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token }) => {
     <>
       <Head>
         <title>เช็คคนโกง</title>
+        <SEOTags />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="report-page-layout layout-with-bg">

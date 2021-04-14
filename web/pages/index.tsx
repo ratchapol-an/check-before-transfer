@@ -6,6 +6,7 @@ import Container from '@components/Container';
 import Hero from '@components/Hero';
 import { withAuthUser } from 'next-firebase-auth';
 import './index.less';
+import SEOTags from '@components/SEO';
 
 export const Home: FunctionComponent = () => {
   const { Content, Footer } = Layout;

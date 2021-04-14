@@ -9,7 +9,7 @@ import 'firebase/auth';
 import './login.less';
 import Link from 'next/link';
 import useGTM from '@elgorditosalsero/react-gtm-hook';
-import { any } from 'sequelize/types/lib/operators';
+import SEOTags from '@components/SEO';
 
 type LoginPageProps = { token: string; email: string };
 
@@ -63,7 +63,6 @@ const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
     },
   };
 
-
   // const { init, UseGTMHookProvider } = useGTM();
   // const gtmParams = {
   //   id: 'GTM-WR83PLJ',
@@ -75,7 +74,7 @@ const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
     <>
       <Head>
         <title>เช็คคนโกง</title>
-        <meta name="robots" content="noindex, nofollow" />
+        <SEOTags />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="layout-with-bg bg-main">

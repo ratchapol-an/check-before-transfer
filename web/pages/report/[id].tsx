@@ -13,6 +13,7 @@ import Link from 'next/link';
 import ReportStatus, { reportStatusCaptions, reportStatusColors } from '@models/ReportStatus';
 import { isAdminRole, notifyError } from 'utils';
 import { useRouter } from 'next/router';
+import SEOTags from '@components/SEO';
 
 interface ReportPageProps {
   report: Report;
@@ -77,6 +78,7 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report, i
     <>
       <Head>
         <title>เช็คคนโกง - รายงานการโกง {report.name}</title>
+        <SEOTags />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="report-page-layout layout-with-bg">

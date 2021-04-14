@@ -7,7 +7,6 @@ import '../styles/antd.less';
 import moment from 'moment';
 import NextJsProgressBar from 'nextjs-progressbar';
 import useGTM from '@elgorditosalsero/react-gtm-hook';
-import MetaTags from 'react-meta-tags';
 
 initAuth();
 moment.locale('th');
@@ -15,22 +14,13 @@ moment.locale('th');
 function MyApp({ Component, pageProps }: AppProps) {
 
   const { init, UseGTMHookProvider } = useGTM();
-  useEffect(() => init({ id: 'GTM-WR83PLJ' }), [])
+  useEffect(() => init({ id: 'GTM-WR83PLJ' }), []);
 
   return (
     <ConfigProvider locale={thTH}>
       <UseGTMHookProvider>
-        <MetaTags>
-        <meta name="description"
-          content="เช็คคนโกง ก่อนการโอนเงิน จากเลขบัญชีธนาคาร หรือ เบอร์โทรศัพท์มือถือ หรือ เลขประจำตัวประชาชน หรือ ชื่อ-นามสกุล"
-        />
-        <meta
-          name="keywords"
-          content="โอนเงิน,ทรูมันนี่,พร้อมเพย์,truemoney,truemoney wallet,เช็คแม่ค้า,โกงเงิน,เช็คประวัติ,ประวัติคนขาย,เช็คพ่อค้า,คนโกง,เว็บโกง,ร้านโกง,เช็คโกง,กู้เงิน"
-        />
-      </MetaTags>
+        <NextJsProgressBar color="#00589b" startPosition={0.3} stopDelayMs={200} height={1} />
       </UseGTMHookProvider>
-      <NextJsProgressBar color="#00589b" startPosition={0.3} stopDelayMs={200} height={1} />
       <Component {...pageProps} />
     </ConfigProvider>
   );
