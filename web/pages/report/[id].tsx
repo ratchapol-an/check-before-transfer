@@ -13,7 +13,7 @@ import Link from 'next/link';
 import ReportStatus, { reportStatusCaptions, reportStatusColors } from '@models/ReportStatus';
 import { isAdminRole, notifyError } from 'utils';
 import { useRouter } from 'next/router';
-import SEOTags from '@components/SEO';
+import SEOTags from '@components/SEO/';
 
 interface ReportPageProps {
   report: Report;

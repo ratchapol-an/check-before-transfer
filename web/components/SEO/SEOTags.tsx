@@ -1,6 +1,6 @@
 import MetaTags from 'react-meta-tags';
 
-const SEO = () => {
+const SEOTags = () => {
     return (
       <MetaTags>
         <meta name="description"
@@ -14,4 +14,4 @@ const SEO = () => {
     );
   };
 
-export default SEO;
+export default SEOTags;
