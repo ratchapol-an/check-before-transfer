@@ -14,9 +14,6 @@ type LoginPageProps = { token: string; email: string };
 
 const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
 
-  const { sendDataToGTM } = useGTM();
-  useEffect(() => sendDataToGTM({ 'event': 'loggedin', 'userId': email as string}), []);
-
   // Do not SSR FirebaseUI, because it is not supported.
   // https://github.com/firebase/firebaseui-web/issues/213
   const [renderAuth, setRenderAuth] = useState(false);
@@ -27,6 +24,8 @@ const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
       setRenderAuth(true);
     }
   }, []);
+
+  const { sendDataToGTM } = useGTM();
 
   const uiConfig: firebaseui.auth.Config = {
     signInFlow: firebase.auth().isSignInWithEmailLink(window.location.href) ? 'redirect' : 'popup',
@@ -42,6 +41,7 @@ const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
     ],
     callbacks: {
       signInSuccessWithAuthResult(authResult, redirectUrl) {
+       sendDataToGTM({ 'event': 'loggedin2', 'userId': email as string});
         setTimeout(() => {
           window.location.href = `${
             process.env.NEXT_PUBLIC_APP_STAGE === 'production'
