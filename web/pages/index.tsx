@@ -12,15 +12,6 @@ import SEOTags from '@components/SEO';
 export const Home: FunctionComponent = () => {
   const { Content, Footer } = Layout;
 
-  useEffect(() => {
-    const { sendDataToGTM } = useGTM();
-    const authUser = useAuthUser();
-    sendDataToGTM({
-      'userId': authUser.id,
-      'userEmail': authUser.email,
-    })}
-  , []);
-
   return (
     <>
       <Head>
