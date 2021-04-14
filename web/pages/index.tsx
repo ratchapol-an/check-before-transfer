@@ -12,13 +12,14 @@ import SEOTags from '@components/SEO';
 export const Home: FunctionComponent = () => {
   const { Content, Footer } = Layout;
 
-  const { sendDataToGTM } = useGTM();
-  const authUser = useAuthUser();
-
-  useEffect(() => sendDataToGTM({
-    'userId': authUser.id,
-    'userEmail': authUser.email,
-  }), []);
+  useEffect(() => {
+    const { sendDataToGTM } = useGTM();
+    const authUser = useAuthUser();
+    sendDataToGTM({
+      'userId': authUser.id,
+      'userEmail': authUser.email,
+    })}
+  , []);
 
   return (
     <>
