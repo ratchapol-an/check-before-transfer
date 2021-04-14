@@ -43,12 +43,8 @@ const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
     callbacks: {
       signInSuccessWithAuthResult(authResult, redirectUrl) {
         const currentAuth = firebase.auth();
-        async () => {
-          const token = await currentAuth.currentUser.getIdToken();
-        }
         sendDataToGTM({ 
           'event': 'logged_in', 
-          'userToken': token,
           'userId': currentAuth.currentUser.uid, 
           'userEmail': currentAuth.currentUser.email,
           'userDisplayName': currentAuth.currentUser.displayName,

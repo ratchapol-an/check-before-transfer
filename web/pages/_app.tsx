@@ -17,12 +17,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   const { init, UseGTMHookProvider } = useGTM();
   useEffect(() => init({ id: 'GTM-WR83PLJ' }), [])
 
-  // const gtmParams = {
-  //   id: 'GTM-WR83PLJ',
-  //   dataLayer: {'userId':''},
-  // };
-  // useEffect(() => init(gtmParams), []);
-
   return (
     <ConfigProvider locale={thTH}>
       <UseGTMHookProvider>
