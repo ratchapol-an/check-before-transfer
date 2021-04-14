@@ -28,15 +28,17 @@ function MyApp({ Component, pageProps }: AppProps) {
   const gtmParams = {
     id: 'GTM-WR83PLJ',
     dataLayer: {
-      'userId': auth.firebaseUser?.uid   
+      'event' : 'login',
+      'userId' : auth.id   
     }
   }
+
 
   useEffect(() => init(gtmParams), [])
 
   return (
     <ConfigProvider locale={thTH}>
-      <UseGTMHookProvider><p>uid={auth.firebaseUser?.uid}</p>
+      <UseGTMHookProvider><p>uid={auth.id}</p>
       <NextJsProgressBar color="#00589b" startPosition={0.3} stopDelayMs={200} height={1} />
       </UseGTMHookProvider>
       <Component {...pageProps} />
