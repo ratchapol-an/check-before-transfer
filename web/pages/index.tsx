@@ -14,14 +14,12 @@ export const Home: FunctionComponent = () => {
 
   const { sendDataToGTM } = useGTM();
   const authUser = useAuthUser();
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
+  useEffect(() =>
       sendDataToGTM({ 
         'userId': authUser.id, 
         'userEmail': authUser.email,
-      });
-    }
-  }, []);
+      })
+  , []);
 
   return (
     <>
