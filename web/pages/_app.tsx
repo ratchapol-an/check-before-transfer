@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const { init, UseGTMHookProvider } = useGTM();
   const gtmParams = {
     id: 'GTM-WR83PLJ',
-    dataLayer: {'event':'','userId':''}
+    dataLayer: {'userId':''}
   };
 
   useEffect(() => init(gtmParams), []);

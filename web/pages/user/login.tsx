@@ -10,7 +10,9 @@ import './login.less';
 import Link from 'next/link';
 import useGTM from '@elgorditosalsero/react-gtm-hook';
 
-const LoginPage: FunctionComponent = () => {
+type LoginPageProps = { token: string; email: string };
+
+const LoginPage: FunctionComponent<LoginPageProps>  = ({ token, email }) => {
   // Do not SSR FirebaseUI, because it is not supported.
   // https://github.com/firebase/firebaseui-web/issues/213
   const [renderAuth, setRenderAuth] = useState(false);
@@ -22,9 +24,13 @@ const LoginPage: FunctionComponent = () => {
     }
   }, []);
 
-  const { sendDataToGTM } = useGTM();
+  const { init, UseGTMHookProvider } = useGTM();
+  const gtmParams = {
+    id: 'GTM-WR83PLJ',
+    dataLayer: { 'event': 'loggedin', 'userId': email }
+  };
 
-  useEffect(() => sendDataToGTM({ 'event': 'awesomeButtonClicked', 'userId': 'imAwesome' }));
+  useEffect(() => init(gtmParams), []);
 
   const uiConfig: firebaseui.auth.Config = {
     signInFlow: firebase.auth().isSignInWithEmailLink(window.location.href) ? 'redirect' : 'popup',
@@ -57,7 +63,9 @@ const LoginPage: FunctionComponent = () => {
     <>
       <Head>
         <title>เช็คคนโกง</title>
+        <UseGTMHookProvider>
         <meta name="robots" content="noindex, nofollow" />
+        </UseGTMHookProvider>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="layout-with-bg bg-main">
@@ -90,7 +98,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
   };
 });
 
-export default withAuthUser({
+export default withAuthUser<LoginPageProps>({
   whenUnauthedBeforeInit: AuthAction.RETURN_NULL,
   whenUnauthedAfterInit: AuthAction.RENDER,
 })(LoginPage);
