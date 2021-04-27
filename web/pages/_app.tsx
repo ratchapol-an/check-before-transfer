@@ -12,7 +12,7 @@ moment.locale('th');
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ConfigProvider locale={thTH}>
-      <NextJsProgressBar color="#00589b" startPosition={0.3} stopDelayMs={200} height={1} />
+      <NextJsProgressBar color="#00589b" startPosition={0.3} stopDelayMs={200} height={2} />
       <Component {...pageProps} />
     </ConfigProvider>
   );

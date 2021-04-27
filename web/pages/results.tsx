@@ -17,8 +17,6 @@ import { ParsedUrlQuery } from 'querystring';
 import Link from 'next/link';
 import { KeywordsAndDescription } from '@components/Seo';
 
-// type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
-
 type ResultsProps = {
   searchValue: string;
   searchBy: SearchBy;

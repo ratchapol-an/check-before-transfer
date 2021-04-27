@@ -92,7 +92,6 @@ const SearchForm: React.FunctionComponent<SearchFormProps> = ({
         <Radio value="name">ชื่อ-นามสกุล</Radio>
       </Radio.Group>
       <Search
-        // placeholder={placeHolders[searchBy]}
         allowClear
         enterButton="ค้นหา"
         size="large"
@@ -104,7 +103,6 @@ const SearchForm: React.FunctionComponent<SearchFormProps> = ({
         maxLength={searchBy === 'name' ? 100 : 20}
       />
       <Text type="secondary">{placeHolders[searchBy]}</Text>
-      {/* {helpMsg && <Text type="warning">{helpMsg}</Text>} */}
     </Space>
   );
 };

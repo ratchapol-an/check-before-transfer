@@ -13,7 +13,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ role }) => {
     <Menu>
       {role.user || role.admin || role.superUser ? (
         <>
-          {role.admin && (
+          {(role.admin || role.superUser) && (
             <Menu.Item key="4">
               <Link href="/admin">จัดการรายงาน</Link>
             </Menu.Item>
