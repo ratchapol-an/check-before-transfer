@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app';
 import React, { useEffect } from 'react';
 import thTH from 'antd/lib/locale/th_TH';
 import initAuth from 'services/firebaseService';
-import { useAuthUser  } from 'next-firebase-auth';
+import { useAuthUser } from 'next-firebase-auth';
 import '../styles/antd.less';
 import moment from 'moment';
 import NextJsProgressBar from 'nextjs-progressbar';
@@ -13,15 +13,14 @@ initAuth();
 moment.locale('th');
 
 function MyApp({ Component, pageProps }: AppProps) {
-  
   const authUser = useAuthUser();
 
   const { init, UseGTMHookProvider } = useGTM();
   const gtmParams = {
     id: 'GTM-WR83PLJ',
     dataLayer: {
-      'userId': authUser.id,
-      'userEmail': authUser.email,
+      userId: authUser.id,
+      userEmail: authUser.email,
     },
   };
 
@@ -29,9 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ConfigProvider locale={thTH}>
-      <UseGTMHookProvider>
-        <NextJsProgressBar color="#00589b" startPosition={0.3} stopDelayMs={200} height={1} />
-      </UseGTMHookProvider>
+      <NextJsProgressBar color="#00589b" startPosition={0.3} stopDelayMs={200} height={2} />
       <Component {...pageProps} />
     </ConfigProvider>
   );
