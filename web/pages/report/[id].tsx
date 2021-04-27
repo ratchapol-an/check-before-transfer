@@ -20,6 +20,8 @@ interface ReportPageProps {
   token: string;
   isAdmin: boolean;
 }
+
+const BUCKET_NAME = 'whoscheat-e2261';
 const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report, isAdmin }) => {
   const { Content } = Layout;
   const { Title } = Typography;
@@ -33,7 +35,7 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report, i
       ? attachedFiles.files.map(
           (o, i) =>
             ({
-              url: `https://firebasestorage.googleapis.com/v0/b/check-before-transfer.appspot.com/o/files${encodeURIComponent(
+              url: `https://firebasestorage.googleapis.com/v0/b/${BUCKET_NAME}.appspot.com/o/files${encodeURIComponent(
                 `/${o.dirName}/${o.name}`,
               )}?alt=media&token=${o.accessToken}`,
               size: o.size,
