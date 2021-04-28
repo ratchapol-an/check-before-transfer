@@ -16,8 +16,6 @@ apiKey.apiKey = process.env.EMAIL_API_KEY || '';
 
 const transactionalEmailApi = new SibApiV3Sdk.TransactionalEmailsApi();
 
-transactionalEmailApi.setApiKey(SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey, process.env.EMAIL_API_KEY || '');
-
 initAuth();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

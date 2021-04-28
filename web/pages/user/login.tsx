@@ -4,17 +4,19 @@ import firebase from 'firebase/app';
 import { withAuthUser, AuthAction, withAuthUserTokenSSR } from 'next-firebase-auth';
 import Head from 'next/head';
 import Image from 'next/image';
-import { Layout } from 'antd';
+import { Layout, Typography } from 'antd';
 import 'firebase/auth';
 import './login.less';
 import Link from 'next/link';
 import { KeywordsAndDescription } from '@components/Seo';
+import Paragraph from 'antd/lib/typography/Paragraph';
 
 const LoginPage: FunctionComponent = () => {
   // Do not SSR FirebaseUI, because it is not supported.
   // https://github.com/firebase/firebaseui-web/issues/213
   const [renderAuth, setRenderAuth] = useState(false);
   const { Content } = Layout;
+  const { Text } = Typography;
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -67,6 +69,11 @@ const LoginPage: FunctionComponent = () => {
                 </a>
               </Link>
               <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} className="login-option" />
+              <Paragraph>
+                <Text strong>
+                  ถ้าหากต้องการ Login with Google กรุณาเปิดเว็บไซต์นี้ด้วย Browser เช่น Safari Chrome หรือ Edge
+                </Text>
+              </Paragraph>
             </>
           ) : null}
         </Content>

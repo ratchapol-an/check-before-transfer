@@ -211,14 +211,9 @@ const ReportForm: React.FunctionComponent<ReportFormProps> = ({
           <Option value={0}>{productTypeCaptions[0]}</Option>
         </Select>
       </Form.Item>
-      <Form.Item
-        name="productLink"
-        label="พบสินค้าหรือบริการผ่านทาง"
-        rules={[{ required: true, message: 'กรุณากรอกที่มาของสินค้าหรือบริการ' }]}
-        hasFeedback
-      >
+      <Form.Item name="productLink" label="พบสินค้าหรือบริการผ่านทาง" hasFeedback>
         <Input
-          type="url"
+          type="text"
           placeholder="ลิงค์ไปยังสินค้าหรือบริการ เช่น http://www.cheatshop.com/example/1234"
           readOnly={viewOnly}
         />
