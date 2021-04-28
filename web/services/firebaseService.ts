@@ -1,5 +1,6 @@
-import { init } from 'next-firebase-auth';
+import { init, withAuthUser } from 'next-firebase-auth';
 import { NextApiRequest } from 'next';
+import { FirebaseAuth } from 'react-firebaseui';
 
 const initAuth = () => {
   init({

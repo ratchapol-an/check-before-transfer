@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/interactive-supports-focus */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { Button, Dropdown, Layout, Menu, Space } from 'antd';
 import Container from '@components/Container';
 import Image from 'next/image';
@@ -75,7 +73,6 @@ const Header: React.FunctionComponent = () => {
             <Image width={197.15} height={45} alt="whoscheat" src="/logo3.png" />
           </a>
         </Link>
-        <DropdownMenu role={role} />
         <Space direction="horizontal" className="large-screen-menu">
           {auth.email ? (
             <>
@@ -102,6 +99,12 @@ const Header: React.FunctionComponent = () => {
             </Dropdown>
           )}
         </Space>
+        <Link href="https://lin.ee/ktLQLwv">
+          <a className="line-link">
+            <Image width={45} height={45} alt="contact" src="/line.png" />
+          </a>
+        </Link>
+        <DropdownMenu role={role} />
       </Container>
     </AntdHeader>
   );

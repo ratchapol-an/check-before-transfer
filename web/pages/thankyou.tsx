@@ -5,9 +5,8 @@ import Header from '@components/Header';
 import Container from '@components/Container';
 import { withAuthUserTokenSSR, withAuthUser } from 'next-firebase-auth';
 import { useRouter } from 'next/router';
-
 import './thankyou.less';
-import { KeywordsAndDescription } from '@components/Seo';
+import SEOTags from '@components/SEO';
 
 export const ThankYouPage: FunctionComponent = () => {
   const { Content, Footer } = Layout;
@@ -22,7 +21,7 @@ export const ThankYouPage: FunctionComponent = () => {
     <>
       <Head>
         <title>เช็คคนโกง</title>
-        <KeywordsAndDescription />
+        <SEOTags />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="thank-you-page-layout layout-with-bg">

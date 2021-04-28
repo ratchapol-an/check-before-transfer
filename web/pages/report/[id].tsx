@@ -13,13 +13,15 @@ import Link from 'next/link';
 import ReportStatus, { reportStatusCaptions, reportStatusColors } from '@models/ReportStatus';
 import { isAdminRole, notifyError } from 'utils';
 import { useRouter } from 'next/router';
-import { KeywordsAndDescription } from '@components/Seo';
+import SEOTags from '@components/SEO/';
 
 interface ReportPageProps {
   report: Report;
   token: string;
   isAdmin: boolean;
 }
+
+const BUCKET_NAME = 'whoscheat-e2261';
 const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report, isAdmin }) => {
   const { Content } = Layout;
   const { Title } = Typography;
@@ -33,7 +35,7 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report, i
       ? attachedFiles.files.map(
           (o, i) =>
             ({
-              url: `https://firebasestorage.googleapis.com/v0/b/check-before-transfer.appspot.com/o/files${encodeURIComponent(
+              url: `https://firebasestorage.googleapis.com/v0/b/${BUCKET_NAME}.appspot.com/o/files${encodeURIComponent(
                 `/${o.dirName}/${o.name}`,
               )}?alt=media&token=${o.accessToken}`,
               size: o.size,
@@ -52,7 +54,7 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report, i
       try {
         await updateReport(updatingReport, token);
         notification.success({
-          message: 'บันทึกข้อมูลเรียยร้อย',
+          message: 'บันทึกข้อมูลเรียบร้อย',
         });
       } catch {
         notifyError();
@@ -78,7 +80,7 @@ const ReportPage: React.FunctionComponent<ReportPageProps> = ({ token, report, i
     <>
       <Head>
         <title>เช็คคนโกง - รายงานการโกง {report.name}</title>
-        <KeywordsAndDescription />
+        <SEOTags />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="report-page-layout layout-with-bg">

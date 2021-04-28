@@ -8,8 +8,9 @@ import { Layout, Typography } from 'antd';
 import 'firebase/auth';
 import './login.less';
 import Link from 'next/link';
-import { KeywordsAndDescription } from '@components/Seo';
 import Paragraph from 'antd/lib/typography/Paragraph';
+import useGTM from '@elgorditosalsero/react-gtm-hook';
+import SEOTags from '@components/SEO';
 
 const LoginPage: FunctionComponent = () => {
   // Do not SSR FirebaseUI, because it is not supported.
@@ -23,6 +24,8 @@ const LoginPage: FunctionComponent = () => {
       setRenderAuth(true);
     }
   }, []);
+
+  const { sendDataToGTM } = useGTM();
 
   const uiConfig: firebaseui.auth.Config = {
     signInFlow: firebase.auth().isSignInWithEmailLink(window.location.href) ? 'redirect' : 'popup',
@@ -38,6 +41,15 @@ const LoginPage: FunctionComponent = () => {
     ],
     callbacks: {
       signInSuccessWithAuthResult(authResult, redirectUrl) {
+        const currentAuth = firebase.auth();
+        const authUser = currentAuth.currentUser;
+        sendDataToGTM({
+          event: 'logged_in',
+          userId: authUser.uid,
+          userEmail: authUser.email,
+          userDisplayName: authUser.displayName,
+          userPhotoURL: authUser.photoURL,
+        });
         setTimeout(() => {
           window.location.href = `${
             process.env.NEXT_PUBLIC_APP_STAGE === 'production'
@@ -51,12 +63,18 @@ const LoginPage: FunctionComponent = () => {
     },
   };
 
+  // const { init, UseGTMHookProvider } = useGTM();
+  // const gtmParams = {
+  //   id: 'GTM-WR83PLJ',
+  //   dataLayer: { 'event': 'loggedin', 'userId': '' }
+  // };
+  // useEffect(() => init(gtmParams), []);
+
   return (
     <>
       <Head>
         <title>เช็คคนโกง</title>
-        <KeywordsAndDescription />
-        <meta name="robots" content="noindex, nofollow" />
+        <SEOTags />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="layout-with-bg bg-main">
@@ -84,9 +102,13 @@ const LoginPage: FunctionComponent = () => {
 
 export const getServerSideProps = withAuthUserTokenSSR({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
-})(async () => {
+})(async ({ AuthUser }) => {
+  const token = await AuthUser.getIdToken();
   return {
-    props: {},
+    props: {
+      token,
+      email: AuthUser.email,
+    },
   };
 });
 

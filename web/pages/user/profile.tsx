@@ -6,13 +6,13 @@ import { AuthAction, withAuthUser, withAuthUserTokenSSR } from 'next-firebase-au
 import ReportTable from '@components/Report/ReportTable';
 import { deleteReport, getReportsByUserId, PaginatedReports } from 'services/reportingService';
 import { PaginationConfig } from 'antd/lib/pagination';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import Link from 'next/link';
 
 type ProfilePageProps = { token: string; email: string };
 
 export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ token, email }) => {
-  const { Content, Footer } = Layout;
+  const { Content } = Layout;
   const { Title } = Typography;
   const [currentPage, setCurrentPage] = useState(1);
   const handleDeleteReport = useCallback(
@@ -32,6 +32,7 @@ export const ProfilePage: React.FunctionComponent<ProfilePageProps> = ({ token, 
   const handleTableChange = ({ current = 1 }: TablePaginationConfig) => {
     setCurrentPage(currentPage);
   };
+
   return (
     <>
       <Head>
@@ -74,7 +75,6 @@ export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
 })(async ({ AuthUser }) => {
   const token = await AuthUser.getIdToken();
-
   return {
     props: {
       token,

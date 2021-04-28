@@ -19,12 +19,21 @@
         margin-left: @margin-lg;
     }
 
+    .line-link {
+        display: none;
+    }
+
     @media only screen and (min-width: @screen-md-min) {
         .mobile-dropdown-menu {
             display: none;
         }
-        .large-screen-menu {
+        .large-screen-menu,
+        .line-link {
             display: inline-flex;
+        }
+        .large-screen-menu {
+            flex-grow: 1;
+            flex-direction: row-reverse;
         }
     }
 }
