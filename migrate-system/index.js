@@ -97,7 +97,7 @@ const insert = async () => {
       eventDetail: row["รายละเอียดเพิ่มเติม"]
         ? row["รายละเอียดเพิ่มเติม"].replace(/(?:\r\n|\r|\n)/g, "")
         : "",
-      reporterID: "oNTiaV3zUhfeP4veXvsbJ2aCXf52",
+      reporterID: "TDULMbEwo3MS2NKBFqgc72VRZbK2",
       paymentMethod: paymentMethod,
       productType: productType,
       productLink: "",
