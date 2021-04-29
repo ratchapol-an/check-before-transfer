@@ -106,7 +106,7 @@ const insert = async () => {
       phoneNumber: phoneNumber,
       idNumber: idNumber,
       eventDate: eventDate,
-      status: 1,
+      status: 2,
       attachedFiles: {},
       isDeleted: false,
     };
@@ -117,7 +117,6 @@ const insert = async () => {
     } catch (e) {
       console.log(e);
     }
-    // await sleep(100);
   }
 };
 
