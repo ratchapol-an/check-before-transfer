@@ -23,12 +23,20 @@
         display: none;
     }
 
+    .fb-link {
+        display: none;
+    }
+
     @media only screen and (min-width: @screen-md-min) {
         .mobile-dropdown-menu {
             display: none;
         }
         .large-screen-menu,
         .line-link {
+            display: inline-flex;
+        }
+        .fb-link {
+            margin-left: @margin-lg;
             display: inline-flex;
         }
         .large-screen-menu {
