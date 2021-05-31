@@ -15,17 +15,29 @@ export const Home: FunctionComponent = () => {
   return (
     <>
       <Head>
-      <meta name="title" 
-          content="โดนโกงอีกแล้วทำยังไงดี มาเชคที่นี่ก่อนโอนสิ ลดโอกาสโดนโกงง่ายๆ | whoscheat.com"
-        />
-        <meta name="description"
-          content=" เช็คก่อนโอนช่วยให้การโอนทุกครั้งมั่นใจขึ้น ลดโอกาสในการเอาเปรียบของมิจฉาชีพ ร่วมกันสร้างสังคมซื้อขายออนไลน์ที่ปลอดภัยที่เช็คก่อนโอน"
-        />
-        <meta
-          name="keywords"
-          content="โอนเงิน,ทรูมันนี่,พร้อมเพย์,truemoney,truemoney wallet,เช็คแม่ค้า,โกงเงิน,เช็คประวัติ,ประวัติคนขาย,เช็คพ่อค้า,คนโกง,เว็บโกง,ร้านโกง,เช็คโกง,กู้เงิน"
-        />
-        <link rel="icon" href="/favicon.ico" />
+      {/* COMMON TAGS */}
+      <meta charSet="utf-8" />
+      <title>เช็คก่อนโอน - ลดโอกาสโดนโกงด้วยวิธีง่ายๆ มาเช็คที่นี่ก่อนสิ</title>
+      {/* Search Engine */}
+      <meta name="description" content="โอนเงินได้อย่างมั่นใจ ตัดรายได้มิจฉาชีพ ร่วมสร้างสังคมซื้อขายออนไลน์ที่ปลอดภัยที่เช็คก่อนโอน" />
+      <meta name="image" content="https://firebasestorage.googleapis.com/v0/b/whoscheat-e2261.appspot.com/o/pub%2FSEO-og-image%402x.png?alt=media" />
+      {/* Schema.org for Google */}
+      <meta itemProp="name" content="เช็คก่อนโอน - ลดโอกาสโดนโกงด้วยวิธีง่ายๆ มาเช็คที่นี่ก่อนสิ" />
+      <meta itemProp="description" content="โอนเงินได้อย่างมั่นใจ ตัดรายได้มิจฉาชีพ ร่วมสร้างสังคมซื้อขายออนไลน์ที่ปลอดภัยที่เช็คก่อนโอน" />
+      <meta itemProp="image" content="https://firebasestorage.googleapis.com/v0/b/whoscheat-e2261.appspot.com/o/pub%2FSEO-og-image%402x.png?alt=media" />
+      {/* Open Graph general (Facebook, Pinterest & LinkedIn) */}
+      <meta property="og:title" content="เช็คก่อนโอน - ลดโอกาสโดนโกงด้วยวิธีง่ายๆ มาเช็คที่นี่ก่อนสิ" />
+      <meta property="og:description" content="โอนเงินได้อย่างมั่นใจ ร่วมสร้างสังคมซื้อขายออนไลน์ที่ปลอดภัย" />
+      <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/whoscheat-e2261.appspot.com/o/pub%2FSEO-og-image%402x.png?alt=media" />
+      <meta property="og:url" content="https://www.whoscheat.com" />
+      <meta property="og:site_name" content="เช็คก่อนโอน" />
+      <meta property="og:locale" content="th-TH" />
+      <meta property="og:type" content="website" />
+      {/* Twitter */}
+      <meta property="twitter:card" content="summary" />
+      <meta property="twitter:title" content="เช็คก่อนโอน - ลดโอกาสโดนโกงด้วยวิธีง่ายๆ มาเช็คที่นี่ก่อนสิ" />
+      <meta property="twitter:description" content="โอนเงินได้อย่างมั่นใจ ตัดรายได้มิจฉาชีพ ร่วมสร้างสังคมซื้อขายออนไลน์ที่ปลอดภัยที่เช็คก่อนโอน" />
+      <meta property="twitter:image:src" content="https://firebasestorage.googleapis.com/v0/b/whoscheat-e2261.appspot.com/o/pub%2FSEO-og-image%402x.png?alt=media" />
       </Head>
       <Layout className="home-page-layout layout-with-bg bg-main">
         <Header />

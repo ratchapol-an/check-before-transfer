@@ -106,7 +106,7 @@ const Header: React.FunctionComponent = () => {
         </Link>
         <Link href="https://lin.ee/ktLQLwv">
           <a className="line-link" target="_blank">
-            <Image width={45} height={45} alt="contact" src="/line.png" />
+            <Image width={30} height={30} alt="contact" src="/line.png" />
           </a>
         </Link>
         <DropdownMenu role={role} />
