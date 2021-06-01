@@ -38,6 +38,7 @@ export const Home: FunctionComponent = () => {
       <meta property="twitter:title" content="เช็คก่อนโอน - ตรวจสอบให้ชัวร์ ใครขี้โกง บัญชีไหนอันตราย" />
       <meta property="twitter:description" content="โอนเงินได้อย่างมั่นใจ ตัดรายได้มิจฉาชีพ ร่วมสร้างสังคมซื้อขายออนไลน์ที่ปลอดภัยที่เช็คก่อนโอน" />
       <meta property="twitter:image:src" content="/SEO-og-image-2x.png" />
+      <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="home-page-layout layout-with-bg bg-main">
         <Header />
