@@ -70,7 +70,7 @@ const Header: React.FunctionComponent = () => {
       <Container className="header-container">
         <Link href="/">
           <a className="header-logo-link">
-            <Image width={197.15} height={45} alt="whoscheat" src="/logo3.png" />
+            <Image width={197.15} height={45} alt="logo" src="/logo3.png" />
           </a>
         </Link>
         <Space direction="horizontal" className="large-screen-menu">

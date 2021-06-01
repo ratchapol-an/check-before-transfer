@@ -33,6 +33,7 @@ export const Home: FunctionComponent = () => {
       <meta property="og:site_name" content="เช็คก่อนโอน" />
       <meta property="og:locale" content="th-TH" />
       <meta property="og:type" content="website" />
+      <meta property="fb:app_id" content="314459616702586" />
       {/* Twitter */}
       <meta property="twitter:card" content="summary" />
       <meta property="twitter:title" content="เช็คก่อนโอน - ตรวจสอบให้ชัวร์ ใครขี้โกง บัญชีไหนอันตราย" />
